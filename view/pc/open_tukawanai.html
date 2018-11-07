@@ -1,0 +1,1354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-style-type" content="text/css" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="無料,グループウェア,プロジェクト,クラウド,PTA,イベント運営" />
+    <meta name="description" content="サイボウズLiveは、グループチャットや掲示板、ファイル共有など、チーム運営に必要な機能がそろった「チームのためのグループウェア」です。すべて無料で利用できます。PTA、自治会、おやじの会、NPO、イベント運営、企業間プロジェクトなど、様々なシーンで利用できます。" />
+    <meta http-equiv="Imagetoolbar" content="no" />
+    <meta property="og:site_name" content="サイボウズLive" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="プロジェクトは情報共有で成功する : 無料コラボレーションツール サイボウズLive" />
+    <meta property="og:image" content="https://cybozulive.com/static/49f5cdb4ca/images/og_image.png" />
+    <meta property="og:description" content="サイボウズLiveは、グループチャットや掲示板、ファイル共有など、チーム運営に必要な機能がそろった「チームのためのグループウェア」です。すべて無料で利用できます。PTA、自治会、おやじの会、NPO、イベント運営、企業間プロジェクトなど、様々なシーンで利用できます。" />
+    <meta property="og:url" content="https://cybozulive.com" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/base.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/common.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/lightbox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/colorbox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/error.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/syntaxHighlighter/shCore.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/syntaxHighlighter/shThemeDefault.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/newCss/design/standard.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/application/mpChatList.css" media="screen,print" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/smoothness/jquery-ui.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/jquery.qtip.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/error.css" media="screen" />
+    <link rel="start" href="/" title="home" />
+    <link rel="apple-touch-icon" href="https://cybozulive.com/static/49f5cdb4ca/images/iphone/apple-touch-icon.png" />
+    <title>チャット - サイボウズLive</title>
+    <link rel="shortcut icon" href="https://cybozulive.com/static/49f5cdb4ca/images/favicon.ico" />
+    <script type="text/javascript">
+<!--
+var CbAries = window.CbAries || new Object();
+if( ! CbAries.Global )
+{
+    CbAries.Global = new Object;
+}
+
+CbAries.Global.cybozuStatus = 200;
+CbAries.Global.lastAccessDate = '';
+
+CbAries.Global.setStatic = function( path, param ) {
+    var result = 'https://cybozulive.com/static/49f5cdb4ca' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    return result;
+};
+CbAries.Global.setRelative = function( path, param ) {
+    var result = '' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    var match= new RegExp( "\\?" );
+    if( result.match( match ) ) {
+        result += '&dummy=' + new Date().getTime();
+    }
+    else {
+        result += '?dummy=' + new Date().getTime();
+    }
+
+    return result;
+};
+CbAries.Global.setAbsolute = function( path, param ) {
+    var result = 'https://cybozulive.com' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    result = CbAries.Global.addDummyParam( result );
+
+    return result;
+};
+CbAries.Global.setPortalRelative = function( path, param ) {
+    var result = '' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    result = CbAries.Global.addDummyParam( result );
+
+    return result;
+};
+CbAries.Global.addDummyParam = function( url )
+{
+    if( !url )
+    {
+        return url;
+    }
+    var match= new RegExp( "\\?" );
+    if( url.match( match ) ) {
+        url += '&dummy=' + new Date().getTime();
+    }
+    else {
+        url += '?dummy=' + new Date().getTime();
+    }
+    return url;
+};
+CbAries.Global.isGw = false;
+CbAries.Global.inline = true;
+  CbAries.Global.newCss = false;
+-->
+</script>
+  </head>
+  <body class="mypage mpChat CHROME CHROME_69 ja  logined">
+    <div class="globalNavi" data-interval="60">
+      <table class="globalNavi__table">
+        <tr>
+          <th class="globalNavi__logo">
+            <a href="/">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/brand-logo.png" alt="" />
+            </a>
+          </th>
+          <td class="globalNavi__menu globalNavi__menu--group">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--menu globalNavi__link--groupware iconLink globalNavi__link--unselected" data-url="https://cybozulive.com/common/globalNavi/groupMenuAjax" data-type="group">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-group.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">グループ</span>
+              <span>
+                <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/sort-down.png" alt="メニューを開く" class="globalNavi__arrow" />
+              </span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="/mpSchedule/calendarSwitch?ref=header" class="globalNavi__link globalNavi__link--menu globalNavi__link--mpSchedule iconLink globalNavi__link--unselected">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-calendar.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">マイカレンダー</span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="/mpChat/list?ref=header" class="globalNavi__link globalNavi__link--menu globalNavi__link--mpChat iconLink globalNavi__link--selected">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-chat.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">チャット</span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--account globalNavi__link--menu iconLink globalNavi__link--unselected" data-url="https://cybozulive.com/common/globalNavi/accountMenuAjax" data-type="account">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-user.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">アカウント</span>
+              <span>
+                <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/sort-down.png" alt="メニューを開く" class="globalNavi__arrow" />
+              </span>
+            </a>
+          </td>
+          <td class="globalNavi__menu--blank"></td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--update" title="新着情報" data-url="https://cybozulive.com/common/globalNavi/updateListAjax" data-type="update">
+              <span class="unreadMark unreadMark--confirmed" style="display: none;">0</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-bell.png" alt="新着情報" />
+            </a>
+          </td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--good" title="いいね！" data-url="https://cybozulive.com/common/globalNavi/goodListAjax" data-type="good">
+              <span class="unreadMark" style="display: none;">0</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-good.png" alt="いいね！" />
+            </a>
+          </td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--star" title="お気に入り" data-url="https://cybozulive.com/common/globalNavi/starListAjax" data-type="star">
+              <span class="unreadMark unreadMark--confirmed" style="display: inline;">2</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-star.png" alt="お気に入り" />
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="body">
+      <div class="breadcrumb">
+        <ul>
+          <li>
+            <a href="/">
+              <span>ホーム</span>
+            </a>
+          </li>
+          <li class='active'>チャット </li>
+        </ul>
+      </div>
+      <div class="menuArea mpChatList">
+        <div class="menuAreaWrapper selfclear">
+          <div class="bodyArea">
+            <div class="menuFrame categoryList">
+              <div class="menuFrameInner">
+                <div class="menuTitle">
+                  <span class="titleText">カテゴリ</span>
+                </div>
+                <ul>
+                  <li class="active">
+                    <a href="/mpChat/list" class="iconLink categoryLink">
+                      <span class="categoryName">(すべて)</span>
+                    </a>
+                    <span class="targetCount">(198)</span>
+                  </li>
+                </ul>
+                <ul>
+                  <li id="cba_chatRoomFolder_THEME" class="selfclear ">
+                    <span class="switch">
+                      <a href="javascript:void(0);" class="folderOpen" chatRoomType="THEME" data-url="/mpChat/folder/themeChatRoomListAjax" style="">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+                      </a>
+                      <a href="javascript:void(0);" class="folderClose" chatRoomType="THEME" style="display:none;">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+                      </a>
+                    </span>
+                    <a href="/mpChat/list?currentFolder=THEME" class="iconLink categoryLink">
+                      <span class="categoryName">テーマチャット</span>
+                    </a>
+                    <span class="targetCount">(3)</span>
+                    <ul id="cba_chatRoomList_THEME" class="include" style="display: none;"></ul>
+                  </li>
+                </ul>
+                <ul>
+                  <li id="cba_chatRoomFolder_DIRECT" class="selfclear ">
+                    <span class="switch">
+                      <a href="javascript:void(0);" class="folderOpen" chatRoomType="DIRECT" data-url="/mpChat/folder/directChatRoomListAjax" style="">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+                      </a>
+                      <a href="javascript:void(0);" class="folderClose" chatRoomType="DIRECT" style="display:none;">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+                      </a>
+                    </span>
+                    <a href="/mpChat/list?currentFolder=DIRECT" class="iconLink categoryLink">
+                      <span class="categoryName">ダイレクトチャット</span>
+                    </a>
+                    <span class="targetCount">(190)</span>
+                    <ul id="cba_chatRoomList_DIRECT" class="include" style="display: none;"></ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="bodyAreaWrapper">
+              <div class="contentsArea">
+                <div class="funcMenuBlock">
+                  <div class="funcMenuFrame">
+                    <div class="menu last">
+                      <a href="/mpChat/add" class="iconLink" title="テーマチャットを作成する">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/write20.gif" alt="" class="icon" />
+                        <span>テーマチャットを作成する</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="contentsMenu">
+                  <div class="narrowDown">
+                    <form>
+                      <select id="cba_mpChatNarrowDown" style="display:none" placeholder="メンバー名で絞り込む">
+                        <option value="1:1080100" data-keyword0="リューバオ ラム" data-keyword1="">リューバオ ラム</option>
+                        <option value="2:1088439" data-keyword0="【エンジニア】 中村義喜" data-keyword1="よしき">【エンジニア】 中村義喜</option>
+                        <option value="2:1106671" data-keyword0="平塚 貴之" data-keyword1="">平塚 貴之</option>
+                        <option value="2:1158756" data-keyword0="Misato Chiba" data-keyword1="">Misato Chiba</option>
+                        <option value="2:1151795" data-keyword0="東江 朗美" data-keyword1="あがりえろみ">東江 朗美</option>
+                        <option value="2:787030" data-keyword0="秋山 直貴" data-keyword1="あきやまなおき">秋山 直貴</option>
+                        <option value="1:1106714" data-keyword0="秋山 祐香莉" data-keyword1="あきやまゆかり">秋山 祐香莉</option>
+                        <option value="1:752384" data-keyword0="浅海 美由紀" data-keyword1="あさうみみゆき">浅海 美由紀</option>
+                        <option value="2:897013" data-keyword0="阿部 愛理" data-keyword1="あべあいり">阿部 愛理</option>
+                        <option value="1:768547" data-keyword0="天野 高敬" data-keyword1="あまのたかゆき">天野 高敬</option>
+                        <option value="2:669887" data-keyword0="新井 由紀子" data-keyword1="あらいゆきこ">新井 由紀子</option>
+                        <option value="2:1087072" data-keyword0="粟元 香織" data-keyword1="あわもとかおり">粟元 香織</option>
+                        <option value="2:1134339" data-keyword0="飯島 涼太" data-keyword1="いいじまりょうた">飯島 涼太</option>
+                        <option value="2:848714" data-keyword0="五十嵐 純子" data-keyword1="いがらしじゅんこ">五十嵐 純子</option>
+                        <option value="2:1064396" data-keyword0="池田 七重" data-keyword1="いけだななえ">池田 七重</option>
+                        <option value="1:1091951" data-keyword0="池田 秀春" data-keyword1="いけだひではる">池田 秀春</option>
+                        <option value="2:1025267" data-keyword0="生駒 春奈" data-keyword1="いこまはるな">生駒 春奈</option>
+                        <option value="1:946983" data-keyword0="伊佐次 哲也" data-keyword1="いさじてつや">伊佐次 哲也</option>
+                        <option value="1:1126781" data-keyword0="井澤 繁" data-keyword1="いざわしげる">井澤 繁</option>
+                        <option value="2:1084481" data-keyword0="石戸谷 奈々" data-keyword1="いしどやなな">石戸谷 奈々</option>
+                        <option value="1:965144" data-keyword0="石鍋 裕介" data-keyword1="いしなべゆうすけ">石鍋 裕介</option>
+                        <option value="2:1112672" data-keyword0="石原 將太" data-keyword1="いしはらしょうた">石原 將太</option>
+                        <option value="1:939128" data-keyword0="石丸 裕紀乃" data-keyword1="いしまるゆきの">石丸 裕紀乃</option>
+                        <option value="1:899214" data-keyword0="井関 真菜" data-keyword1="いせきまな">井関 真菜</option>
+                        <option value="1:674082" data-keyword0="井出 知里" data-keyword1="いでちさと">井出 知里</option>
+                        <option value="2:786497" data-keyword0="伊藤 豊" data-keyword1="いとうゆたか">伊藤 豊</option>
+                        <option value="2:926512" data-keyword0="伊藤 喜彦" data-keyword1="いとうよしひこ">伊藤 喜彦</option>
+                        <option value="2:954220" data-keyword0="伊藤 麻美子" data-keyword1="いとうまみこ">伊藤 麻美子</option>
+                        <option value="1:1101737" data-keyword0="伊東 越" data-keyword1="いとうこゆる">伊東 越</option>
+                        <option value="1:1155120" data-keyword0="伊藤 和奏" data-keyword1="いとうわかな">伊藤 和奏</option>
+                        <option value="2:1134522" data-keyword0="海野 知子" data-keyword1="うみのともこ">海野 知子</option>
+                        <option value="1:938307" data-keyword0="梅津 秀聡" data-keyword1="うめつひであき">梅津 秀聡</option>
+                        <option value="1:888982" data-keyword0="江崎 友美" data-keyword1="えさきゆみ">江崎 友美</option>
+                        <option value="2:669822" data-keyword0="江畑 聡" data-keyword1="えばたさとし">江畑 聡</option>
+                        <option value="1:1055109" data-keyword0="遠藤 航" data-keyword1="えんどうわたる">遠藤 航</option>
+                        <option value="1:960297" data-keyword0="大木 悠司" data-keyword1="おおきゆうじ">大木 悠司</option>
+                        <option value="2:915916" data-keyword0="大竹 奈津美" data-keyword1="おおたけなつみ">大竹 奈津美</option>
+                        <option value="2:1057895" data-keyword0="岡田 美佳" data-keyword1="おかだみか">岡田 美佳</option>
+                        <option value="1:1103182" data-keyword0="奥村 春香" data-keyword1="おくむらはるか">奥村 春香</option>
+                        <option value="1:1152383" data-keyword0="男澤 純一" data-keyword1="おとこざわじゅんいち">男澤 純一</option>
+                        <option value="2:1110519" data-keyword0="小野邉 慶子" data-keyword1="おのべけいこ">小野邉 慶子</option>
+                        <option value="1:965681" data-keyword0="抱井 美緒" data-keyword1="かかいみお">抱井 美緒</option>
+                        <option value="1:847577" data-keyword0="柿沼 裕太" data-keyword1="かきぬまゆうだい">柿沼 裕太</option>
+                        <option value="1:1150601" data-keyword0="鹿島 捺未" data-keyword1="かしまなつみ">鹿島 捺未</option>
+                        <option value="2:866316" data-keyword0="片山 舞" data-keyword1="かたやままい">片山 舞</option>
+                        <option value="2:859516" data-keyword0="桂 奈々" data-keyword1="かつらなな">桂 奈々</option>
+                        <option value="1:1105807" data-keyword0="加藤 裕樹" data-keyword1="かとうゆうき">加藤 裕樹</option>
+                        <option value="2:1113232" data-keyword0="金子 愛" data-keyword1="かねこあい">金子 愛</option>
+                        <option value="1:1105774" data-keyword0="加納 由紀" data-keyword1="かのうゆき">加納 由紀</option>
+                        <option value="2:1149283" data-keyword0="鎌滝 美佳" data-keyword1="かまたきみか">鎌滝 美佳</option>
+                        <option value="2:1105550" data-keyword0="亀谷 匠" data-keyword1="かめたにたくみ">亀谷 匠</option>
+                        <option value="2:1151553" data-keyword0="かるろわ あなすたしあ" data-keyword1="かるろわあなすたしあ">かるろわ あなすたしあ</option>
+                        <option value="1:1102029" data-keyword0="河合 優樹" data-keyword1="かわいゆうき">河合 優樹</option>
+                        <option value="2:1106017" data-keyword0="川上 峻" data-keyword1="かわかみしゅん">川上 峻</option>
+                        <option value="1:1158767" data-keyword0="川口 恵太" data-keyword1="かわぐちけいた">川口 恵太</option>
+                        <option value="2:1084764" data-keyword0="川西 吾梨紗" data-keyword1="かわにしありさ">川西 吾梨紗</option>
+                        <option value="1:678732" data-keyword0="菊地 智子" data-keyword1="きくちともこ">菊地 智子</option>
+                        <option value="2:913900" data-keyword0="菊池 泰斗" data-keyword1="きくちたいと">菊池 泰斗</option>
+                        <option value="1:1103383" data-keyword0="北川 絵梨奈" data-keyword1="きたがわえりな">北川 絵梨奈</option>
+                        <option value="2:1124165" data-keyword0="金 東建" data-keyword1="きむどんごん">金 東建</option>
+                        <option value="1:1049132" data-keyword0="木村 桃" data-keyword1="きむらもも">木村 桃</option>
+                        <option value="2:862924" data-keyword0="工藤 博行" data-keyword1="くどうひろゆき">工藤 博行</option>
+                        <option value="1:1109424" data-keyword0="國武 瑠璃" data-keyword1="くにたけるり">國武 瑠璃</option>
+                        <option value="1:953673" data-keyword0="蔵田 成美" data-keyword1="くらたなるみ">蔵田 成美</option>
+                        <option value="2:751208" data-keyword0="栗田 和幸" data-keyword1="くりたかずゆき">栗田 和幸</option>
+                        <option value="1:1009256" data-keyword0="栗原 なみ" data-keyword1="くりはらなみ">栗原 なみ</option>
+                        <option value="2:1079994" data-keyword0="栗山 堅太郎" data-keyword1="くりやまけんたろう">栗山 堅太郎</option>
+                        <option value="1:668738" data-keyword0="黒岩 里恵" data-keyword1="くろいわりえ">黒岩 里恵</option>
+                        <option value="1:1146235" data-keyword0="黒澤 正輝" data-keyword1="くろさわまさき">黒澤 正輝</option>
+                        <option value="2:885977" data-keyword0="桑原 悠里子" data-keyword1="くわはらゆりこ">桑原 悠里子</option>
+                        <option value="2:1044601" data-keyword0="桑村 佳奈" data-keyword1="くわむらかな">桑村 佳奈</option>
+                        <option value="1:1110890" data-keyword0="小池 楓" data-keyword1="こいけかえで">小池 楓</option>
+                        <option value="2:1102511" data-keyword0="小泉 梨花子" data-keyword1="こいずみりかこ">小泉 梨花子</option>
+                        <option value="1:1109423" data-keyword0="甲原 純" data-keyword1="こうはらじゅん">甲原 純</option>
+                        <option value="2:670036" data-keyword0="小菅 拓洋" data-keyword1="こすげたくひろ">小菅 拓洋</option>
+                        <option value="1:869450" data-keyword0="小林 真美" data-keyword1="こばやしまみ">小林 真美</option>
+                        <option value="2:1149219" data-keyword0="小林 凌平" data-keyword1="こばやしりょうへい">小林 凌平</option>
+                        <option value="1:993893" data-keyword0="今野 顕樹" data-keyword1="こんのあきな">今野 顕樹</option>
+                        <option value="1:1095460" data-keyword0="紺野 恵美子" data-keyword1="こんのえみこ">紺野 恵美子</option>
+                        <option value="2:993080" data-keyword0="権田 早紀" data-keyword1="ごんださき">権田 早紀</option>
+                        <option value="1:784798" data-keyword0="斉藤 将志" data-keyword1="さいとうまさし">斉藤 将志</option>
+                        <option value="2:1095030" data-keyword0="齋藤 春佳" data-keyword1="さいとうはるか">齋藤 春佳</option>
+                        <option value="2:847179" data-keyword0="坂上 理恵" data-keyword1="さかうえりえ">坂上 理恵</option>
+                        <option value="1:847480" data-keyword0="坂下 けい" data-keyword1="さかしたけい">坂下 けい</option>
+                        <option value="2:830095" data-keyword0="坂本 千春" data-keyword1="さかもとちはる">坂本 千春</option>
+                        <option value="1:1092101" data-keyword0="坂本 真依子" data-keyword1="さかもとまいこ">坂本 真依子</option>
+                        <option value="1:898004" data-keyword0="笹川 隼聡" data-keyword1="ささかわとしあき">笹川 隼聡</option>
+                        <option value="2:1006491" data-keyword0="佐藤 南" data-keyword1="さとうみなみ">佐藤 南</option>
+                        <option value="1:1007630" data-keyword0="佐藤 華与" data-keyword1="さとうはなよ">佐藤 華与</option>
+                        <option value="1:1107552" data-keyword0="佐藤 絵里子" data-keyword1="さとうえりこ">佐藤 絵里子</option>
+                        <option value="1:1150657" data-keyword0="佐藤 めぐみ" data-keyword1="さとうめぐみ">佐藤 めぐみ</option>
+                        <option value="1:923076" data-keyword0="塩崎 裕一" data-keyword1="しおさきゆういち">塩崎 裕一</option>
+                        <option value="2:924049" data-keyword0="柴田 さやか" data-keyword1="しばたさやか">柴田 さやか</option>
+                        <option value="1:934074" data-keyword0="澁谷 優希" data-keyword1="しぶたにゆき">澁谷 優希</option>
+                        <option value="2:1142410" data-keyword0="島澤 広樹" data-keyword1="しまざわひろき">島澤 広樹</option>
+                        <option value="1:1046369" data-keyword0="島津 朋子" data-keyword1="しまつともこ">島津 朋子</option>
+                        <option value="1:1069288" data-keyword0="嶌村 麻紀" data-keyword1="しまむらまき">嶌村 麻紀</option>
+                        <option value="2:1119576" data-keyword0="清水 紗菜" data-keyword1="しみずさな">清水 紗菜</option>
+                        <option value="2:1150256" data-keyword0="清水 信絵" data-keyword1="しみずのぶえ">清水 信絵</option>
+                        <option value="1:883622" data-keyword0="下田 絵莉子" data-keyword1="しもだえりこ">下田 絵莉子</option>
+                        <option value="1:978461" data-keyword0="新里 理奈" data-keyword1="しんざとりな">新里 理奈</option>
+                        <option value="1:1084389" data-keyword0="菅 香織" data-keyword1="すがかおり">菅 香織</option>
+                        <option value="1:1110705" data-keyword0="杉山 智昭" data-keyword1="すぎやまともあき">杉山 智昭</option>
+                        <option value="1:672465" data-keyword0="鈴木 愛" data-keyword1="すずきあい">鈴木 愛</option>
+                        <option value="1:752863" data-keyword0="鈴木 雄紀" data-keyword1="すずきゆうき">鈴木 雄紀</option>
+                        <option value="1:1080085" data-keyword0="鈴木 舞" data-keyword1="すずきまい">鈴木 舞</option>
+                        <option value="2:949792" data-keyword0="関 佑介" data-keyword1="せきゆうすけ">関 佑介</option>
+                        <option value="1:1008212" data-keyword0="高梨 理" data-keyword1="たかなしあや">高梨 理</option>
+                        <option value="1:1098268" data-keyword0="高橋 良周" data-keyword1="たかはしよしひろ">高橋 良周</option>
+                        <option value="1:738219" data-keyword0="高宮 沙知江" data-keyword1="たかみやさちえ">高宮 沙知江</option>
+                        <option value="2:1155018" data-keyword0="竹田 大志" data-keyword1="たけだひろし">竹田 大志</option>
+                        <option value="1:670746" data-keyword0="武富 建二" data-keyword1="たけとみけんじ">武富 建二</option>
+                        <option value="1:1120267" data-keyword0="田多 みのり" data-keyword1="ただみのり">田多 みのり</option>
+                        <option value="2:1158896" data-keyword0="田地 陽美" data-keyword1="たちはるみ">田地 陽美</option>
+                        <option value="2:1074566" data-keyword0="辰已 枝利華" data-keyword1="たつみえりか">辰已 枝利華</option>
+                        <option value="1:1155206" data-keyword0="田中 淳海" data-keyword1="たなかあつみ">田中 淳海</option>
+                        <option value="1:1159925" data-keyword0="田中 志歩" data-keyword1="たなかしほ">田中 志歩</option>
+                        <option value="2:1030913" data-keyword0="田村 育子" data-keyword1="たむらいくこ">田村 育子</option>
+                        <option value="2:1109131" data-keyword0="田村 真智子" data-keyword1="たむらまちこ">田村 真智子</option>
+                        <option value="2:751973" data-keyword0="田呂丸 智教" data-keyword1="たろまるとものり">田呂丸 智教</option>
+                        <option value="1:698684" data-keyword0="千葉 翔" data-keyword1="ちばしょう">千葉 翔</option>
+                        <option value="2:841063" data-keyword0="張 儀" data-keyword1="ちょうぎ">張 儀</option>
+                        <option value="2:939971" data-keyword0="蝶多 寿希也" data-keyword1="ちょうだじゅきや">蝶多 寿希也</option>
+                        <option value="2:673817" data-keyword0="恒見 萌子" data-keyword1="つねみもえこ">恒見 萌子</option>
+                        <option value="1:1135254" data-keyword0="戸谷 菜摘" data-keyword1="とだになつみ">戸谷 菜摘</option>
+                        <option value="1:1153077" data-keyword0="外村 悠" data-keyword1="とのむらゆう">外村 悠</option>
+                        <option value="1:1044875" data-keyword0="土肥 奈津子" data-keyword1="どいなつこ">土肥 奈津子</option>
+                        <option value="1:766935" data-keyword0="中村 康生" data-keyword1="なかむらやすお">中村 康生</option>
+                        <option value="1:1114260" data-keyword0="長沢 亜季" data-keyword1="ながさわあき">長沢 亜季</option>
+                        <option value="1:1025337" data-keyword0="永松 奈央美" data-keyword1="ながまつなおみ">永松 奈央美</option>
+                        <option value="1:1125369" data-keyword0="永松 卓" data-keyword1="ながまつたかし">永松 卓</option>
+                        <option value="2:1103376" data-keyword0="西海 健一" data-keyword1="にしうみけんいち">西海 健一</option>
+                        <option value="2:1121621" data-keyword0="新田 敦大" data-keyword1="にったあつひろ">新田 敦大</option>
+                        <option value="2:1106835" data-keyword0="沼澤 沙衣子" data-keyword1="ぬまざわさえこ">沼澤 沙衣子</option>
+                        <option value="1:736394" data-keyword0="根本 正人" data-keyword1="ねもとまさと">根本 正人</option>
+                        <option value="2:1118025" data-keyword0="能條 沙也佳" data-keyword1="のうじょうさやか">能條 沙也佳</option>
+                        <option value="1:859717" data-keyword0="塙 まゆみ" data-keyword1="はまゆみ">塙 まゆみ</option>
+                        <option value="1:701718" data-keyword0="橋村 雄一郎" data-keyword1="はしむらゆういちろう">橋村 雄一郎</option>
+                        <option value="2:912495" data-keyword0="長谷川 浩明" data-keyword1="はせがわひろあき">長谷川 浩明</option>
+                        <option value="2:667507" data-keyword0="畑田 広一" data-keyword1="はただこういち">畑田 広一</option>
+                        <option value="1:741179" data-keyword0="波多野 律子" data-keyword1="はたのりつこ">波多野 律子</option>
+                        <option value="1:860030" data-keyword0="浜田 孟志" data-keyword1="はまだたけし">浜田 孟志</option>
+                        <option value="1:1157807" data-keyword0="浜辺 玲嗣" data-keyword1="はまべりょうじ">浜辺 玲嗣</option>
+                        <option value="2:1079162" data-keyword0="林 麻衣香" data-keyword1="はやしまいか">林 麻衣香</option>
+                        <option value="2:465553" data-keyword0="原田 圭佑" data-keyword1="はらだけいすけ">原田 圭佑</option>
+                        <option value="1:791655" data-keyword0="比嘉 なな子" data-keyword1="ひがななこ">比嘉 なな子</option>
+                        <option value="1:1002973" data-keyword0="平井 龍成" data-keyword1="ひらいりゅうせい">平井 龍成</option>
+                        <option value="1:1032244" data-keyword0="Hirano Izuki" data-keyword1="ひらのいづき">Hirano Izuki</option>
+                        <option value="1:785920" data-keyword0="平山 潤子" data-keyword1="ひらやまじゅんこ">平山 潤子</option>
+                        <option value="1:753740" data-keyword0="深田 亮平" data-keyword1="ふかだりょうへい">深田 亮平</option>
+                        <option value="2:922494" data-keyword0="深田 拓圭" data-keyword1="ふかだひろよし">深田 拓圭</option>
+                        <option value="2:829673" data-keyword0="Fukui ai" data-keyword1="ふくいあい">Fukui ai</option>
+                        <option value="2:658500" data-keyword0="藤田 恭平" data-keyword1="ふじたきょうへい">藤田 恭平</option>
+                        <option value="2:1040452" data-keyword0="船木 裕矢" data-keyword1="ふなきゆうや">船木 裕矢</option>
+                        <option value="2:707900" data-keyword0="星 夏美" data-keyword1="ほしなつみ">星 夏美</option>
+                        <option value="1:1112321" data-keyword0="本澤 沙帆" data-keyword1="ほんざわさほ">本澤 沙帆</option>
+                        <option value="1:1126357" data-keyword0="本多 ゆり乃" data-keyword1="ほんだゆりの">本多 ゆり乃</option>
+                        <option value="2:913876" data-keyword0="真壁 奈々" data-keyword1="まかべなな">真壁 奈々</option>
+                        <option value="2:1053004" data-keyword0="倍川 葵" data-keyword1="ましかわあおい">倍川 葵</option>
+                        <option value="1:919613" data-keyword0="増田 紘子" data-keyword1="ますだひろこ">増田 紘子</option>
+                        <option value="1:1041398" data-keyword0="松井 成美" data-keyword1="まついなるみ">松井 成美</option>
+                        <option value="2:1058890" data-keyword0="松澤 柚子" data-keyword1="まつざわゆうこ">松澤 柚子</option>
+                        <option value="2:836640" data-keyword0="松本 雄太" data-keyword1="まつもとゆうた">松本 雄太</option>
+                        <option value="1:1106626" data-keyword0="松本 隆太" data-keyword1="まつもとりゅうた">松本 隆太</option>
+                        <option value="2:1119193" data-keyword0="三栖 あかね" data-keyword1="みすあかね">三栖 あかね</option>
+                        <option value="2:1061545" data-keyword0="三橋 優也" data-keyword1="みつはしゆうや">三橋 優也</option>
+                        <option value="2:1099944" data-keyword0="宮入 裕幸" data-keyword1="みやいりひろゆき">宮入 裕幸</option>
+                        <option value="1:1102357" data-keyword0="宮澤 萌子" data-keyword1="みやざわもえこ">宮澤 萌子</option>
+                        <option value="2:1062341" data-keyword0="宮下 陽介" data-keyword1="みやしたようすけ">宮下 陽介</option>
+                        <option value="2:1064553" data-keyword0="宮下 桃香" data-keyword1="みやしたももか">宮下 桃香</option>
+                        <option value="1:1097048" data-keyword0="宮西 優太" data-keyword1="みやにしゆうた">宮西 優太</option>
+                        <option value="1:672950" data-keyword0="宮本 和世士" data-keyword1="みやもとかずよし">宮本 和世士</option>
+                        <option value="2:1157880" data-keyword0="宮森 康説" data-keyword1="みやもりこうとく">宮森 康説</option>
+                        <option value="2:1136724" data-keyword0="苗 華玉" data-keyword1="みょうかぎょく">苗 華玉</option>
+                        <option value="1:1135244" data-keyword0="三好 梨紗子" data-keyword1="みよしりさこ">三好 梨紗子</option>
+                        <option value="2:1103394" data-keyword0="村上 志帆" data-keyword1="むらかみしほ">村上 志帆</option>
+                        <option value="1:899156" data-keyword0="村田 友紀" data-keyword1="むらたゆき">村田 友紀</option>
+                        <option value="1:1147301" data-keyword0="森口 英奈" data-keyword1="もりぐちえな">森口 英奈</option>
+                        <option value="1:902875" data-keyword0="森田 桂子" data-keyword1="もりたけいこ">森田 桂子</option>
+                        <option value="1:1161015" data-keyword0="山口 真奈" data-keyword1="やまぐちまな">山口 真奈</option>
+                        <option value="1:1059547" data-keyword0="山崎 省吾" data-keyword1="やまざきしょうご">山崎 省吾</option>
+                        <option value="1:1115129" data-keyword0="山田 若葉" data-keyword1="やまだわかば">山田 若葉</option>
+                        <option value="2:741293" data-keyword0="山本 剛志" data-keyword1="やまもとつよし">山本 剛志</option>
+                        <option value="2:1150886" data-keyword0="山本 紘一" data-keyword1="やまもとこういち">山本 紘一</option>
+                        <option value="2:1091041" data-keyword0="横須賀 愛佳" data-keyword1="よこすかあいか">横須賀 愛佳</option>
+                        <option value="1:1139679" data-keyword0="横山 聡" data-keyword1="よこやまさとし">横山 聡</option>
+                        <option value="2:1109327" data-keyword0="吉田 勇太" data-keyword1="よしだゆうた">吉田 勇太</option>
+                        <option value="2:764996" data-keyword0="渡辺 弘平" data-keyword1="わたなべこうへい">渡辺 弘平</option>
+                        <option value="1:785387" data-keyword0="渡辺 鮎子" data-keyword1="わたなべあゆこ">渡辺 鮎子</option>
+                        <option value="1:1081817" data-keyword0="渡辺 真" data-keyword1="わたなべしん">渡辺 真</option>
+                      </select>
+                    </form>
+                  </div>
+                  <div class="listSort">
+                    <div class="dropdown listUpdate">
+                      <div class="title">
+                        <a href="javascript:void(0);">
+                          <span>更新日時（降順）</span>
+                        </a>
+                      </div>
+                      <div class="menu">
+                        <ul>
+                          <li >
+                            <a href="javascript:void(0);" data-url="/mpChat/ajax/listAjax?sortOrder=ASC&amp;currentFolder=" data-sortOrder="ASC">更新日時（昇順）</a>
+                          </li>
+                          <li class="active">
+                            <a href="javascript:void(0);" data-url="/mpChat/ajax/listAjax?sortOrder=DESC&amp;currentFolder=" data-sortOrder="DESC">更新日時（降順）</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="currentFolder" value="">
+                  <input type="hidden" name="sortOrder" value="DESC">
+                  <input type="hidden" name="narrowDownMemberId" value="">
+                </div>
+                <div class="contentsTable">
+                  <table class="list">
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A15547680" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:922494_2:931069_1479690565000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                              <span>深田 拓圭 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A15547680">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody">OAuthという製品とその概要について https://qiita.com/TakahikoKawasaki/items/e37caf50776e00e733be マイクロソフトパートナー(マネージメントや企業同士のパイプ作りに繋がる?) https://partner.microsoft.com/ja-jp/ https://www.microsoft.com/ja-jp/partner HTMLやC#を仕事にしている社員がいるのであれば、取らせて、技術証明という形で他企業に営業をさせるのも手かもですね。(サブコンの会社の時は、管工事施工管理技士という国家資格を持っている会社の社員数と割合が大きいということも少なからず、入札ということにつながっていたとお聞きしていました。) https://docs.microsoft.com/ja-jp/partner-center/learn-about-competencies これに対するえバターマンの解答 今月末は帰省かぁ～！！ ズルイ！ｗ 楽しんで行ってきてね＾＾</div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">牛島 淳史 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">9/6(木)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A21164578" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1113232_2:1122897_1518156256000.jpg" width="20" height="19" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>金子 愛 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A21164578">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody">大丈夫ですー&#128582;&#8205;♂&#65039;&#128582;&#8205;♀&#65039;</div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">金子 愛 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">9/4(火)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22876519" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1161015_1:1170898_1535953761000.jpeg" width="20" height="15" style="padding:2px 0px 2px 0px;" alt="" class="icon" />
+                              <span>山口 真奈 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22876519">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">山口 真奈 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">9/3(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A23138551" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1158896_2:1168746_1535419147000.jpg" width="12" height="20" style="padding:0px 4px 0px 4px;" alt="" class="icon" />
+                              <span>田地 陽美 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A23138551">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">田地 陽美 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/28(火)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A23133146" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1158756_2:1168605_1536544841000.jpeg" width="11" height="20" style="padding:0px 5px 0px 4px;" alt="" class="icon" />
+                              <span>Misato Chiba さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A23133146">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">Misato Chiba </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/27(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22828565" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1159925_1:1169798_1535716022000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>田中 志歩 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22828565">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">田中 志歩 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/25(土)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A23097928" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1157880_2:1167727_1534733512000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>宮森 康説 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A23097928">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">宮森 康説 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/20(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A20294875" class="iconLink">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" class="icon" />
+                              <span>もくもく会（仮）</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A20294875">5</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody">Laravelハンズオンテキスト 作ったのでよかったら見てみてください。 https://hackmd.io/s/r1cq54Drm</div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">伊藤 喜彦 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/18(土)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22782626" class="iconLink">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" class="icon" />
+                              <span>遷移確認</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22782626">1</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody">遷移を確認します。</div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">牛島 淳史 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/15(水)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22782354" class="iconLink">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" class="icon" />
+                              <span>テーマチャット作成確認</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22782354">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">牛島 淳史 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/15(水)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22779918" class="iconLink">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/member20.gif" width="20" height="20" alt="" class="icon" />
+                              <span>川口 恵太 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22779918">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">川口 恵太 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/15(水)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22738160" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1157807_1:1167670_1533546339000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>浜辺 玲嗣 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22738160">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">浜辺 玲嗣 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">8/6(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A22969050" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1155018_2:1164852_1532926628000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                              <span>竹田 大志 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A22969050">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">竹田 大志 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/27(金)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22618977" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1155206_1:1165055_1531967393000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>田中 淳海 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22618977">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">田中 淳海 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/19(木)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22615297" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1155120_1:1164969_1531908599000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>伊藤 和奏 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22615297">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">伊藤 和奏 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/18(水)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A19590748" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1081817_1:1091365_1506302752000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                              <span>渡辺 真 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A19590748">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody">お疲れ様です。 本日予定していた打ち合わせですが、 体調不良によりリスケをお願いしたいです。 大変申し訳ございません。</div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">渡辺 真 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/9(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A22813699" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1151795_2:1161620_1530764518000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                              <span>東江 朗美 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A22813699">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">東江 朗美 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/5(木)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22519103" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1153077_1:1162910_1530855230000.png" width="16" height="20" style="padding:0px 2px 0px 2px;" alt="" class="icon" />
+                              <span>外村 悠 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22519103">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">外村 悠 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/5(木)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="even confirmed subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=2%3A22802310" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/2:1151553_2:1161373_1531185280000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                              <span>かるろわ あなすたしあ さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=2%3A22802310">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="even confirmed contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">かるろわ あなすたしあ </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/4(水)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr class="odd confirmed last subject">
+                        <td class="title">
+                          <div>
+                            <a href="/mpChat/view?chatRoomId=1%3A22482911" class="iconLink">
+                              <img src="/49f5cdb4ca/icon/member/1:1152383_1:1162213_1534757669000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                              <span>男澤 純一 さんとのチャット</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td class="member">
+                          <div>
+                            <span class="contentsLabel">メンバー:</span>
+                            <span class="contentsValue">
+                              <a href="javascript:void(0);" class="chatRoomMemberListTip" data-url="/mpChat/ajax/chatRoomMemberListTip?chatRoomId=1%3A22482911">2</a>名
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="odd confirmed last contents">
+                        <td colspan="2" class="content">
+                          <div class="dateformat_mde">
+                            <div class="contentsParts">
+                              <div class="contentsPartsWrapper">
+                                <div class="contentsPartsBody"></div>
+                              </div>
+                            </div>
+                            <div class="modifyParts">
+                              <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue">男澤 純一 </span>
+                              </div>
+                              <div class="modifyDate">
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue">7/2(月)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="contentsInfo listUpdate" >
+                    <div class="pageNavi">
+                      <span class="disable cba_commonPageNaviTop">先頭へ</span>
+                      <span class="delimiter">|</span>
+                      <span class="disable cba_commonPageNaviPrev">&laquo;&nbsp;前の 20 件へ</span>
+                      <span class="delimiter">|</span>
+                      <a href="javascript:void(0);" data-url="/mpChat/ajax/listAjax?sortOrder=DESC&amp;currentFolder=&amp;offset=20" class="cba_commonPageNaviNext">次の 20 件へ&nbsp;&raquo;</a>
+                      <span class="delimiter">|</span>
+                      <a href="javascript:void(0);" data-url="/mpChat/ajax/listAjax?sortOrder=DESC&amp;currentFolder=&amp;offset=180" class="cba_commonPageNaviLast">末尾へ</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sideAreaWrapper">
+            <div class="sideArea">
+              <div class="contentsFrame">
+                <div class="subTitle">
+                  <p>添付ファイルの保存容量</p>
+                </div>
+                <div class="fileSizeSub">1 MB / 1,024 MB </div>
+                <div class="progressBar" data-share="0">
+                  <div class="share">0 %</div>
+                </div>
+                <div class="fileListLink">
+                  <a href="/mpCabinet/list?application=MP_CHAT" title="添付ファイル一覧へ">添付ファイル一覧へ</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+            var require = {
+            baseUrl: "https://cybozulive.com/static/49f5cdb4ca/js/src"
+        };
+        </script>
+    <script src="https://cybozulive.com/static/49f5cdb4ca/js/require.js" data-main="../built/chat/listMain" type="text/javascript"></script>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<!-- この下のクラスは、ダイレクトチャットの時は、出していない -->
+<script>
+function themeShowClick(){
+  var expandContent = document.getElementsByClassName('expandContent');
+  var closeContent = document.getElementsByClassName('closeContent');
+  var content = document.getElementsByClassName('content');
+  for (var i=0;i<expandContent.length;i+=1){
+    expandContent[i].style.display = "none";
+  }
+  for (var i=0;i<content.length;i+=1){
+    content[i].style.display = "block";
+  }
+}
+//ボタンを閉じる時の処理
+function themeCloseClick(){
+  var expandContent = document.getElementsByClassName('expandContent');
+  var closeContent = document.getElementsByClassName('closeContent');
+  var content = document.getElementsByClassName('content');
+  for (var i=0;i<expandContent.length;i+=1){
+    expandContent[i].style.display = "block";
+  }
+  for (var i=0;i<content.length;i+=1){
+    content[i].style.display = "none";
+  }
+}
+//テーマチャットから抜けるをクリックした時に削除してチャットトップ画面に遷移する
+$(function(){
+  $(document).on("click",'a[name="leave_group_chat"]',function(){
+
+    //フラグの初期化
+    var useAjaxFlg = true;
+
+    //テーマチャットから抜けるメンバー情報を作成する
+    if(window.confirm('本当に「テーマチャット名」を削除してもよろしいですか?')){
+      //キャンセル時の処理
+      return false;
+    }else{
+      //OKの時はチャットトップ画面に遷移する
+      senddata[$(this).attr("id")] = $(this).val();
+      location.href = 'chat_top.html';
+    }
+
+    // Ajaxでのグループチャットから抜ける処理(自分)
+    if(useAjaxFlg){
+      $.ajax({
+        type: "POST",
+        url: "library/Api/chat.php",
+        data: senddata,
+
+        success: function (senddata) {
+          pass
+        },
+        error: function (XMLHttpRequest,textStatus,errorThrown) {
+          alert(errorThrown);
+        }
+      })
+    }
+  });
+})
+
+</script>
+<!-- TODO ひとまずphpの処理を先に作成する -->
+<?php $group_chat_data =$chat->getGroupChat($group_chat_no)?>
+<!-- TODO グループチャット番号によって表示を変更する -->
+<!-- 変更するとテーマチャットから抜けるボタンを押した時の動きをajaxとphpで行う。 -->
+<div class="content" style="display:none;">
+  <div class="funcMenuBlock">
+    <div class="funcMenuFrame">
+      <!-- TODO テーマチャットの作成と同じレイアウトの画面に遷移して、作成の表示を変更に表示する -->
+      <div class="menu">
+        <a href="chat_theme_edit?edit_type=update&group_chat_no=<?=$group_chat_no?>" class="iconLink" title="変更する">
+          <img src="https://cybozulive.com/static/49f5cdb4ca/images/write20.gif" alt="変更する" class="icon" />
+          <span>変更する</span>
+        </a>
+      </div>
+      <div class="menu">
+        <form action="/mpChat/outputTextDirect" method="POST">
+          <input type="hidden" name="chatRoomId" value="1:20294875" />
+        </form>
+      </div>
+      <!--TODO テーマチャットから抜けるをクリックした時　画像:文章「遷移確認」を削除します。よろしいですか？ 削除したテーマチャットは元に戻すことができません。→はいを選択するとチャットトップに遷移する -->
+      <div class="menu last">
+        <a href="#leaveChatRoom_chatRoomId=1:20294875" name =leave_group_chat class="history iconLink" title="テーマチャットから抜ける ">
+          <img src="https://cybozulive.com/static/49f5cdb4ca/images/signout20.png" alt="テーマチャットから抜ける " class="icon" />
+          <span>テーマチャットから抜ける </span>
+        </a>
+      </div>
+    </div>
+    <div class="func">
+      <a href="javascript:void(0);" class="closeContent"onclick="themeCloseClick();">詳細を閉じる</a>
+    </div>
+  </div>
+  <div class="contentsFrame scrollable">
+    <div class="contentsView">
+      <div class="contentsTitle">
+        <h2>
+          <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-" class="star">
+            <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+          </a>
+          <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat32.png" class="icon" />
+          <span><?=$group_chat_data['GROUP_CHAT_TITLE']?></span>
+        </h2>
+      </div>
+      <div class="contentsDetail">
+        <div class="formatContents "><?=$group_chat_data['GROUP_CHAT_MEMO']?></div>
+        <div class="operationParts">
+          <div class="operation">
+            <span data-url="/common/good/goodAjax">
+              <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875--on" data-url="/common/good/goodTurnJsonDirect">
+                <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                <span>いいね！</span>
+              </a>
+            </span>
+          </div>
+          <div id="cbaGoodMemberList-MP_CHAT-1:20294875-" data-url="/common/good/goodMemberListAjax" class="goodMemberListParts"></div>
+        </div>
+        <div class="contentsModifyInfo">
+          <div class="create">登録
+            <span><?=date('Y年m月d日',strtotime($group_chat_data['GROUP_CHAT_INS_TS']))?></span>
+            <span>
+              <span class="name"><?=$con->selectNo($group_chat_data['GROUP_CHAT_CREATE_MEMBER_NO'])['member_name']?></span>
+            </span>
+          </div>
+          <div class="modify">更新
+            <span><?=date('Y年m月d日',strtotime($group_chat_data['GROUP_CHAT_UPD_TS']))?></span>
+            <span>
+              <span class="name"><?=$con->selectNo($group_chat_data['GROUP_CHAT_UPDATE_MEMBER_NO'])['member_name']?></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- 下のdivは、chatRoomHeaderの閉じタグ -->
+</div>
+<!-- 戻すボタン -->
+<div class="title" style="display:block;">
+  <div class="func">
+    <a href="javascript:void(0);" class="expandContent"onclick="themeShowClick();">詳細を見る</a>
+  </div>
+</div>

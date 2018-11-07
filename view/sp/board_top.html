@@ -1,0 +1,17 @@
+<?php require_once('category_list.html')?>
+<?=!empty($_POST['edit_topic_msg']) ? '<div id="board_topic_msg"><p>'.$_POST['edit_topic_msg'].'</p></div>' : ''?>
+<a href ="topic_edit?edit_type=register">新規作成</a>
+<?php $board_category_no = (!empty($_GET['board_category_no']) ? $_GET['board_category_no'] : null)?>
+<div id="topic_list">
+<?php foreach($board->getAllBoardTopic($board_category_no) as $board_topic):?>
+<p>
+    <a href="topic_top?board_topic_no=<?=$board_topic['BOARD_TOPIC_NO']?>"><?=$board_topic['BOARD_TOPIC_TITLE']?></a>
+    コメント数:<?=$board_topic['BOARD_COMMENT_NUM']?>
+    いいね数:<?=$board_topic['BOARD_TOPIC_GOOD_NUM']?>
+    <a href="topic_edit?edit_type=update&board_topic_no=<?=$board_topic['BOARD_TOPIC_NO']?>">編集する</a>
+</p>
+<?php endforeach;?>
+</div>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

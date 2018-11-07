@@ -1,0 +1,73 @@
+<?php $board = new Board;?>
+<h1>トピック<?= $board->getTopicEditType($_GET['edit_type'])?>画面</h1>
+<div id="title_msg">
+
+    <?php if(!empty($_POST['err'])):?>
+    <?php foreach($_POST['err'] as $err):?>
+    <p><?=$err?></p>
+    <?php endforeach;?>
+    <?php endif;?>
+
+</div>
+<div id="text_msg"></div>
+<form action="" method="post" name="topic_edit">
+    <table class="topic_edit">
+        <tr>
+            <th>
+                トピック名(必須)
+            </th>
+            <td>
+                <input type="text" class="board_topic_title" name="BOARD_TOPIC_TITLE" value=
+                        "<?=!empty($_POST['BOARD_TOPIC_TITLE']) ? $_POST['BOARD_TOPIC_TITLE'] : ''?>
+<?=empty($_POST['BOARD_TOPIC_TITLE'])
+    && !empty($_GET['board_topic_no'])
+    && !empty($board->getBoardTopic($_GET['board_topic_no'])['BOARD_TOPIC_TITLE'])
+    ? $board->getBoardTopic($_GET['board_topic_no'])['BOARD_TOPIC_TITLE'] : ''
+?>
+" placeholder="<?=$board::TOPIC_TITLE_MAX?>文字以内">
+            </td>
+        </tr>
+
+
+        <tr>
+            <th>
+                カテゴリ
+            </th>
+            <td>
+                <select name="BOARD_CATEGORY_NO" >
+                    <?php foreach($board->getAllBoardCategory() as $board_category):?>
+                    <option value="<?=$board_category['BOARD_CATEGORY_NO']?>"
+                    <?=!empty($_POST['BOARD_CATEGORY_NO']) && $board_category['BOARD_CATEGORY_NO'] == $_POST['BOARD_CATEGORY_NO'] ? ' selected' : ''?>
+                    <?=empty($_POST['BOARD_CATEGORY_NO'])
+                    && !empty($_GET['board_topic_no'])
+                    && $board->getBoardTopic($_GET['board_topic_no'])['BOARD_CATEGORY_NO'] == $board_category['BOARD_CATEGORY_NO']
+                    ? ' selected' : ''
+                    ?>
+
+                    >
+                    <?=$board_category['BOARD_CATEGORY_NAME']?>
+                    </option>
+                    <?php endforeach;?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                本文
+            </th>
+            <td>
+<textarea name="BOARD_TOPIC_TEXT" rows="4" style="width:300px;" placeholder="<?=$board::TOPIC_TEXT_MAX?>文字以内"
+    ><?=!empty($_POST['BOARD_TOPIC_TEXT']) ? $_POST['BOARD_TOPIC_TEXT'] : ''?>
+<?=empty($_POST['BOARD_TOPIC_TEXT'])
+    && !empty($_GET['board_topic_no'])
+    && !empty($board->getBoardTopic($_GET['board_topic_no'])['BOARD_TOPIC_TEXT'])
+    ? $board->getBoardTopic($_GET['board_topic_no'])['BOARD_TOPIC_TEXT'] : ''
+?>
+</textarea>
+            </td>
+
+        </tr>
+    </table>
+    <input type="submit" name="edit_board_topic" value="<?= $board->getTopicEditType($_GET['edit_type'])?>">
+</form>

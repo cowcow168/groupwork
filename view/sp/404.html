@@ -1,0 +1,48 @@
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                存在しないページ
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">存在しないページ</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+
+            <div class="login-box">
+                <div class="login-logo">
+                    <p style="font-size: 1.4rem; color: red; font-weight: bold;background-color: #fff; width: 56rem;">Error-404</p>
+                </div>
+                <!-- /.login-logo -->
+                <div class="login-box-body" style="width: 56rem;">
+                    <p style="font-size: 1.4rem; color: red;font-weight: bold;background-color: #fff;">該当ページを表示出来ませんでした。<br><?=(empty($_SERVER['HTTP_REFERER']) ? '直接URL入力はしないようお願いします。<br>' : 'リンクを辿ってこちらに到着した場合には、<br>以下の文字列を添えてsyuuhou@xxxcorp.jpまで連絡してください。<br><br>'.$_SERVER['HTTP_REFERER'])?>
+                    </p>
+
+                    <!-- /.social-auth-links -->
+                </div>
+                <!-- /.login-box-body -->
+            </div>
+            <!-- /.login-box -->
+
+            <!-- /.row (main row) -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer text-center">
+        <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+    </footer>
+</div>
+<!-- ./wrapper -->

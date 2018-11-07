@@ -1,0 +1,85 @@
+@CHARSET "UTF-8";
+
+body {
+    margin: auto;
+
+    width: 90% px;
+    text-align: center;
+}
+
+div {
+    margin: auto;
+}
+
+* {
+    /*font-family: 'メイリオ';*/
+    text-decoration: none;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.center {
+    text-align: center;
+}
+
+.red {
+    color: red;
+}
+
+.login_err {
+    color: black;
+    font-weight: bold;
+}
+
+h1 {
+    margin: 0;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    /*background-color: #fff;*/
+}
+
+input[type="submit"] {
+    cursor: pointer;
+}
+
+.table2 > tbody > tr > td, .table2 > tbody > tr > th, .table2 > tfoot > tr > td, .table2 > tfoot > tr > th, .table2 > thead > tr > td, .table2 > thead > tr > th {
+    border: none;
+}
+
+footer {
+    text-align: right;
+}
+
+.bg-primary {
+    background-color: #222222;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 1px solid #222;
+}
+
+table {
+    margin: auto;
+}
+
+table > thead {
+    font-weight: bold;
+}
+
+.nav,
+.nav-tabs {
+    border-bottom: 1px solid #333;
+}
+
+th{
+    text-align: center;
+    background-color: greenyellow;
+}

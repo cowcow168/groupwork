@@ -1,0 +1,293 @@
+<style>
+/* 実際は、ヘッダーかcssファイルで読む */
+/* 開閉の時の疑似要素 */
+.selfclear:after {
+    height: 0;
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    min-height: 1%;
+}
+</style>
+
+<?php $chat = new Chat;?>
+<?php require_once(LIBRARY.'Api/chat.php')?>
+<?php require_once('chat_top_list.html')?>
+<!-- 初回時でのPERMISSIONテーブルの登録・更新処理など -->
+<?php $chat->setPERMISSION()?>
+<div>
+    <a href="chat_theme?edit_type=register"><span>テーマチャットを作成する</span></a>
+</div>
+<div class="contentsMenu">
+    <div class="narrowDown">
+        <form>
+            <select id="cba_mpChatNarrowDown"　 style="display:none"　placeholder="メンバー名で絞り込む">
+                <option value="">リューバオ ラム</option>
+                <option value="">平塚 貴之</option>
+            </select>
+       </form>
+    </div>
+    <div class="listSort">
+        <div class="dropdown listUpdate">
+            <div class="title"><a href=""><span>更新日時（降順）</span></a></div>
+            <div class="menu">
+                <ul>
+                    <li ><a href="">更新日時（昇順）</a></li>
+                    <li class="active"><a href="">更新日時（降順）※初期表示は、こちらです。</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="currentFolder" value="">
+    <input type="hidden" name="sortOrder" value="DESC">
+    <input type="hidden" name="narrowDownMemberId" value="">
+</div>
+<!-- ここから下は、自分以外の社員毎のダイレクトチャットと自身の所属しているチャットを表示する(Top画面での真ん中の表示領域) -->
+<!-- デフォルトでは、すべてで、サイドバーでテーマチャットをクリックするとテーマチャットのみ、ダイレクトだと辞めていない全社員 -->
+<!-- TODO 切り分け方をより綺麗にできるか検討 -->
+<?php $con = new Db?>
+<?php $member_no = $_SESSION['member_no']?>
+<!-- 下は、ダイレクトチャットの時の表示 -->
+<?php if($chat_shikibetu_flag == 'DIRECT'):?>
+<h1>ダイレクトチャット表示されていますよ</h1>
+<?php foreach($chat->getPermissionMember($member_no) as $permisiion_member):?>
+<div class="contentsTable">
+    <table>
+        <tbody>
+            <tr class="even confirmed subject">
+                <td class="title">
+                    <div>
+                        <a href="chat_direct" class="iconLink">
+                        <img src=""><span><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?> さんとのチャット</span>
+                        </a>
+                    </div>
+                </td>
+                <td  class="member">
+                    <div>
+                        <span class="contentsLabel">メンバー:</span>
+                        <!-- TODO グループチャット時は、参加している人数を表示する -->
+                        <span class="contentsValue"><a href="">2</a> 名</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="even confirmed contents">
+                <td colspan="2" class="content">
+                    <div class="dateformat_mde">
+                        <div class="contentsParts">
+                            <div class="contentsPartsWrapper">
+                              <!-- やり取りしていなければ何も表示されない(TO_CHATテーブルでのテキストがなければ表示されずに最新のコメントが表示される) -->
+                              <!-- TODO 更新者とgroup_chat_noを紐付ける必要あり -->
+                              <!-- TODO グループチャットの時は、参加しているメンバーの投稿した最新のコメントを出すことで可能グループチャットを登録する時の登録のさせ方を登録させる -->
+                                <div class="contentsPartsBody">
+                                  <?php foreach ($chat->getAllToChat($group_chat_no) as $to_chat):?>
+                                  <?=$chat->formatDirectChatTextDisplay($to_chat['TO_CHAT_TEXT'])?>
+                                  <?php endforeach;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modifyParts">
+                            <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue"><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span>
+                            </div>
+                            <div class="modifyDate">
+                              <!-- 更新日時の表記がおかしいのと更新日時は、どの値を出すのかを確認 -->
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue"><?=date('Y年m月d日',strtotime($permisiion_member['PERMISSION_UPD_TS']))?></span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php endforeach;?>
+<?php endif;?>
+<!-- 下は、グループチャットの時の表示 -->
+<?php if($chat_shikibetu_flag == 'THEME'):?>
+<h1>グループチャット表示されていますよ</h1>
+<?php foreach ($chat->getAllGroupChat() as $group_chat):?>
+<div class="contentsTable">
+    <table>
+        <tbody>
+            <tr class="even confirmed subject">
+                <td class="title">
+                    <div>
+                        <a href="chat_direct" class="iconLink">
+                        <img src=""><span><?=$group_chat['GROUP_CHAT_TITLE']?></span>
+                        </a>
+                    </div>
+                </td>
+                <td  class="member">
+                    <div>
+                        <span class="contentsLabel">メンバー:</span>
+                        <!-- TODO グループチャット時は、参加している人数を表示する -->
+                        <span class="contentsValue"><a href="">5</a> 名</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="even confirmed contents">
+                <td colspan="2" class="content">
+                    <div class="dateformat_mde">
+                        <div class="contentsParts">
+                            <div class="contentsPartsWrapper">
+                              <!-- やり取りしていなければ何も表示されない(TO_CHATテーブルでのテキストがなければ表示されずに最新のコメントが表示される) -->
+                              <!-- TODO 更新者とgroup_chat_noを紐付ける必要あり -->
+                              <!-- TODO グループチャットの時は、参加しているメンバーの投稿した最新のコメントを出すことで可能グループチャットを登録する時の登録のさせ方を登録させる -->
+                                <div class="contentsPartsBody">
+                                  <?php foreach ($chat->getAllToChat($group_chat['GROUP_CHAT_NO']) as $to_chat):?>
+                                  <?=$chat->formatDirectChatTextDisplay($to_chat['TO_CHAT_TEXT'])?>
+                                  <?php endforeach;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modifyParts">
+                            <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue"><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span>
+                            </div>
+                            <div class="modifyDate">
+                              <!-- 更新日時の表記がおかしいのと更新日時は、どの値を出すのかを確認 -->
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue"><?=date('Y年m月d日',strtotime($permisiion_member['PERMISSION_UPD_TS']))?></span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php endforeach;?>
+<?php endif;?>
+<!-- TODO 辞めた社員と全グループチャットを表示させる -->
+<!-- デフォルトの時とすべてがクリックされた時の表示 -->
+<?php if(is_null($chat_shikibetu_flag)):?>
+<!-- 下は、すべての時の表示 -->
+<h1>すべてが表示されていますよ</h1>
+<?php foreach ($chat->getAllGroupChat() as $group_chat):?>
+<div class="contentsTable">
+    <table>
+        <tbody>
+            <tr class="even confirmed subject">
+                <td class="title">
+                    <div>
+                        <a href="chat_direct" class="iconLink">
+                        <img src=""><span><?=$group_chat['GROUP_CHAT_TITLE']?></span>
+                        </a>
+                    </div>
+                </td>
+                <td  class="member">
+                    <div>
+                        <span class="contentsLabel">メンバー:</span>
+                        <!-- TODO グループチャット時は、参加している人数を表示する -->
+                        <span class="contentsValue"><a href="">5</a> 名</span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="even confirmed contents">
+                <td colspan="2" class="content">
+                    <div class="dateformat_mde">
+                        <div class="contentsParts">
+                            <div class="contentsPartsWrapper">
+                              <!-- やり取りしていなければ何も表示されない(TO_CHATテーブルでのテキストがなければ表示されずに最新のコメントが表示される) -->
+                              <!-- TODO 更新者とgroup_chat_noを紐付ける必要あり -->
+                              <!-- TODO グループチャットの時は、参加しているメンバーの投稿した最新のコメントを出すことで可能グループチャットを登録する時の登録のさせ方を登録させる -->
+                                <div class="contentsPartsBody">
+                                  <?php foreach ($chat->getAllToChat($group_chat['GROUP_CHAT_NO']) as $to_chat):?>
+                                  <?=$chat->formatDirectChatTextDisplay($to_chat['TO_CHAT_TEXT'])?>
+                                  <?php endforeach;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modifyParts">
+                            <div class="modifyMember">
+                                <span class="contentsLabel">更新者:</span>
+                                <span class="contentsValue"><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span>
+                            </div>
+                            <div class="modifyDate">
+                              <!-- 更新日時の表記がおかしいのと更新日時は、どの値を出すのかを確認 -->
+                                <span class="contentsLabel">更新日時:</span>
+                                <span class="contentsValue"><?=date('Y年m月d日',strtotime($permisiion_member['PERMISSION_UPD_TS']))?></span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php endforeach;?>
+<?php endif;?>
+    <div>
+        <span>先頭へ</span><span>|</span>
+        <span>&laquo;&nbsp;前の 20 件へ</span><span>|</span>
+        <a href="">次の 20 件へ&nbsp;&raquo;</a><span>|</span>
+        <a href="">末尾へ</a>
+    </div>
+</div>
+<script>
+// ボタンをクリックしたら、styleにつける
+//ボタンを開閉する時の処理(テーマチャット側)
+function btnthemeClick(){
+  var folderOpen = document.getElementsByClassName('folderThemeOpen');
+  var folderClose = document.getElementsByClassName('folderThemeClose');
+  var includeDirectory = document.getElementsByClassName('include_theme');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "none";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "block";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "block";
+  }
+}
+//ボタンを閉じる時の処理(テーマチャット側)
+function btnthemeCloseClick(){
+  var folderOpen = document.getElementsByClassName('folderThemeOpen');
+  var folderClose = document.getElementsByClassName('folderThemeClose');
+  var includeDirectory = document.getElementsByClassName('include_theme');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "block";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "none";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "none";
+  }
+}
+//ボタンを開閉する時の処理(ダイレクトチャット側)
+function btnClick(){
+  var folderOpen = document.getElementsByClassName('folderOpen');
+  var folderClose = document.getElementsByClassName('folderClose');
+  var includeDirectory = document.getElementsByClassName('include_direct');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "none";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "block";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "block";
+  }
+}
+//ボタンを閉じる時の処理(ダイレクトチャット側)
+function btnCloseClick(){
+  var folderOpen = document.getElementsByClassName('folderOpen');
+  var folderClose = document.getElementsByClassName('folderClose');
+  var includeDirectory = document.getElementsByClassName('include_direct');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "block";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "none";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "none";
+  }
+}
+</script>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

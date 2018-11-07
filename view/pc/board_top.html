@@ -1,0 +1,70 @@
+<script>
+    $(function() {
+        $(document).on("click", 'input[name="delete_board_topic"]', function() {
+            var checkedFlg = false; // 選択されているか否かを判定する変数
+
+            if(document.board_topic_check.delete_board_topic_list.length){
+                for(var i = 0; i < document.board_topic_check.delete_board_topic_list.length; i++){
+                    if (document.board_topic_check.delete_board_topic_list[i].checked) {
+                        checkedFlg = true;
+                        break;
+                    }
+                }
+            }else{
+                if (document.board_topic_check.delete_board_topic_list.checked) {
+                    checkedFlg = true;
+                }
+            }
+
+            if(checkedFlg){
+                if (window.confirm('本当に削除してもよろしいですか？')) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                alert('削除するトピックが選択されていません。');
+                return false;
+            }
+        })
+    })
+</script>
+<a href="top">トップへ戻る</a>
+<?php require_once('category_list.html')?>
+<?=!empty($_POST['edit_topic_msg']) ? '<div id="board_topic_msg"><p>'.$_POST['topic_msg'].'</p></div>' : ''?>
+<a href ="topic_edit?edit_type=register">新規作成</a>
+<?php $board_category_no = (!empty($_GET['board_category_no']) ? $_GET['board_category_no'] : null)?>
+<div id="topic_list">
+    <form action="" method="post" name="board_topic_check">
+<?php foreach($board->getAllBoardTopic($board_category_no) as $board_topic):?>
+<p>
+    <?php if($account->chkUpdatePermission($board_topic['BOARD_TOPIC_CREATE_MEMBER_NO'], null)):?>
+        <input type="checkbox" id="delete_board_topic_list" name="delete_board_topic_list[]" value="<?=$board_topic['BOARD_TOPIC_NO']?>">
+    <?php endif;?>
+
+    <a href="topic_top?board_topic_no=<?=$board_topic['BOARD_TOPIC_NO']?>"><?=$board_topic['BOARD_TOPIC_TITLE']?></a>
+        <p>
+            <?=$board->formatBoardTopicTextForDisplay($board_topic['BOARD_TOPIC_TEXT'])?>
+        </p>
+        <?php $con = new Db?>
+        <p>
+            更新者:<?=$con->selectNo($board_topic['BOARD_TOPIC_UPDATE_MEMBER_NO'])['member_name']?>
+        </p>
+        <p>
+            更新日時:<?=date('Y年m月d日 H時i分s秒', strtotime($board_topic['BOARD_TOPIC_UPD_TS']))?>
+        </p>
+        <?php if($account->chkUpdatePermission($board_topic['BOARD_TOPIC_CREATE_MEMBER_NO'], null)
+            && $board_topic['BOARD_CATEGORY_NO'] != $board->getBoardCategoryByName($board::DEFAULT_CATEGORY['trash'])['BOARD_CATEGORY_NO']
+            ):?>
+            <a href="topic_edit?edit_type=update&board_topic_no=<?=$board_topic['BOARD_TOPIC_NO']?>">編集する</a>
+        <?php endif;?>
+</p>
+<?php endforeach;?>
+<?php if(!empty($board->getAllBoardTopic($board_category_no))):?>
+        <input type="submit" name="delete_board_topic" value="削除">
+<?php endif;?>
+        </form>
+</div>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

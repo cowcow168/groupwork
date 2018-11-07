@@ -1,0 +1,202 @@
+<!-- javascriptを記載する所がいい場所でないので、bodyタグ前で読み込ませるかjsファイルを作成する -->
+<p><b>チャットダイレクト画面(サイボウズでメンバーをクリックした際は、ダイレクトチャット、グループチャットをクリックした時は、グループでやりとりする画面です。</b></p>
+<?php $chat = new Chat;?>
+<?php require_once(LIBRARY.'Api/chat.php')?>
+<?php require_once('chat_top_list.html')?>
+<div class="bodyAreaWrapper">
+    <div class="contentsFrame selfclear">
+        <div class="chatRoomWrapper">
+          <!-- data属性の検証の必要あり -->
+            <div class="chatRoom" data-contentConfirmed="true">
+                <div class="chatRoomHeader">
+                  <!-- テーマチャットがある時は、別テンプレートを読み込ませる -->
+                  <?php $theme_chat = (!empty($_GET['theme_chat']) ? $_GET['theme_chat'] : null)?>
+                  <?php if(!empty($theme_chat)):?>
+                  <?php require_once('chat_theme_list.html')?>
+                  <?php endif;?>
+                    <div class="title">
+                        <div class="func">
+                            <form action="/mpChat/outputTextDirect" method="POST">
+                                <input type="hidden" name="chatRoomId" value="1:14259717" />
+                            </form>
+                        </div>
+                    <a href="" class="star"><img src="" class="icon" alt="お気に入りに登録する" data-star="off" /></a>
+                    <img src="" class="icon" /><span>深田 拓圭 さんとのチャット</span>
+                    </div>
+                </div>
+                <div class="chatRoomBody">
+                    <div class="chatRoomCommentListParts scrollable">
+                        <div class="chatRoomCommentBlock" data-createMemberDisplayName="深田 拓圭">
+                            <div class="createMemberIcon">
+                                <img src="" class="icon" />
+                                <div class="name">
+                                    <a href="" title="深田 拓圭"><span class="name">深田 拓圭</span></a>
+                                </div>
+                            </div>
+                            <div class="commentItemList">
+                                <div class="commentItem  ">
+                                    <div class="commentContents ">
+                                        <div class="commentBody selfclear">
+                                            <div class="commentBodyLeft">
+                                                <div class="formatContents">
+                                                    コメントが入ります。pタグは、サイボウズでは入らないみたいです。
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="commentFooter operationParts selfclear">
+                                            <div class="operation">
+                                                <a href=""><span>No.</span>
+                                                    <span class="number">2</span>
+                                                    <span class="createDate">2016/12/26(月) 9:08</span>
+                                                </a>
+                                                <span class="good">
+                                                    <span>
+                                                        <a href=""><img src=""/><span>いいね！</span></a>
+                                                    </span>
+                                                    <span class="goodMemberCountParts">
+                                                        <a href="">1</a><span>件</span>
+                                                    </span>
+                                                </span>
+                                                <a href=""><img src=""/><span>返信</span></a>
+                                                <a href=""><span>お気に入り</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="newCommentAnnouncement">
+                        <div>新着コメントあり</div>
+                    </div>
+                </div>
+                <div class="chatRoomFooter">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="input textareaParts expand">
+                                <div class="minTextareaParts selfclear">
+                                    <div class="textareaWrapper">
+                                     <textarea class="commonContent" placeholder="コメントを入力"></textarea>
+                                    </div>
+                                    <div class="functionButton">
+                                        <button class="submit">送信</button>
+                                    </div>
+                                </div>
+                            <div class="expandedTextareaParts">
+                                <div class="attachedFile" id="cba_mpChatAddFile">
+                                    <div class="attachedFileAddWrapper">
+                                        <div class="attachedFileAdd">
+                                            <a href="" class="fileadd iconLink"><img src="" alt=""/><span>添付ファイルを追加する</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sendOption">
+                                <input type="checkbox"/><label for="cba_mpChatEnterSendOption">Enterで送信</label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="chatRoomId" value="1:14259717" />
+                            <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-06-29T23:43:26" />
+                        </div>
+                    </form>
+                </div>
+                <div class="sideAreaWrapper">
+                    <div class="sideArea scrollable">
+                        <div class="contentsFrame">
+                            <div class="chatRoomMemberListWrapper">
+                                <div class="chatRoomMemberList contentsFrame">
+                                    <div class="subTitle">
+                                        <p>メンバー</p>
+                                    </div>
+                                    <div>
+                                        <div class="chatRoomMember">
+                                        <a href="" title="牛島 淳史"><img src=""/><span class="name">牛島 淳史</span></a>
+                                        </div>
+                                        <div class="chatRoomMember">
+                                        <a href="" title="深田 拓圭"><img src=""/><span class="name">深田 拓圭</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chatRoomAttachFileListWrapper">
+                                <div class="chatRoomAttachFileList contentsFrame">
+                                    <div class="subTitle">
+                                        <p>添付ファイル</p>
+                                    </div>
+                                    <div class="accessoryLink">
+                                        <a href="">一覧を表示する </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// ボタンをクリックしたら、styleにつける
+//ボタンを開閉する時の処理(テーマチャット側)
+function btnthemeClick(){
+  var folderOpen = document.getElementsByClassName('folderThemeOpen');
+  var folderClose = document.getElementsByClassName('folderThemeClose');
+  var includeDirectory = document.getElementsByClassName('include_theme');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "none";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "block";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "block";
+  }
+}
+//ボタンを閉じる時の処理(テーマチャット側)
+function btnthemeCloseClick(){
+  var folderOpen = document.getElementsByClassName('folderThemeOpen');
+  var folderClose = document.getElementsByClassName('folderThemeClose');
+  var includeDirectory = document.getElementsByClassName('include_theme');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "block";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "none";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "none";
+  }
+}
+//ボタンを開閉する時の処理(ダイレクトチャット側)
+function btnClick(){
+  var folderOpen = document.getElementsByClassName('folderOpen');
+  var folderClose = document.getElementsByClassName('folderClose');
+  var includeDirectory = document.getElementsByClassName('include_direct');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "none";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "block";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "block";
+  }
+}
+//ボタンを閉じる時の処理(ダイレクトチャット側)
+function btnCloseClick(){
+  var folderOpen = document.getElementsByClassName('folderOpen');
+  var folderClose = document.getElementsByClassName('folderClose');
+  var includeDirectory = document.getElementsByClassName('include_direct');
+  for (var i=0;i<folderOpen.length;i+=1){
+    folderOpen[i].style.display = "block";
+  }
+  for (var i=0;i<folderClose.length;i+=1){
+    folderClose[i].style.display = "none";
+  }
+  for (var i=0;i<includeDirectory.length;i+=1){
+    includeDirectory[i].style.display = "none";
+  }
+}
+</script>
+<?php require_once('footer.html')?>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-style-type" content="text/css" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="無料,グループウェア,プロジェクト,クラウド,PTA,イベント運営" />
+    <meta name="description" content="サイボウズLiveは、グループチャットや掲示板、ファイル共有など、チーム運営に必要な機能がそろった「チームのためのグループウェア」です。すべて無料で利用できます。PTA、自治会、おやじの会、NPO、イベント運営、企業間プロジェクトなど、様々なシーンで利用できます。" />
+    <meta http-equiv="Imagetoolbar" content="no" />
+    <meta property="og:site_name" content="サイボウズLive" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="プロジェクトは情報共有で成功する : 無料コラボレーションツール サイボウズLive" />
+    <meta property="og:image" content="https://cybozulive.com/static/49f5cdb4ca/images/og_image.png" />
+    <meta property="og:description" content="サイボウズLiveは、グループチャットや掲示板、ファイル共有など、チーム運営に必要な機能がそろった「チームのためのグループウェア」です。すべて無料で利用できます。PTA、自治会、おやじの会、NPO、イベント運営、企業間プロジェクトなど、様々なシーンで利用できます。" />
+    <meta property="og:url" content="https://cybozulive.com" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/base.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/common.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/lightbox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/colorbox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/error.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/syntaxHighlighter/shCore.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/syntaxHighlighter/shThemeDefault.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/common/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/newCss/design/standard.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/application/mpChatView.css" media="screen,print" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/smoothness/jquery-ui.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/jquery.qtip.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://cybozulive.com/static/49f5cdb4ca/css/error.css" media="screen" />
+    <link rel="start" href="/" title="home" />
+    <link rel="apple-touch-icon" href="https://cybozulive.com/static/49f5cdb4ca/images/iphone/apple-touch-icon.png" />
+    <title>もくもく会（仮） - チャットの詳細 - サイボウズLive</title>
+    <link rel="shortcut icon" href="https://cybozulive.com/static/49f5cdb4ca/images/favicon.ico" />
+    <script type="text/javascript">
+<!--
+var CbAries = window.CbAries || new Object();
+if( ! CbAries.Global )
+{
+    CbAries.Global = new Object;
+}
+
+CbAries.Global.cybozuStatus = 200;
+CbAries.Global.lastAccessDate = '2018-09-12T11:45:35';
+
+CbAries.Global.setStatic = function( path, param ) {
+    var result = 'https://cybozulive.com/static/49f5cdb4ca' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    return result;
+};
+CbAries.Global.setRelative = function( path, param ) {
+    var result = '' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    var match= new RegExp( "\\?" );
+    if( result.match( match ) ) {
+        result += '&dummy=' + new Date().getTime();
+    }
+    else {
+        result += '?dummy=' + new Date().getTime();
+    }
+
+    return result;
+};
+CbAries.Global.setAbsolute = function( path, param ) {
+    var result = 'https://cybozulive.com' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    result = CbAries.Global.addDummyParam( result );
+
+    return result;
+};
+CbAries.Global.setPortalRelative = function( path, param ) {
+    var result = '' + path + '';
+
+    if( typeof param !== "undefined" ) {
+        var match= new RegExp( "\\?" );
+        if( ''.match( match ) ) {
+            result += '&' + param;
+        } else {
+            result += '?' + param;
+        }
+    }
+
+    result = CbAries.Global.addDummyParam( result );
+
+    return result;
+};
+CbAries.Global.addDummyParam = function( url )
+{
+    if( !url )
+    {
+        return url;
+    }
+    var match= new RegExp( "\\?" );
+    if( url.match( match ) ) {
+        url += '&dummy=' + new Date().getTime();
+    }
+    else {
+        url += '?dummy=' + new Date().getTime();
+    }
+    return url;
+};
+CbAries.Global.isGw = false;
+CbAries.Global.inline = true;
+  CbAries.Global.newCss = false;
+-->
+</script>
+  </head>
+  <body class="mypage mpChat CHROME CHROME_69 ja  logined">
+    <div class="globalNavi" data-interval="60">
+      <table class="globalNavi__table">
+        <tr>
+          <th class="globalNavi__logo">
+            <a href="/">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/brand-logo.png" alt="" />
+            </a>
+          </th>
+          <td class="globalNavi__menu globalNavi__menu--group">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--menu globalNavi__link--groupware iconLink globalNavi__link--unselected" data-url="https://cybozulive.com/common/globalNavi/groupMenuAjax" data-type="group">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-group.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">グループ</span>
+              <span>
+                <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/sort-down.png" alt="メニューを開く" class="globalNavi__arrow" />
+              </span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="/mpSchedule/calendarSwitch?ref=header" class="globalNavi__link globalNavi__link--menu globalNavi__link--mpSchedule iconLink globalNavi__link--unselected">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-calendar.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">マイカレンダー</span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="/mpChat/list?ref=header" class="globalNavi__link globalNavi__link--menu globalNavi__link--mpChat iconLink globalNavi__link--selected">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-chat.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">チャット</span>
+            </a>
+          </td>
+          <td class="globalNavi__menu">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--account globalNavi__link--menu iconLink globalNavi__link--unselected" data-url="https://cybozulive.com/common/globalNavi/accountMenuAjax" data-type="account">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-user.png" alt="" class="globalNavi__icon" />
+              <span class="globalNavi__label">アカウント</span>
+              <span>
+                <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/sort-down.png" alt="メニューを開く" class="globalNavi__arrow" />
+              </span>
+            </a>
+          </td>
+          <td class="globalNavi__menu--blank"></td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--update" title="新着情報" data-url="https://cybozulive.com/common/globalNavi/updateListAjax" data-type="update">
+              <span class="unreadMark unreadMark--confirmed" style="display: none;">0</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-bell.png" alt="新着情報" />
+            </a>
+          </td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--good" title="いいね！" data-url="https://cybozulive.com/common/globalNavi/goodListAjax" data-type="good">
+              <span class="unreadMark" style="display: none;">0</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-good.png" alt="いいね！" />
+            </a>
+          </td>
+          <td class="globalNavi__menu--notification">
+            <a href="javascript:void(0);" class="globalNavi__link globalNavi__link--list globalNavi__link--star" title="お気に入り" data-url="https://cybozulive.com/common/globalNavi/starListAjax" data-type="star">
+              <span class="unreadMark unreadMark--confirmed" style="display: inline;">2</span>
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/newCss/globalNavi/icon-star.png" alt="お気に入り" />
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="body">
+      <div class="breadcrumb">
+        <ul>
+          <li>
+            <a href="/">
+              <span>ホーム</span>
+            </a>
+          </li>
+          <li>
+            <a href="/mpChat/list">
+              <span>チャット </span>
+            </a>
+          </li>
+          <li class='active'>チャットの詳細</li>
+        </ul>
+      </div>
+      <div class="menuArea mpChatView">
+        <div class="menuAreaWrapper selfclear">
+          <div class="bodyArea">
+            <div class="menuFrame categoryList scrollable">
+              <div class="menuFrameInner">
+                <div class="menuTitle">
+                  <span class="titleText">カテゴリ</span>
+                </div>
+                <ul>
+                  <li >
+                    <a href="/mpChat/list" class="iconLink categoryLink">
+                      <span class="categoryName">(すべて)</span>
+                    </a>
+                    <span class="targetCount">(198)</span>
+                  </li>
+                </ul>
+                <ul>
+                  <li id="cba_chatRoomFolder_THEME" class="selfclear ">
+                    <span class="switch">
+                      <a href="javascript:void(0);" class="folderOpen" chatRoomType="THEME" data-url="/mpChat/folder/themeChatRoomListAjax" style="display:none;">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+                      </a>
+                      <a href="javascript:void(0);" class="folderClose" chatRoomType="THEME" style="">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+                      </a>
+                    </span>
+                    <a href="/mpChat/list?currentFolder=THEME" class="iconLink categoryLink">
+                      <span class="categoryName">テーマチャット</span>
+                    </a>
+                    <span class="targetCount">(3)</span>
+                    <ul id="cba_chatRoomList_THEME" class="include" style="">
+                      <li class="selfclear active">
+                        <div>
+                          <a href="/mpChat/view?chatRoomId=1%3A20294875" title="もくもく会（仮）" class="iconLink">
+                            <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" alt="" class="icon" />
+                            <span>もくもく会（仮）</span>
+                          </a>
+                        </div>
+                      </li>
+                      <li class="selfclear  confirmed">
+                        <div>
+                          <a href="/mpChat/view?chatRoomId=1%3A22782626" title="遷移確認" class="iconLink">
+                            <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" alt="" class="icon" />
+                            <span>遷移確認</span>
+                          </a>
+                        </div>
+                      </li>
+                      <li class="selfclear  confirmed">
+                        <div>
+                          <a href="/mpChat/view?chatRoomId=1%3A22782354" title="テーマチャット作成確認" class="iconLink">
+                            <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" alt="" class="icon" />
+                            <span>テーマチャット作成確認</span>
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <ul>
+                  <li id="cba_chatRoomFolder_DIRECT" class="selfclear ">
+                    <span class="switch">
+                      <a href="javascript:void(0);" class="folderOpen" chatRoomType="DIRECT" data-url="/mpChat/folder/directChatRoomListAjax" style="">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+                      </a>
+                      <a href="javascript:void(0);" class="folderClose" chatRoomType="DIRECT" style="display:none;">
+                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+                      </a>
+                    </span>
+                    <a href="/mpChat/list?currentFolder=DIRECT" class="iconLink categoryLink">
+                      <span class="categoryName">ダイレクトチャット</span>
+                    </a>
+                    <span class="targetCount">(190)</span>
+                    <ul id="cba_chatRoomList_DIRECT" class="include" style="display: none;"></ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="bodyAreaWrapper">
+              <div class="contentsFrame selfclear">
+                <div class="chatRoomWrapper">
+                  <div class="chatRoom" data-contentConfirmed="true">
+                    <div class="chatRoomHeader">
+                      <!-- この下のクラスは、ダイレクトチャットの時は、出していない -->
+                      <div class="content" style="display:none" >
+                        <div class="funcMenuBlock">
+                          <div class="funcMenuFrame">
+                            <div class="menu">
+                              <a href="/mpChat/modify?chatRoomId=1%3A20294875" class="iconLink" title="変更する">
+                                <img src="https://cybozulive.com/static/49f5cdb4ca/images/write20.gif" alt="変更する" class="icon" />
+                                <span>変更する</span>
+                              </a>
+                            </div>
+                            <div class="menu">
+                              <form action="/mpChat/outputTextDirect" method="POST">
+                                <input type="hidden" name="chatRoomId" value="1:20294875" />
+                                <input type="submit" value="テキストで出力する" id="cba_textOutput" />
+                              </form>
+                            </div>
+                            <div class="menu last">
+                              <a href="#leaveChatRoom_chatRoomId=1:20294875" class="history iconLink" title="テーマチャットから抜ける ">
+                                <img src="https://cybozulive.com/static/49f5cdb4ca/images/signout20.png" alt="テーマチャットから抜ける " class="icon" />
+                                <span>テーマチャットから抜ける </span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="func">
+                            <a href="javascript:void(0);" class="closeContent">詳細を閉じる</a>
+                          </div>
+                        </div>
+                        <div class="contentsFrame scrollable">
+                          <div class="contentsView">
+                            <div class="contentsTitle">
+                              <h2>
+                                <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-" class="star">
+                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                </a>
+                                <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat32.png" class="icon" />
+                                <span>もくもく会（仮）</span>
+                              </h2>
+                            </div>
+                            <div class="contentsDetail">
+                              <div class="formatContents "></div>
+                              <div class="operationParts">
+                                <div class="operation">
+                                  <span data-url="/common/good/goodAjax">
+                                    <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875--on" data-url="/common/good/goodTurnJsonDirect">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                      <span>いいね！</span>
+                                    </a>
+                                  </span>
+                                </div>
+                                <div id="cbaGoodMemberList-MP_CHAT-1:20294875-" data-url="/common/good/goodMemberListAjax" class="goodMemberListParts"></div>
+                              </div>
+                              <div class="contentsModifyInfo">
+                                <div class="create">登録
+                                  <span>2017/11/20(月) 16:14</span>
+                                  <span>
+                                    <span class="name">天野 高敬</span>
+                                  </span>
+                                </div>
+                                <div class="modify">更新
+                                  <span>2018/8/18(土) 14:07</span>
+                                  <span>
+                                    <span class="name">伊藤 喜彦</span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="func">
+                          <a href="javascript:void(0);" class="closeContent">詳細を閉じる</a>
+                        </div>
+                      </div>
+                      <div class="title" style="display:block">
+                        <div class="func">
+                          <a href="javascript:void(0);" class="expandContent">詳細を見る</a>
+                        </div>
+                        <div class="titleWrapper">
+                          <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-" class="star">
+                            <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                          </a>
+                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/chat20.png" class="icon" alt="" />
+                          <span>もくもく会（仮）</span>
+                        </div>
+                      </div>
+                    </div>
+                      <!-- グループチャットの場合は、ヘッダー部分に上記が必要                     -->
+                    <div class="chatRoomBody">
+                      <!-- 下記chatRoomCommentListPartsクラスの表記は、ダイレクトと違うので分ける必要あり -->
+                      <div class="chatRoomCommentListParts scrollable" data-hasNext="false" data-hasPrevious="false">
+                        <!-- chatRoomContentBlockクラスでは、登録者と更新者を出す所が違う -->
+                        <div class="chatRoomContentBlock">
+                          <div class="contentsModifyInfo">
+                            <div class="create">登録
+                              <span>2017/11/20(月) 16:14</span>
+                              <span>
+                                <span class="name">天野 高敬</span>
+                              </span>
+                            </div>
+                            <div class="modify">更新
+                              <span>2018/8/18(土) 14:07</span>
+                              <span>
+                                <span class="name">伊藤 喜彦</span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="chatRoomCommentBlock" data-createMemberId="1:768547" data-createMemberDisplayName="                                                    天野 高敬             " data-chatRoomId="1:20294875">
+                          <div class="createMemberIcon">
+                            <img src="/49f5cdb4ca/icon/member/1:768547_1:776162_1468736489000.jpg" width="32" height="32" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                            <div class="name">
+                              <a href="/mpAddress/list?mid=1%3A768547" class="profileLb iconLink" id="profile_1:768547" title="天野 高敬">
+                                <span class="name">天野 高敬</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="commentItemList">
+                            <div data-id="15846506" data-number="1" data-createDateInLong="1511162239000" class="commentItem  ">
+                              <div class="commentContents ">
+                                <div class="commentBody selfclear">
+                                  <div class="commentBodyLeft">
+                                    <div class="formatContents">他のチャットツールを使うまでの暫定チャット </div>
+                                  </div>
+                                  <div class="commentBodyRight">
+                                    <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                                  </div>
+                                </div>
+                                <div class="commentFooter operationParts selfclear">
+                                  <div class="operation">
+                                    <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D1%253A20294875%26fid%3D15846506" class="commentUrlTip" title="固定リンク">
+                                      <span>No.</span>
+                                      <span class="number">1</span>
+                                      <span class="createDate">2017/11/20(月) 16:17</span>
+                                    </a>
+                                    <span class="good">
+                                      <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                        <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875-15846506-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                          <span>いいね！</span>
+                                        </a>
+                                      </span>
+                                      <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                        <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=1%3A20294875&amp;subTargetId=15846506">3</a>
+                                        <span>件</span>
+                                      </span>
+                                    </span>
+                                    <a href="javascript:void(0);" id="chatRoomComment_1" class="replyChatRoomComment iconLink">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                      <span>返信</span>
+                                    </a>
+                                    <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-15846506" class="star iconLink" data-displayLabel="true">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                      <span class="starLabel">お気に入り</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="chatRoomCommentBlock" data-createMemberId="2:926512" data-createMemberDisplayName="                                                    伊藤 喜彦             " data-chatRoomId="1:20294875">
+                          <div class="createMemberIcon">
+                            <img src="/49f5cdb4ca/icon/member/2:926512_2:935109_1480515966000.jpg" width="17" height="32" style="padding:0px 8px 0px 7px;" alt="" class="icon" />
+                            <div class="name">
+                              <a href="/mpAddress/list?mid=2%3A926512" class="profileLb iconLink" id="profile_2:926512" title="伊藤 喜彦">
+                                <span class="name">伊藤 喜彦</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="commentItemList">
+                            <div data-id="15848577" data-number="2" data-createDateInLong="1511167431000" class="commentItem  ">
+                              <div class="commentContents ">
+                                <div class="commentBody selfclear">
+                                  <div class="commentBodyLeft">
+                                    <div class="formatContents">天野さん
+                                      <br />ありがとうございます。
+                                    </div>
+                                  </div>
+                                  <div class="commentBodyRight">
+                                    <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                                  </div>
+                                </div>
+                                <div class="commentFooter operationParts selfclear">
+                                  <div class="operation">
+                                    <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D1%253A20294875%26fid%3D15848577" class="commentUrlTip" title="固定リンク">
+                                      <span>No.</span>
+                                      <span class="number">2</span>
+                                      <span class="createDate">2017/11/20(月) 17:43</span>
+                                    </a>
+                                    <span class="good">
+                                      <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                        <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875-15848577-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                          <span>いいね！</span>
+                                        </a>
+                                      </span>
+                                      <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                        <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=1%3A20294875&amp;subTargetId=15848577">1</a>
+                                        <span>件</span>
+                                      </span>
+                                    </span>
+                                    <a href="javascript:void(0);" id="chatRoomComment_2" class="replyChatRoomComment iconLink">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                      <span>返信</span>
+                                    </a>
+                                    <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-15848577" class="star iconLink" data-displayLabel="true">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                      <span class="starLabel">お気に入り</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="chatRoomCommentBlock" data-createMemberId="2:926512" data-createMemberDisplayName="                                                    伊藤 喜彦             " data-chatRoomId="1:20294875">
+                          <div class="createMemberIcon">
+                            <img src="/49f5cdb4ca/icon/member/2:926512_2:935109_1480515966000.jpg" width="17" height="32" style="padding:0px 8px 0px 7px;" alt="" class="icon" />
+                            <div class="name">
+                              <a href="/mpAddress/list?mid=2%3A926512" class="profileLb iconLink" id="profile_2:926512" title="伊藤 喜彦">
+                                <span class="name">伊藤 喜彦</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="commentItemList">
+                            <div data-id="15854971" data-number="3" data-createDateInLong="1511220096000" class="commentItem  ">
+                              <div class="commentContents ">
+                                <div class="commentBody selfclear">
+                                  <div class="commentBodyLeft">
+                                    <div class="formatContents">先週日曜にメールを送ったので時間あるときに見てみてください。
+                                      <br />
+                                      <br />
+                                      <a target='_blank' href='https://chouseisan.com/s?h=ccd3678682d749aa88dbf1fc98ccf839'>https://chouseisan.com/s?h=ccd3678682d749aa88dbf1fc98ccf839</a>
+                                      <br />日程を決めたくて調整さんで、都合がいい日に丸をつけてください。
+                                    </div>
+                                  </div>
+                                  <div class="commentBodyRight">
+                                    <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                                  </div>
+                                </div>
+                                <div class="commentFooter operationParts selfclear">
+                                  <div class="operation">
+                                    <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D1%253A20294875%26fid%3D15854971" class="commentUrlTip" title="固定リンク">
+                                      <span>No.</span>
+                                      <span class="number">3</span>
+                                      <span class="createDate">2017/11/21(火) 8:21</span>
+                                    </a>
+                                    <span class="good">
+                                      <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                        <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875-15854971-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                          <span>いいね！</span>
+                                        </a>
+                                      </span>
+                                      <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                        <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=1%3A20294875&amp;subTargetId=15854971">1</a>
+                                        <span>件</span>
+                                      </span>
+                                    </span>
+                                    <a href="javascript:void(0);" id="chatRoomComment_3" class="replyChatRoomComment iconLink">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                      <span>返信</span>
+                                    </a>
+                                    <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-15854971" class="star iconLink" data-displayLabel="true">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                      <span class="starLabel">お気に入り</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="chatRoomCommentBlock" data-createMemberId="2:926512" data-createMemberDisplayName="                                                    伊藤 喜彦             " data-chatRoomId="1:20294875">
+                          <div class="createMemberIcon">
+                            <img src="/49f5cdb4ca/icon/member/2:926512_2:935109_1480515966000.jpg" width="17" height="32" style="padding:0px 8px 0px 7px;" alt="" class="icon" />
+                            <div class="name">
+                              <a href="/mpAddress/list?mid=2%3A926512" class="profileLb iconLink" id="profile_2:926512" title="伊藤 喜彦">
+                                <span class="name">伊藤 喜彦</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="commentItemList">
+                            <div data-id="15968351" data-number="4" data-createDateInLong="1511905181000" class="commentItem  ">
+                              <div class="commentContents ">
+                                <div class="commentBody selfclear">
+                                  <div class="commentBodyLeft">
+                                    <div class="formatContents">第一回もくもく会は12/9(土) 10:00&#12316;にしたいと思います。
+                                      <br />時間は前後しても全員参加できる日だと思いここにしたいです。
+                                      <br />
+                                      <br />あと、申し訳ないのですが、1月の日付は12月中旬にもう一度確認させてください。
+                                      <br />家族の予定が1ヶ月前くらいでないとちゃんと分からず、せっかく決めても変更になるかもしれないと思ったからです。
+                                    </div>
+                                  </div>
+                                  <div class="commentBodyRight">
+                                    <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                                  </div>
+                                </div>
+                                <div class="commentFooter operationParts selfclear">
+                                  <div class="operation">
+                                    <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D1%253A20294875%26fid%3D15968351" class="commentUrlTip" title="固定リンク">
+                                      <span>No.</span>
+                                      <span class="number">4</span>
+                                      <span class="createDate">2017/11/29(水) 6:39</span>
+                                    </a>
+                                    <span class="good">
+                                      <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                        <a href="javascript:void(0);" class="iconLink goodLinkOff" id="cbaGood-MP_CHAT-1:20294875-15968351-off" data-url="/comet/common/good/goodTurnJsonDirect">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/good_check14.png" alt="" class="icon" />
+                                          <span>いいね！</span>
+                                        </a>
+                                      </span>
+                                      <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                        <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=1%3A20294875&amp;subTargetId=15968351">2</a>
+                                        <span>件</span>
+                                      </span>
+                                    </span>
+                                    <a href="javascript:void(0);" id="chatRoomComment_4" class="replyChatRoomComment iconLink">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                      <span>返信</span>
+                                    </a>
+                                    <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-15968351" class="star iconLink" data-displayLabel="true">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                      <span class="starLabel">お気に入り</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="chatRoomCommentBlock" data-createMemberId="2:926512" data-createMemberDisplayName="                                                    伊藤 喜彦             " data-chatRoomId="1:20294875">
+                          <div class="createMemberIcon">
+                            <img src="/49f5cdb4ca/icon/member/2:926512_2:935109_1480515966000.jpg" width="17" height="32" style="padding:0px 8px 0px 7px;" alt="" class="icon" />
+                            <div class="name">
+                              <a href="/mpAddress/list?mid=2%3A926512" class="profileLb iconLink" id="profile_2:926512" title="伊藤 喜彦">
+                                <span class="name">伊藤 喜彦</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="commentItemList">
+                            <div data-id="19258724" data-number="7" data-createDateInLong="1534568873000" class="commentItem  ">
+                              <div class="commentContents ">
+                                <div class="commentBody selfclear">
+                                  <div class="commentBodyLeft">
+                                    <div class="formatContents">Laravelハンズオンテキスト
+                                      <br />作ったのでよかったら見てみてください。
+                                      <br />
+                                      <a target='_blank' href='https://hackmd.io/s/r1cq54Drm'>https://hackmd.io/s/r1cq54Drm</a>
+                                    </div>
+                                  </div>
+                                  <div class="commentBodyRight">
+                                    <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                                  </div>
+                                </div>
+                                <div class="commentFooter operationParts selfclear">
+                                  <div class="operation">
+                                    <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D1%253A20294875%26fid%3D19258724" class="commentUrlTip" title="固定リンク">
+                                      <span>No.</span>
+                                      <span class="number">7</span>
+                                      <span class="createDate">2018/8/18(土) 14:07</span>
+                                    </a>
+                                    <span class="good">
+                                      <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                        <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-1:20294875-19258724-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                          <span>いいね！</span>
+                                        </a>
+                                      </span>
+                                      <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                        <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=1%3A20294875&amp;subTargetId=19258724">2</a>
+                                        <span>件</span>
+                                      </span>
+                                    </span>
+                                    <a href="javascript:void(0);" id="chatRoomComment_7" class="replyChatRoomComment iconLink">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                      <span>返信</span>
+                                    </a>
+                                    <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--1:20294875-19258724" class="star iconLink" data-displayLabel="true">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                      <span class="starLabel">お気に入り</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="newCommentAnnouncement" style="display:none">
+                        <div>新着コメントあり</div>
+                      </div>
+                      <div class="unconfirmedExistsAnnouncement" style="display:none">
+                        <div>新着コメントあり</div>
+                      </div>
+                    </div>
+                    <div class="chatRoomFooter" style="visibility: hidden">
+                      <form method="post" enctype="multipart/form-data">
+                        <div class="textareaSwitchParts">
+                          <div class="expandTextarea" style="display:none">
+                            <a href="javascript:void(0);" title="コメント入力欄を拡大">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/arrow_up16.png" class="icon" alt="" />
+                            </a>
+                          </div>
+                          <div class="collapseTextarea" style="display:block">
+                            <a href="javascript:void(0);" title="コメント入力欄を縮小">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/arrow_down16.png" class="icon" alt="" />
+                            </a>
+                          </div>
+                        </div>
+                        <div class="input textareaParts expand" id="cba_commonTextAreaContent_UNIQUEID" data-expandMargin="5">
+                          <div class="mode expandedTextareaParts" style="display:block">
+                            <span>編集モード:</span>
+                            <input type="radio" name="textType" value="plain" id="textTypePlain_UNIQUEID" checked="checked" tabindex="-1" autocomplete="off"/>
+                            <label for="textTypePlain_UNIQUEID">テキスト</label>
+                            <input type="radio" name="textType" value="html" id="textTypeHtml_UNIQUEID" tabindex="-1" autocomplete="off"/>
+                            <label for="textTypeHtml_UNIQUEID">書式編集</label>
+                            <input type="hidden" name="textTypeShadow" value="plain" autocomplete="off"/>
+                          </div>
+                          <div class="inReplyToWrapper selfclear" style="display:none"></div>
+                          <div class="minTextareaParts selfclear">
+                            <div class="textareaWrapper">
+                              <textarea class="commonContent" id="cba_commonContent_UNIQUEID" placeholder="コメントを入力" data-placeholderOnEnterSendOptionTrue="コメントを入力（Shift + Enter で改行）" data-placeholderOnEnterSendOptionFalse="コメントを入力" autocomplete="off"></textarea>
+                              <textarea name="contentsShadow" tabIndex="-1" class="contentsShadow"></textarea>
+                              <div class="contentsShadowDiv"></div>
+                            </div>
+                            <div class="functionButton">
+                              <button id="cba_mpChatSend" class="submit">送信</button>
+                            </div>
+                          </div>
+                          <div class="expandedTextareaParts" style="display:block">
+                            <div class="attachedFile" id="cba_mpChatAddFile">
+                              <div class="attachedFileAddParts"></div>
+                              <div class="attachedFileAddWrapper">
+                                <div class="attachedFileAdd" data-url="/common/file/addMpAjax" data-file-count="0" data-attach-number="0" data-next-attach-number="1">
+                                  <a href="javascript:void(0);" class="fileadd iconLink">
+                                    <img src="https://cybozulive.com/static/49f5cdb4ca/images/attachment16.png" alt="" class="clip icon"/>
+                                    <span>添付ファイルを追加する</span>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="sendOption">
+                              <input type="checkbox" id="cba_mpChatEnterSendOption" />
+                              <label for="cba_mpChatEnterSendOption">Enterで送信</label>
+                            </div>
+                          </div>
+                          <input type="hidden" name="chatRoomId" value="1:20294875" />
+                          <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-09-12T11:45:40" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sideAreaWrapper">
+            <div class="sideArea scrollable">
+              <div class="contentsFrame">
+                <div class="selfclear">
+                  <div class="funcMenuBlock">
+                    <div class="funcMenuFrame">
+                      <div class="menu last">
+                        <input type="checkbox" id="cba_mpChatMute" />
+                        <label for="cba_mpChatMute">
+                          <span>ミュート</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="help">
+                  <span data-url="/help/mpChatMuteTip" class="qTipLink iconLink">
+                    <img src="https://cybozulive.com/static/49f5cdb4ca/images/help14.gif" class="icon" alt="" />
+                    <span>ミュートとは?</span>
+                  </span>
+                </div>
+                <div class="chatRoomMemberListWrapper">
+                  <div class="chatRoomMemberList contentsFrame">
+                    <div class="subTitle">
+                      <p>メンバー</p>
+                    </div>
+                    <div>
+                      <div class="chatRoomMember">
+                        <a href="/mpAddress/list?mid=2%3A926512" class="profileLb iconLink" id="profile_2:926512" title="伊藤 喜彦">
+                          <img src="/49f5cdb4ca/icon/member/2:926512_2:935109_1480515966000.jpg" width="11" height="20" style="padding:0px 5px 0px 4px;" alt="" class="icon" />
+                          <span class="name">伊藤 喜彦</span>
+                        </a>
+                      </div>
+                      <div class="chatRoomMember">
+                        <a href="/mpAddress/list?mid=1%3A1002973" class="profileLb iconLink" id="profile_1:1002973" title="平井 龍成">
+                          <img src="/49f5cdb4ca/icon/member/1:1002973_1:1012028_1493450012000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                          <span class="name">平井 龍成</span>
+                        </a>
+                      </div>
+                      <div class="chatRoomMember">
+                        <a href="/mpAddress/list?mid=2%3A922494" class="profileLb iconLink" id="profile_2:922494" title="深田 拓圭">
+                          <img src="/49f5cdb4ca/icon/member/2:922494_2:931069_1479690565000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                          <span class="name">深田 拓圭</span>
+                        </a>
+                      </div>
+                      <div class="chatRoomMember">
+                        <a href="/mpConfiguration/profile/view" class="profileLb iconLink" id="profile_1:884608" title="牛島 淳史">
+                          <img src="/49f5cdb4ca/icon/member/1:884608_1:893008_1472443501000.jpg" width="15" height="20" style="padding:0px 3px 0px 2px;" alt="" class="icon" />
+                          <span class="name">牛島 淳史</span>
+                        </a>
+                      </div>
+                      <div class="chatRoomMember">
+                        <a href="/mpAddress/list?mid=1%3A768547" class="profileLb iconLink" id="profile_1:768547" title="天野 高敬">
+                          <img src="/49f5cdb4ca/icon/member/1:768547_1:776162_1468736489000.jpg" width="20" height="20" style="padding:0px 0px 0px 0px;" alt="" class="icon" />
+                          <span class="name">天野 高敬</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="chatRoomAttachFileListWrapper">
+                  <div class="chatRoomAttachFileList contentsFrame">
+                    <div class="subTitle">
+                      <p>添付ファイル</p>
+                    </div>
+                    <div class="accessoryLink">
+                      <a href="/mpChat/accessory?chatRoomId=1%3A20294875">一覧を表示する </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+            var require = {
+            baseUrl: "https://cybozulive.com/static/49f5cdb4ca/js/src"
+        };
+        </script>
+    <script src="https://cybozulive.com/static/49f5cdb4ca/js/require.js" data-main="../built/chat/viewMain" type="text/javascript"></script>
+  </body>
+</html>

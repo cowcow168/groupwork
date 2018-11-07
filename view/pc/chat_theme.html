@@ -1,0 +1,342 @@
+<?php $chat = new Chat;?>
+<p><b>グループチャット作成画面(サイボウズだとテーマを作成する画面です。)</b></p>
+<div id="title_msg">
+      <?php if(!empty($_POST['err'])):?>
+      <?php foreach($_POST['err'] as $err):?>
+      <p><?=$err?></p>
+      <?php endforeach;?>
+      <?php endif;?>
+</div>
+<!-- 下記は一時的に記述 -->
+<?php var_dump($_POST['modifiable']);?>
+<h2>テーマチャットの<?=$chat->getGroupChatEditType($_GET['edit_type'])?></h2>
+<h2>タイトル<span>[必須]</span></h2>
+<form action="" method="post" name="chat_theme" enctype="multipart/form-data">
+    <div class="title">
+        <input type="text" size="50" maxlength="200" name="GROUP_CHAT_TITLE" value="<?=!empty($_POST['GROUP_CHAT_TITLE']) ? $_POST['GROUP_CHAT_TITLE'] : null?>">
+    </div>
+    <h3>メモ</h3>
+    <!-- TODO テキストエリアと添付ファイルをつけれるようにする -->
+    <div class="content">
+        <textarea name="GROUP_CHAT_MEMO" id="" cols="30" rows="7"><?=!empty($_POST['GROUP_CHAT_MEMO']) ? $_POST['GROUP_CHAT_MEMO'] : null?></textarea>
+    </div>
+    <!-- 画像は、パスで登録する -->
+    <div class="attachedFile">
+      <!-- クリックしない時は、attachedFileAddPartsは空ファイル -->
+      <div class="attachedFileAddParts" id="ui-id-1"></div>
+      <!-- クリックした際は、下記のようになる -->
+        <!-- ファイルを追加ボタンを押すと追加できる。削除ボタンを押すと消せる -->
+        <!-- <div id="cba_commonAttachedFile0" class="attachedFileParts" data-file-count="0"> -->
+          <!-- クリックした数をカウントしている(リロードしたら、再度0からスタートで、押して追加数がカウント、削除で消しても連番になる) -->
+          <!-- <input type="hidden" name="attachNumber0" value="0"> -->
+          <!-- 削除ボタンを押した時ファイル番号は、リセットされて0からスタートする 複数ある時は、消した分番号が若返る 4つあってfile3のものでもそれより前のfile1などを削除したらfile2になる。-->
+          <!-- <input type="file" size="30" name="file0" class="inputFile">
+          <span class="guide">(25MBまで)</span>
+          <a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink">
+            <img src="" alt class="icon">
+            <span>削除</span>
+          </a>
+        </div> -->
+      <!-- </div> -->
+      <div class="attachedFileAddWrapper">
+        <!-- 添付ファイルを追加するをクリックした時に、data-file-countとdata-attach-numberが1になる -->
+        <!-- 削除した際にdata-file-countの個数が一つ減る -->
+        <!-- <div id="attachedFileAdd" class="attachedFileAdd" data-file-count="0"> -->
+        <div id="attachedFileAdd" class="attachedFileAdd">
+          <a href="javascript:void(0);" class="fileadd iconLink" onclick="attachFileClick();">
+            <img src="" alt="">
+            <span>添付ファイルを追加する</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <h3>メンバー</h3>
+    <!-- 追加を押すとchoiceGroupで選択しているメンバーがaddressIdのセレクトに移動する -->
+    <div id="cba_mpChatAddress">
+      <div class="selfclear addressChoiceParts">
+        <table class="layout choiceParts" id="addressChoice">
+          <tbody>
+            <tr>
+              <td>
+                <div class="choiceTo">
+                  <table class="layout">
+                    <tbody>
+                      <tr>
+                        <td class="choicePartsBtn" id="addressOrder">
+                          <p>
+                            <a href="javascript:void(0);" class="orderTop noTabIndex">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/order_top20.gif" alt="top" />
+                            </a>
+                          </p>
+                          <p>
+                            <a href="javascript:void(0);" class="orderUp">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/order_up20.gif"alt="up" />
+                            </a>
+                          </p>
+                          <p>
+                            <a href="javascript:void(0);" class="orderDown">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/order_down20.gif" alt="down" />
+                            </a>
+                          </p>
+                          <p>
+                            <a href="javascript:void(0);" class="orderBottom">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/order_bottom20.gif" alt="bottom" />
+                            </a>
+                          </p>
+                        </td>
+                        <td class="choicePartsList" id="addressPick">
+                          <div class="fixedMemberList">
+                            <div class="selected">姓　名</div>
+                          </div>
+                          <!-- 複数登録する時は、配列にしておく -->
+                          <select name="addressId[]" size="9" multiple="multiple" id="addressList" class="pickList">
+                            <?php $con = new Db?>
+                            <!-- メンバーを追加していた状態でバリデーションエラーにひっかかって遷移しない時は、表示させておく -->
+                            <?php if(!empty($_SESSION['belong_member'])):?>
+                              <?php foreach($_SESSION['belong_member'] as $belong_member_no):?>
+                                <option value="<?=$belong_member_no?>"><?=$con->selectNo($belong_member_no)['member_name']?></option>
+                              <?php endforeach;?>
+                            <?php endif;?>
+                          </select>
+                        </td>
+                        <td class="choicePartsFunc button--choice">
+                          <p>
+                            <a href="javascript:void(0);" class="choiceAdd" title="追加">
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/arrow/left.gif" />
+                              <span>追加</span>
+                            </a>
+                          </p>
+                          <p>
+                            <a href="javascript:void(0);" class="choiceDelete" title="削除">
+                              <span>削除</span>
+                              <img src="https://cybozulive.com/static/49f5cdb4ca/images/arrow/right.gif" />
+                            </a>
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+              <td class="choicePartsList isLinked">
+                <div class="searchPartsWrapper choiceSearch">
+                  <input id="addressSearch" class="searchParts" type="text" name="addressSearchQuery" value="" placeholder="メンバー名で検索"/>
+                  <img id="addressSearchIcon" class="icon searchIcon" src="https://cybozulive.com/static/49f5cdb4ca/images/btn_search16.png" alt="検索する">
+                  </img>
+                </div>
+                <!-- TODO 今回は、ひとまず不要(必要になったら実装) -->
+                <!-- <p id="addressType">
+                  <input type="radio" name="choiceType" value="abclist" class="choiceType" id="cba_choiceTypeAbclist" />
+                  <label for="cba_choiceTypeAbclist">五十音別</label>
+                  <input type="radio" name="choiceType" value="groupware" class="choiceType" id="cba_choiceTypeGroupware" checked="checked" />
+                  <label for="cba_choiceTypeGroupware">グループ別 </label>
+                </p> -->
+                <p>
+                  <select size="1" id="addressGroup" class="choiceGroup">
+                  </select>
+                </p>
+                <select size="7" name="choiceList" multiple="multiple" id="addressChoiceList">
+                    <?php if($_SESSION['choice_member']):?>
+                      <!-- メンバー追加されているメンバーは、飛ばす -->
+                      <?php foreach($chat->notBelongMember($_SESSION['choice_member']) as $memberNo):?>
+                        <option value="<?=$memberNo['PERMISSION_MEMBER_NO']?>"><?=$con->selectNo($memberNo['PERMISSION_MEMBER_NO'])['member_name']?></option>
+                      <?php endforeach;?>
+                    <?php else:?>
+                      <!-- ここからループさせる -->
+                      <?php $con = new Db?>
+                      <?php $member_no = $_SESSION['member_no']?>
+                      <?php foreach($chat->getPermissionMember($member_no) as $permisiion_member):?>
+                      <!-- TODO 遷移した後にidをハッシュ化してあげる必要あり -->
+                        <option value="<?=$permisiion_member['GROUP_CHAT_NO']?>"><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></option>
+                      <?php endforeach;?>
+                    <?php endif;?>
+                  <!-- ここまでループさせる -->
+                </select>
+                <p class="guide">複数選択可能。</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="displayParts">
+      <h3>詳細設定</h3>
+        <div>
+            <ul class="detailSetting">
+                <li>
+                    <?php !empty($_POST['modifiable']) ? $_POST['modifiable'] : null?>
+                    <input type="checkbox" id="cba_mpChatModifiable" name="modifiable" value="1" <?php if($_POST['modifiable'] == 1):?> checked <?php endif;?> /><label for="cba_mpChatModifiable">登録者以外に、変更を許可する</label>
+                </li>
+            </ul>
+        </div>
+  </div>
+  <div class="operationParts">
+      <div class="functionButton">
+          <input type="submit" name="chat_theme_create" value="作成する"/>
+          <input type="submit" name="chat_theme_cancel" value="キャンセルする"/>
+      </div>
+  </div>
+</form>
+<div class="btnBackHome">
+    <span><a href="chat_top"><img src=''><span>チャット へ</span></a></span>
+</div>
+<script>
+// ###########################################
+// メンバーを追加・削除する処理を記載
+// ##############################################
+//選択したメンバーを追加する
+// function member_add_btn(){
+//   // 追加したい親要素を取得
+//   var addressList = document.getElementById('addressList');
+//   // const test = document.getElementById('addressChoiceList');
+//   //選択する候補
+//   var member = document.chat_theme.choiceList;
+//   //選択したものを配列に追加する
+//   var arr = [];
+//   //追加ボタンを押した時にaddressListに追加される
+//   var optionMember = document.createElement('option');
+//   //すべてのoption要素を取得する
+//   var elements = member.options;
+//   // //順番を取得(一番上が0番)下の書き方だと選択したoption要素のうち一番上の要素のインデックスが入る
+// 	var num = member.selectedIndex;
+// 	var idx = 0;
+//
+//   // console.log(elements);
+//   // console.log(elements[2]);
+//   // console.log(elements[2].value);
+//   // console.log(elements[2].text);
+//   //選択されたものを配列に格納する
+//   for(var i = 0;i<elements.length;i++){
+//     elements[num].selected = true;
+//     if(elements.selected){
+//       arr[idx] = i;
+//       idx++;
+//     }
+//   }
+//
+//   //選択されたものを追加先のselectボックスに追加する
+//   for (var i=0;i<member.length; i++){
+//     if(elements[num].selected == true){
+//       arr.push(member[num].value);
+//       arr.push(member[num].innerText);
+//       // value値を取得
+//       optionMember.setAttribute('value',member[num].value);
+//       // 名前を取得する
+//       optionMember.innerText = arr[i];
+//       addressList.appendChild(optionMember);
+//     }
+//   }
+//   // console.log(arr);
+//   // console.log(optionMember);
+//   //値(数値)から値(value値)を取得する
+//   // const str = member.options[num].value;
+//   // const mamberName = member.options[num].innerText;
+//   // const optionMember = document.createElement('option');
+//   // value値を取得する
+//   // optionMember.value = str;
+//   // // 名前を取得する
+//   // optionMember.innerText = mamberName;
+//   // addressList.appendChild(optionMember);
+// // }
+
+//一番最初に読み込む追加リンクをクリックしたら、追加される
+window.addEventListener('DOMContentLoaded', function(e){
+  document.querySelector('.choiceAdd').addEventListener('click',function(e){
+    [].forEach.call(document.querySelectorAll('#addressChoiceList option:checked'),function(x){
+      document.querySelector('#addressList').appendChild(x);
+    });
+  });
+});
+
+//追加ボタンを押した後に削除リンクをクリックしたら、削除される
+  document.querySelector('.choiceDelete').addEventListener('click',function(e){
+    [].forEach.call(document.querySelectorAll('#addressList option:checked'),function(x){
+      document.querySelector('#addressChoiceList').appendChild(x);
+    });
+  });
+
+//選択したメンバーを削除する
+// function member_delete_btn(){
+//   const addressList = document.getElementById('addressList');
+//   // TODO 選択したものを追加する条件は、考える
+//   addressList.removeChild(addressList.firstChild);
+// }
+
+// ##############################################
+// 添付画像の処理を記載
+
+// ##############################################
+// TODO 番号のリセットなどを実装して、DB上で複数登録させる
+//カウンターを設定する
+var attachcount = 0;
+var deletecount = 0;
+//ファイルのカウント数を設定する
+// var filecount = 0;
+//添付ファイルのボタンが押された際と削除した際の画像にファイル名を動的に与える為に必要
+var attachbox = document.getElementById('attachedFileAdd');
+// var data_file_count = attachbox.getAttribute('data-file-count');
+
+//添付ファイルを追加するボタン
+function attachFileClick(){
+  //添付ファイルを追加するを押した回数をカウントアップする
+  attachcount++;
+  // //ファイルのカウント数を追加する
+  // filecount++;
+  var counter = attachcount;
+  var test = document.getElementById('ui-id-1');
+  //削除した時は、一つ減って、通常は、プラス
+  // data_file_count++;
+  // attachbox.setAttribute('data-file-count',data_file_count);
+
+
+  //二回目以降は、条件に入る0からスタートしてそこからカウントアップ
+  // if(attachcount >0){
+  //   var counter = attachcount;
+  // }
+  //指定したクラスの開始タグの直前に入れる(上から順番に0,1,2,3などで下に並べていきたいが、今は、０が一番上にきてしまい)
+  //要素内の、最初の子要素の前
+  // test.insertAdjacentHTML('afterbegin',
+  //要素内の、最後の子要素の後ろ
+  // test.insertAdjacentHTML('beforeend',
+  //要素自身の前
+  // test.insertAdjacentHTML('beforebegin',
+  //要素自身の後ろ
+  // test.insertAdjacentHTML('afterend',
+              // '<div id="cba_commonAttachedFile'+ counter +'"'+'class="attachedFileParts_" data-file-count="'+counter +'">'
+              // +'<input type="file" size="30" name="file' + filecount +'"' +'class="inputFile">'
+              // +'<span class="guide">(25MBまで)</span>'
+              // +'<a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink" onclick="deleteFileClick();">'
+              // +'<img src="" alt class="icon">'
+              // +'<span>削除</span>'
+              // +'</a>'
+              // +'</div>');
+              // TODO php側で複数ある時は処理をしてあげる
+              //要素内の、最後の子要素の後ろ
+              test.insertAdjacentHTML('beforeend',
+                          '<div id="cba_commonAttachedFile'+ counter +'"'+'class="attachedFileParts" data-file-count="'+counter +'">'
+                          +'<input type="file" size="30" name="file[] class="inputFile">'
+                          +'<input type="hidden" name="MAX_FILE_SIZE value="26,214,400">'
+                          +'<span class="guide">(25MBまで)</span>'
+                          +'<a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink" onclick="deleteFileClick();">'
+                          +'<img src="" alt class="icon">'
+                          +'<span>削除</span>'
+                          +'</a>'
+                          +'</div>');
+}
+//添付ファイルを削除するボタン
+function deleteFileClick(){
+  //削除ボタンをクリックした回数をカウントアップする
+  deletecount++;
+  // data_file_count--;
+  //削除を押した時は、div毎消す
+  var counter = deletecount;
+  var test = document.getElementById('cba_commonAttachedFile'+counter);
+  test.parentNode.removeChild(test);
+  //削除した時は、一つ減って、通常は、プラス
+  // attachbox.setAttribute('data-file-count',data_file_count);
+}
+</script>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

@@ -1,0 +1,115 @@
+<?php $chat = new Chat;?>
+<?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
+<?php  $group_data =$chat->getGroupChatTheme($group_chat_no);?>
+<div id="title_msg">
+      <?php if(!empty($_POST['err'])):?>
+        <?php var_dump($_POST['chat_theme']);?>
+      <?php foreach($_POST['err'] as $err):?>
+      <p><?=$err?></p>
+      <?php endforeach;?>
+      <?php endif;?>
+</div>
+<h2>テーマチャットの<?=$chat->getGroupChatEditType($_GET['edit_type'])?></h2>
+<h2>タイトル<span>[必須]</span></h2>
+<form action="" method="post" name="chat_theme">
+    <div class="title">
+        <input type="text" size="50" maxlength="200" name="GROUP_CHAT_TITLE" value="<?=!empty($group_data['GROUP_CHAT_TITLE']) ? $group_data['GROUP_CHAT_TITLE'] : null?>">
+    </div>
+    <h3>メモ</h3>
+    <!-- TODO テキストエリアと添付ファイルをつけれるようにする -->
+    <div class="content">
+        <textarea name="GROUP_CHAT_MEMO" id="" cols="30" rows="7"><?=!empty($group_data['GROUP_CHAT_MEMO']) ? $group_data['GROUP_CHAT_MEMO'] : null?></textarea>
+    </div>
+    画像は、パスで登録する
+    <div class="attachedFile">
+      <!-- クリックしない時は、attachedFileAddPartsは空ファイル -->
+      <div class="attachedFileAddParts"></div>
+      <!-- クリックした際は、下記のようになる -->
+      <div class="attachedFileAddParts" id="ui-id-1">
+        <div id="cba_commonAttachedFile0" class="attachedFileParts">
+          <input type="hidden" name="attachNumber0" value="0">
+          <input type="file" size="30" name="file0" class="inputFile">
+          <span class="guide">(25MBまで)</span>
+          <a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink">
+            <img src="" alt class="icon">
+            <span>削除</span>
+          </a>
+        </div>
+      </div>
+      <div class="attachedFileAddWrapper">
+        <!-- 添付ファイルを追加するをクリックした時に、data-file-countとdata-attach-numberが1になる -->
+        <div class="attachedFileAdd" data-url="" data-file-count="0" data-attach-number="0" data-next-attach-number="1">
+          <a href="javascript:void(0);" class="fileadd iconLink">
+            <img src="" alt="">
+            <span>添付ファイルを追加する</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    </div>
+    <h3>メンバー</h3>
+    <table class="layout">
+        <tbody>
+            <tr>
+                <td class="choicePartsBtn"></td>
+                <td class="choicePartsList">
+                    <div class="selected">牛島 淳史 (a.ushijima@xxxcorp.jp) </div>
+                    <td>
+                        <p><a href="" title="追加">追加</a></p>
+                    </td>
+                    <td>
+                        <p><a href="" title="削除">削除</a></p>
+                    </td>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr>
+                <div class="textareaParts"><textarea name="" id="" cols="30" rows="7"></textarea>
+                </div>
+                <td class="choicePartsList isLinked">
+                    <div class="searchPartsWrapper choiceSearch">
+                        <input id="addressSearch" class="searchParts" type="text" name="addressSearchQuery" value="" placeholder="メンバー名で検索"/>
+                        <img id="addressSearchIcon" class="icon searchIcon" src="" alt="検索する">
+                    </div>
+                    <p id="addressType">
+                        <input type="radio" name="choiceType" value="abclist"/><label for="cba_choiceTypeAbclist">五十音別</label>
+                        <input type="radio" name="choiceType" value="groupware" checked="checked"  /><label for="cba_choiceTypeGroupware">グループ別 </label>
+                    </p>
+                    <p>
+                        <select size="1" id="" class="choiceGroup">
+                            <option value="27648518">藤田 恭平 (k.fujita@xxxcorp.jp) </option>
+                            <option value="27648518">畑田　広一</option>
+                        </select>
+                    </p>
+                    <select size="7" class="choiceList" multiple="multiple" id="addressChoiceList">
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="displayParts">
+        <h3>詳細設定</h3>
+            <div>
+                <ul class="detailSetting">
+                    <li>
+                        <input type="checkbox" id="cba_mpChatModifiable" name="modifiable" value="on"  /><label for="cba_mpChatModifiable">登録者以外に、変更を許可する</label>
+                    </li>
+                </ul>
+            </div>
+    </div>
+    <div class="operationParts">
+        <div class="functionButton">
+            <input type="submit" name="chat_theme_create" value="作成する"/>
+            <input type="submit" name="" value="キャンセルする"/>
+        </div>
+    </div>
+</form>
+<div class="btnBackHome">
+    <span><a href="chat_top"><img src=''><span>チャット へ</span></a></span>
+</div>
+<footer class="main-footer text-center">
+    <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
+</footer>

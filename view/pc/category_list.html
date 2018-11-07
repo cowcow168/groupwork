@@ -1,0 +1,98 @@
+<script type="text/javascript">
+    $(function() {
+        $(document).on("click", 'input[type="button"]', function(){
+
+            // フラグの初期化
+            var useAjaxFlg = true;
+            var deletedFlg = false;
+
+            var senddata = new Object();
+
+            var className = $(this).attr("class") ;
+
+            // カテゴリNoを取得するために、class名を分解
+            var arrayClass = className.split("_");
+
+　　　　　　// 登録、編集するカテゴリ情報を作成
+            if(className == "register_board_category" || arrayClass[0]+"_"+arrayClass[1]+"_"+arrayClass[2] == "update_board_category"){
+                $("input."+className).each(function(){
+                    senddata[$(this).attr("id")] = $(this).val();
+                })
+            }
+
+            // 削除するカテゴリ情報を作成
+            if(arrayClass[0]+"_"+arrayClass[1]+"_"+arrayClass[2] == "delete_board_category"){
+                if(window.confirm('本当に削除してもよろしいですか？')){
+                    $("input."+className).each(function(){
+                        senddata[$(this).attr("id")] = $(this).val();
+                    })
+                }
+
+                var deletedFlg = true;
+            }
+
+            if(arrayClass[0]+"_"+arrayClass[1]+"_"+arrayClass[2]+"_"+arrayClass[3] == "display_update_board_category"){
+                $("input."+className).each(function(){
+                    senddata[$(this).attr("id")] = $(this).val();
+                })
+                $('#category_'+arrayClass[4]).html('<input type="text" class="update_board_category_'+arrayClass[4]+'" id="BOARD_CATEGORY_NAME" value="'+senddata['BOARD_CATEGORY_NAME']+'">'
+                    +'<input type="hidden" class="update_board_category_'+arrayClass[4]+'" id="BOARD_CATEGORY_NO" value="'+arrayClass[4]+'">'
+                    +'<input type="button" class="update_board_category_'+arrayClass[4]+'" id="update_board_category" value="編集">'
+                    +'<input type="button" class="cancel" id="cancel" value="キャンセル">'
+                );
+
+                var useAjaxFlg = false;
+            }
+
+
+
+            if (window.XMLHttpRequest) {
+                ajax = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                ajax = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+            }
+
+            // Ajaxでのカテゴリの登録・削除
+            if(useAjaxFlg){
+                $.ajax({
+                    type: "POST",
+                    url: "library/Api/boardCategory.php",
+                    data: senddata,
+
+
+                    success: function (senddata) {
+                        $('#board_category_list').html(senddata);
+
+                        if(deletedFlg){
+                            $('#topic_list').html('指定されたカテゴリが削除されました');
+                            $('#board_category_msg').html('');
+                            $('#board_topic_msg').html('');
+                        }
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                })
+            }
+
+        });
+
+
+    })
+</script>
+<?php $board = new Board;?>
+<form name="board_category">
+    <input type ="text" class="register_board_category" name="board_category_name" id="BOARD_CATEGORY_NAME" placeholder="<?=$board::CATEGORY_NAME_MAX?>文字以内">
+    <input type="button" class="register_board_category" id="register_board_category" value="登録">
+</form>
+
+
+<div id="board_category_list">
+<?php require_once(LIBRARY.'Api/boardCategory.php')?>
+</div>
+<?php if($_SESSION['permission'] == 1):?>
+<p>
+    <a href="board_top?board_category_no=<?=$board->getBoardCategoryByName($board::DEFAULT_CATEGORY['trash'])['BOARD_CATEGORY_NO']?>"><?=$board::DEFAULT_CATEGORY['trash']?></a>
+</p>
+<?php endif;?>

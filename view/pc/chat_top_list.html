@@ -1,0 +1,84 @@
+<a href="top">トップに戻る</a>
+<p><b>チャット一覧画面(サイボウズで一覧が表示されている画面です。</b></p>
+<div>
+    <span>カテゴリ(開閉するようにjavaScriptで制御する)サイドに表示</span>
+</div>
+<?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
+<!-- ダイレクトチャットとテーマチャットがクリックされた時の表示の判定で使用する -->
+<?php $chat_shikibetu_flag = (!empty($_GET['currentFolder']) ? $_GET['currentFolder'] : null)?>
+<!-- (すべて)のカウントしている条件(ダイレクトチャット(辞めた社員も含む)とテーマチャットの合計) -->
+<!-- TODO　下記のリンクをクリックすると中央のデータが切り替わるようにする -->
+<ul>
+    <li>
+        <a href="chat_top">
+            <span>(すべて)</span>
+        </a>
+        <span>(<?= $chat->getPermissionMemberAllCount()?>)</span>
+    </li>
+</ul>
+<ul>
+    <li>
+        <span class="switch">
+          <a href="javascript:void(0);" class="folderThemeOpen" chatRoomType="THEME" data-url="" style="display:block;"onclick="btnthemeClick();">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+          </a>
+          <a href="javascript:void(0);" class="folderThemeClose" chatRoomType="THEME" style="display:none;"onclick="btnthemeCloseClick();">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+          </a>
+        </span>
+        <a href="chat_top?currentFolder=THEME">
+            <span class="categoryName">テーマチャット</span>
+        </a>
+        <!-- テーマチャットの合計数をカウントする -->
+        <?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
+        <span class="targetCount">(<?=count($chat->getAllGroupChat($group_chat_no))?>)</span>
+        <p>下は、テーマチャットの数があるだけ繰り返す(ボタンクリックによって開閉をする。ソースの表示では、ソースを出させない)</p>
+        <?php foreach ($chat->getAllGroupChat($group_chat_no) as $group_chat):?>
+        <!-- クリックすると下記のスタイルにdisplay:noneがつき、デフォルトは、display:blockがつく -->
+        <ul id="cba_chatRoomList_THEME" class="include_theme" style="display:none;">
+          <li class="selfclearconfirmed">
+            <div>
+              <a href="chat_direct?theme_chat=<?=$group_chat['GROUP_CHAT_TITLE']?>&group_chat_no=<?=$group_chat['GROUP_CHAT_NO']?>" title="" class="iconLink">
+                <img src="" alt=""><span><?=$group_chat['GROUP_CHAT_TITLE']?></span>
+              </a>
+            </div>
+          </li>
+        </ul>
+        <?php endforeach;?>
+    </li>
+</ul>
+<!-- 社員一覧を表示させる 100人までは、名称を表示してそれ以降は、他90人などと表示(ひとまず全員を出してから考える)-->
+<ul>
+    <li id="cba_chatRoomList_DIRECT" class="selfclear">
+        <span class="switch">
+          <a href="javascript:void(0);" class="folderOpen" chatRoomType="THEME" data-url="" style="display:block;"onclick="btnClick();">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/plus11.gif" alt="開く" />
+          </a>
+          <a href="javascript:void(0);" class="folderClose" chatRoomType="THEME" style="display:none;"onclick="btnCloseClick();">
+              <img src="https://cybozulive.com/static/49f5cdb4ca/images/minus11.gif" alt="閉じる" />
+          </a>
+        </span>
+        <a href="chat_top?currentFolder=DIRECT">
+            <span class="categoryName">ダイレクトチャット</span>
+        </a>
+        <!-- 人数をカウントするものを作成する -->
+        <span class="targetCount">(<?=$chat->getPermissionMemberCount()?>)</span>
+        <ul id="cba_chatRoomList_DIRECT" class="include_direct" style="display:none;">
+        <!-- 社員名を出力させる(imgには、社員番号に紐づく画像パスを格納してあげる形式にする、aには、権限テーブルにあるmember_noからチャットテーブルにあるものに紐付けるgroup_noに入れる仕組みが必要(既存のテーブル構成では、無理)) -->
+        <!-- サイボウズでは、チャットルームIDを/mpChat/view?chatRoomId=2%3A21164578のように変換している -->
+          <!-- 退社していない自分以外の全社員を除く -->
+          <!-- ここからループさせる -->
+          <?php $con = new Db?>
+          <?php $member_no = $_SESSION['member_no']?>
+          <?php foreach($chat->getPermissionMember($member_no) as $permisiion_member):?>
+          <!-- TODO 遷移した後にidをハッシュ化してあげる必要あり -->
+          <li class="selfclearconfirmed">
+            <div><a href="chat_direct?group_chat_no=<?=$permisiion_member['GROUP_CHAT_NO']?>"><img src="" alt=""><span><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span></a></div>
+          </li>
+          <?php endforeach;?>
+          <!-- ここまでループさせる -->
+          <!-- この下に全社員数から100人を引いたものを表示する -->
+          <li class="remainingCount">他<?=$chat->getPermissionMemberCount()-1?>件(全社員数-100)</li>
+        </ul>
+    </li>
+</ul>

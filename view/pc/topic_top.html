@@ -1,0 +1,226 @@
+<script type="text/javascript">
+    $(function() {
+
+        var registerNum = 0;
+
+        $(document).on("click", 'input[type="button"]', function(){
+
+            var senddata = new Object();
+
+            // 登録するコメント本文を作成
+            $("textarea.BOARD_COMMENT_TEXT").each(function(){
+                senddata[$(this).attr("id")] = $(this).val();
+            })
+
+            // 登録するボタンの情報を作成
+            $("input.register_board_comment").each(function(){
+                senddata[$(this).attr("id")] = $(this).val();
+            })
+
+
+            if (window.XMLHttpRequest) {
+                ajax = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                ajax = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+            }
+
+            // Ajaxでのカテゴリの登録・削除
+
+            $.ajax({
+                type: "POST",
+                url: "library/Api/boardComment.php",
+                data: senddata,
+
+
+                success: function (senddata) {
+                    $('#board_comment_msg').after("<div id=\"new_board_comment_"+registerNum+"\"></div>");
+                    $('#new_board_comment_'+registerNum).html(senddata);
+                    registerNum++;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            })
+        });
+
+        $(document).on("click", 'a[id="reply_comment"]', function(){
+
+            var className = $(this).attr("class");
+            var arrayClass = className.split("_");
+
+            var reply_to_board_comment_no = arrayClass[2];
+            var board_comment_display_no = arrayClass[3];
+
+            $('#reply_to').html(
+                board_comment_display_no+'へ返信する'
+                +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
+                +'<input type="hidden" class="register_board_comment" id="reply_to_board_comment_no" value="'+reply_to_board_comment_no+'">'
+            );
+
+            $('#board_comment_msg').html(""
+            );
+        });
+
+        $(document).on("click", 'a[id="reply_cancel"]', function(){
+            $('#reply_to').html(""
+            );
+        });
+
+        $(document).on("click", 'a[id="delete_board_comment"]', function(){
+
+            var className = $(this).attr("class");
+            var arrayClass = className.split("_");
+
+            var board_comment_no = arrayClass[2];
+            var board_topic_no = arrayClass[3];
+
+            var senddata = new Object();
+
+            // 削除するカテゴリ情報を作成
+            if(arrayClass[0]+'_'+arrayClass[1] == "delete_comment"){
+                senddata["board_topic_no"] = board_topic_no;
+
+                var delFlg = false;
+
+                if(window.confirm('本当に削除してもよろしいですか？')){
+                    $("a."+className).each(function(){
+                        senddata[$(this).attr("id")] = true;
+                        senddata["BOARD_COMMENT_NO"] = board_comment_no;
+
+                    })
+                    var delFlg = true;
+                }
+
+                if(delFlg){
+                    // Ajaxでのコメント削除
+                    $.ajax({
+                        type: "POST",
+                        url: "library/Api/boardComment.php",
+                        data: senddata,
+
+                        //TODO コメント削除の時の挙動
+                        success: function (senddata) {
+                            /*$('#delete_comment').html('このコメントは削除されました');
+                            $('#comment_text').html('');
+                            $('#reply_comment').html('');
+                            $('#delete_board_comment').html('');*/
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    })
+                }
+
+            }
+        });
+
+        $(document).on("click", 'a[id="display_reply_comment_list"]', function(){
+            var name = $(this).attr("name");
+            var arrayName = name.split("_");
+
+            var senddata = new Object();
+
+            $("#display_reply_comment_list").each(function(){
+                senddata["display_reply_comment_list"] = 1;
+                senddata["PARENT_REPLY_TO_BOARD_COMMENT_NO"] = arrayName[0];
+                senddata["REPLY_TO_BOARD_COMMENT_NO"] = arrayName[1];
+                senddata["board_topic_no"] = arrayName[2];
+            })
+
+            $.ajax({
+                type: "POST",
+                url: "library/Api/boardComment.php",
+                data: senddata,
+
+                success: function (senddata) {
+                    $('#reply_comment_list').html(senddata);
+                    document.getElementById('reply_comment_window').style.display = "block";
+
+                    document.getElementById('display_one_comment').style.display = "none";
+                    document.getElementById('display_comment_list').style.display = "block";
+
+                    document.getElementById('reply_comment_list').style.display = "none";
+                    document.getElementById('one_reply_comment').style.display = "block";
+
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            })
+        });
+
+        $(document).on("click", 'a[id="reply_comment_window_cancel"]', function(){
+            document.getElementById('reply_comment_window').style.display = "none";
+        });
+
+        $(document).on("click", 'a[id="display_comment_list"]', function(){
+            document.getElementById('display_one_comment').style.display = "block";
+            document.getElementById('display_comment_list').style.display = "none";
+
+            document.getElementById('reply_comment_list').style.display = "block";
+            document.getElementById('one_reply_comment').style.display = "none";
+        });
+
+        $(document).on("click", 'a[id="display_one_comment"]', function(){
+            document.getElementById('display_one_comment').style.display = "none";
+            document.getElementById('display_comment_list').style.display = "block";
+
+            document.getElementById('reply_comment_list').style.display = "none";
+            document.getElementById('one_reply_comment').style.display = "block";
+        });
+
+        var pageNum = 1;
+
+        $(document).on("click", 'a[id="display_more"]', function(){
+            var name = $(this).attr("name");
+
+            var senddata = new Object();
+
+            $("#board_comment_list").each(function(){
+                senddata["display_more"] = 1;
+                senddata["board_topic_no"] = name;
+            })
+
+            $.ajax({
+                type: "POST",
+                url: "library/Api/boardComment.php",
+                data: senddata,
+
+                success: function (senddata) {
+                    $('#display_more').before("<div id=\"board_comment_list_"+pageNum+"\"></div>");
+                    $('#board_comment_list_'+pageNum).html(senddata);
+                    pageNum++;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            })
+        }).click();
+
+
+
+    })
+</script>
+<?php
+$con = new Db;
+$board = new Board;
+$board_topic = $board->getBoardTopic($_GET['board_topic_no']);
+?>
+<p>タイトル:<?=$board_topic['BOARD_TOPIC_TITLE']?> カテゴリ:<a href="board_top?board_category_no=<?=$board_topic['BOARD_CATEGORY_NO']?>"><?=$board->getBoardCategory($board_topic['BOARD_CATEGORY_NO'])['BOARD_CATEGORY_NAME']?></a></p>
+<p><?=$board_topic['BOARD_TOPIC_TEXT']?></p>
+<p>作成者:<?=$con->selectNo($board_topic['BOARD_TOPIC_CREATE_MEMBER_NO'])['member_name']?> 作成日時:<?=date('Y年m月d日 H時i分s秒', strtotime($board_topic['BOARD_TOPIC_INS_TS']))?></p>
+<p>更新者:<span id="BOARD_TOPIC_UPDATE_MEMBER_NO"><?=$con->selectNo($board_topic['BOARD_TOPIC_UPDATE_MEMBER_NO'])['member_name']?></span> 更新日時:<span id="BOARD_TOPIC_UPD_TS"><?=date('Y年m月d日 H時i分s秒', strtotime($board_topic['BOARD_TOPIC_UPD_TS']))?></span></p>
+<br>
+
+<p>コメントを書き込む</p>
+<form name="board_comment">
+<p id="reply_to"></p>
+<textarea class="BOARD_COMMENT_TEXT" id="BOARD_COMMENT_TEXT" rows="3" style="width:300px;" placeholder="<?=$board::COMMENT_TEXT_MAX?>文字以内"></textarea>
+    <input type="hidden" class="register_board_comment" id="board_topic_no" value="<?=$_GET['board_topic_no']?>">
+    <input type="button" class="register_board_comment" id="register_board_comment" value="投稿">
+</form>
+<div id="board_comment_msg"></div>
+<div id="board_comment_list">
+    <?php require_once(LIBRARY.'Api/boardComment.php')?>
+</div>
