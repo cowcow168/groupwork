@@ -46,15 +46,24 @@ function normalize_files_array($files = []){
 }
 //テーマチャット作成ボタンが押される前にファイルがアップロードされることは、ないのでファイルがアップロードされたら、セッションに入れておく
 //上書きをした場合は、書き換わる
-  if(empty($_SESSION['upfile']) || $_FILES['file']['error'] === 0) {
-    for($i=0;$i<count($_FILES['file']['name']);$i++){
-      // if(isset($_FILES['file'])) {
-      unset($_SESSION['upfile'][$i]);
-      $_SESSION['upfile'][$i] = $_FILES['file'][$i];
-      logger('セッションの値を確認する1'.$_SESSION['upfile'][$i]);
-    }
+// for($i=0;$i<count($_FILES['file']);$i++){
+//   if(empty($_SESSION['upfile']) || $_FILES['file']['error'][$i] === 0) {
+//     unset($_SESSION['upfile']);
+//     $_SESSION['upfile'] = $_FILES['file'];
+//     logger('セッションの値を確認する'.$_SESSION['upfile']);
+//   }
+// }
+$file_list = array();
+for($i=0;$i<count($_FILES['file']);$i++){
+  if(empty($_SESSION['upfile']) || $_FILES['file']['error'][$i] === 0) {
+    unset($_SESSION['upfile']);
+    $_SESSION['upfile'][$i] = $_FILES['file'];
+    //名前の被りを防いで登録するために、拡張子とファイル名の所を分割する(デバッグ用のコード)
+    // $_SESSION['filelist'] = preg_split("/[.]/",$_SESSION['upfile']['name'][$i]);
+    $file_list = preg_split("/[.]/",$_SESSION['upfile']['name']);
+    $_SESSION['filelist'] = $file_list;
   }
-
+}
 
 //テーマチャット作成時バリデーションチェック
 if(!empty($_POST['chat_theme_create'])){
@@ -94,12 +103,9 @@ if(!empty($_POST['chat_theme_create'])){
 
   //グループチャット作成登録画面に遷移してきた時
   if($_GET['edit_type'] == 'register'){
-    //ファイルのアップロード状況を確認
-    logger('登録ボタンを押した瞬間'.$_SESSION['upfile']);
-    logger('登録ボタンを押した瞬間'.var_dump($_SESSION['upfile']));
     //エラーがなければ登録処理を行う
     if(empty($_POST['err'])){
-      $chat->setGroupChat($_POST['GROUP_GHAT_NO'],$_POST['GROUP_CHAT_TITLE'],$_POST['GROUP_CHAT_MEMO'],$_FILE['file']['tmp_name'],$_POST['modifiable'],$_SESSION['belong_member']);
+      $chat->setGroupChat($_POST['GROUP_GHAT_NO'],$_POST['GROUP_CHAT_TITLE'],$_POST['GROUP_CHAT_MEMO'],$_SESSION['upfile'],$_POST['modifiable'],$_SESSION['belong_member']);
       //チャットの一覧ページ(ダイレクトページとテーマチャットが一覧で見れるページ)メッセージは、
       $_SESSION['edit_topic_msg'] = 'トピックが'.$chat->getGroupChatEditType($_GET['edit_type']).'されました';
       //登録がうまく行った場合は、ページ遷移させずに表示させていたセレクトボックスの値などのデータをセッションに入れていたものをクリアする
@@ -111,8 +117,8 @@ if(!empty($_POST['chat_theme_create'])){
 }
 //テーマチャットキャンセル押下時
 if(!empty($_POST['chat_theme_cancel'])){
-  //メンバー一覧の項目はクリアする
-  unset($_SESSION['belong_member']);
+  //メンバー一覧の項目とアップロード画像はクリアする
+  unset($_SESSION['belong_member'],$_SESSION['upfile']);
   header("Location:chat_top");
 }
 // 画面表示

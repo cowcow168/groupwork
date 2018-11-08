@@ -58,34 +58,8 @@ $chat = new Chat;
 //         }
 //     }
 // }
-
 // グループチャット削除時　　　　　　　　　　　　　　　　　　　　　　　　　　　　TODO:トランザクション処理の追加
 if(!empty($_POST['leave_group_chat'])){
     $chat->deleteGroupChat($_POST['GROUP_CHAT_NO']);
     // $msg = '削除に成功しました。';
-}
-$account = new Account;
-
-//グループチャット一覧などを表示させる
-foreach($chat->getAllGroupChat() as $group_chat){
-  echo '<div id="group_chat_'.$group_chat['GROUP_CHAT_NO'].'">'
-      .'<a href="chat_top?group_chat_no='.$group_chat['GROUP_CHAT_NO'].'">'
-      .$group_chat['GROUP_CHAT_TITLE'].
-      '</a>';
-
-      // グループチャット(テーマチャット)のトピック数
-      // .'<span>'
-      // .'('.$group_chat['BOARD_TOPIC_NUM'].')'
-      // .'</span>';
-      // TODO グループチャットでは、自分で作成した掲示板などと違ってテーマチャットの所で削除する仕様の為、編集、削除ボタンをtop画面で表示しなくて良いかも?
-      //ログインユーザーに更新権限がある場合、編集・削除ボタンの表示
-      if($account->chkUpdatePermission($group_chat['GROUP_CHAT_CREATE_MEMBER_NO'], $group_chat['GROUP_CHAT_NO'])){
-          echo '<input type="hidden" class="display_update_group_chat_'.$group_chat['GROUP_CHAT_NO'].'" id="GROUP_CHAT_TITLE" value="'.$group_chat['GROUP_CHAT_TITLE'].'">'
-          .'<input type="button" class="display_update_group_chat_'.$group_chat['GROUP_CHAT_NO'].'" id="display_update_group_chat" value="編集">'
-
-          .'<input type="hidden" class="delete_group_chat_'.$group_chat['GROUP_CHAT_NO'].'" id="GROUP_CHAT_NO" value="'.$group_chat['GROUP_CHAT_NO'].'">'
-          .'<input type="button" class="delete_group_chat_'.$group_chat['GROUP_CHAT_NO'].'" id="delete_group_chat" value="削除">'
-        ;
-      }
-      echo '</div>';
 }

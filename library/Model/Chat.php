@@ -138,7 +138,7 @@ class Chat extends Db
   * @return array
   * TODO $groupChatNoが来る時は、空でinsertされたタイミングでインクリメントされるので、トランザクションつけるか?
   */
-  public function setGroupChat($groupChatNo, $groupChatTitle,$groupChatMemo=null,$groupChatAttachedFile,$modifiable=null,$belong_member=null)
+  public function setGroupChat($groupChatNo, $groupChatTitle,$groupChatMemo=null,$groupChatAttachedFile=null,$modifiable=null,$belong_member=null)
   {
       $con = new Db;
       $con->connect();
@@ -185,12 +185,13 @@ class Chat extends Db
 
         //上記で登録されたID(チャット全体のテーブルに紐付かせるグループチャット番号)を取得する
         $tmpChatNo = $con->dbh->lastInsertId('GROUP_CHAT_NO');
-        //所属メンバーが複数の時もあるのでその時は、同じグループチャット番号で所属メンバーテーブルに複数レコード作る
-        foreach($belong_member as $belong_member_no){
-          $this->setGroupChatBelongs($tmpChatNo,$belong_member_no,$modifiable);
+        //所属メンバーは、必須では、ないので空でない時の判定を入れる
+        if(!empty($belong_member)){
+          //所属メンバーが複数の時もあるのでその時は、同じグループチャット番号で所属メンバーテーブルに複数レコード作る
+          foreach($belong_member as $belong_member_no){
+            $this->setGroupChatBelongs($tmpChatNo,$belong_member_no,$modifiable);
+          }
         }
-        // ログに残す
-        logger('他のテーブルに渡すグループチャット番号'.$tmpChatNo);
         //グループチャット登録時パスを指定してあげる(登録する時のjavaScriptのファイル名をグループチャットの後ろにつける)
         //グループチャット番号が、100005で4枚画像があれば、1000051 1000052 1000053 1000054などのように登録する
         //グループチャット番号が、100005で100枚画像があれば、100005100 が最後の登録になるようにする
@@ -209,25 +210,20 @@ class Chat extends Db
         mkdir($filepath,0777,true);
         chmod($filepath,0777);
 
-        //書き込み後は、権限を元に戻す
-        system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
-
-
-        logger('ファイルの中身を確認する'.$_FILES['file']);
-        logger('ファイルの中身を確認する'.$_FILES['file']['tmp_name']);
-        logger('ファイルの中身を確認する'.$_FILES['file']['name']);
-        logger('リクエストで来た値を確認する'.$groupChatAttachedFile);
+        logger('ファイルの中身を確認する'.print_r($_SESSION['upfile']));
+        // logger('リクエストで来た値を確認する'.$groupChatAttachedFile);
         //ファイルのアップロードがある時
-        if(count($_FILES)>0){
+        if(count($_SESSION['upfile'])>0){
           //配列として画像データを取得してあげて、エラーがある時は、飛ばして、問題ない時は、指定した所にファイルを移動してあげる
-          foreach($_FILES['name']['tmp_name'] as $key => $tmp_name){
-            if($_FILES['name']['error'][$key] > 0){continue;}
+          foreach($_SESSION['upfile'] as $key => $tmp_name){
+            if($_SESSION['upfile']['error'][$key] > 0){continue;}
             //名前の被りを防いで登録するために、拡張子とファイル名の所を分割する
-            $file_list = explode("/[.]/",$_FILES['name']['tmp_name'][$key]);
+            $file_list = explode("/[.]/",$_SESSION['upfile']['name'][$key]);
+            logger('ファイルの分割状況を確認'.$file_list);
             // //実際にあげられたファイル名で拡張子を除く(ダブリをなくす為に上書きしてあげる必要あり)
             // $tmp_file_name = $file_list[0];
             //グループチャット番号の後にアップロードした枚数だけを連番にして、名前を上書き(拡張子は、そのままつける)
-            $tmp_name = $tmpChatNo($key+1).$file_list[1];
+            $tmp_name = $tmpChatNo($key+1).".".$file_list[1];
             logger('ファイルの名前を確認'.$tmp_name);
             //TODO 同じ名前にならないようにする必要がある
             $groupChatAttachedFilePath = THEME_IMAGE.'/'.$tmp_name;
@@ -239,7 +235,8 @@ class Chat extends Db
             }
           }
         }
-
+        //書き込み後は、権限を元に戻す
+        system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
         //新規判定用
         $sql  = ' SELECT * FROM TO_CHAT '
         .' WHERE GROUP_CHAT_NO = :groupChatNo '
@@ -253,7 +250,6 @@ class Chat extends Db
           $this->setToChatNo($tmpChatNo);
         }
         //ある時で、変更がある時は、更新でない時は、時間だけ更新する
-
         // グループチャットの更新(動きを確認して検証する)
         // $sql  = ' UPDATE BOARD_CATEGORY SET '
         //     .' BOARD_TOPIC_NUM = :groupChatNum, '
@@ -304,7 +300,7 @@ class Chat extends Db
      // TODO グループチャット番号が入ってこない
      $stmt->bindValue(':groupChatAttachedFileNo', '');
      $stmt->bindValue(':groupChatNo', $groupChatNo);
-     $stmt->bindValue(':groupChatAttachedFile', $filepath);
+     $stmt->bindValue(':groupChatAttachedFile', $groupChatAttachedFilePath);
      $stmt->bindValue(':groupChatAttachedFileInsTs', $now);
      $stmt->bindValue(':groupChatAttachedFileUpdTs', $now);
      //デフォルトでは、表示させるようにする(削除した際は、0に更新してあげる)
