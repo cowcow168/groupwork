@@ -130,11 +130,15 @@ class Chat extends Db
   *
   * @param $groupChatNo グループチャットNo
   * @param $groupChatTitle グループチャットタイトル名
+  * @param $groupChatMemo グループチャットメモ(グループの詳細の説明などを記載する所)
+  * @param array $groupChatAttachedFile グループチャットでの添付画像
+  * @param boolean $modifiable 作成者以外の所属メンバーがグループチャットを更新できるかのフラグ
+  * @param array $belong_member グループに所属しているメンバー
   *
   * @return array
   * TODO $groupChatNoが来る時は、空でinsertされたタイミングでインクリメントされるので、トランザクションつけるか?
   */
-  public function setGroupChat($groupChatNo, $groupChatTitle,$groupChatMemo=null,$groupChatAttachedFile=null,$modifiable=null,$belong_member=null)
+  public function setGroupChat($groupChatNo, $groupChatTitle,$groupChatMemo=null,$groupChatAttachedFile,$modifiable=null,$belong_member=null)
   {
       $con = new Db;
       $con->connect();
@@ -144,122 +148,126 @@ class Chat extends Db
       $belong_member = array();
       $belong_member = $_POST['addressId'];
       // チャットの登録
-      //所属メンバーが複数の時もあるのでその時は、同じグループチャット番号で複数レコード作る
-      foreach($belong_member as $belong_member_no){
-        $sql  = ' INSERT INTO GROUP_CHAT ( '
-          .' GROUP_CHAT_NO, '
-          .' GROUP_CHAT_TITLE, '
-          .' GROUP_CHAT_MEMO, '
-          .' GROUP_CHAT_CREATE_MEMBER_NO, '
-          .' GROUP_CHAT_UPDATE_MEMBER_NO, '
-          .' GROUP_CHAT_BELONGS_MEMBER_NO, '
-          .' GROUP_CHAT_INS_TS, '
-          .' GROUP_CHAT_UPD_TS, '
-          .' GROUP_CHAT_UPDATE_PERMISSION_STATUS, '
-          .' GROUP_CHAT_STATUS) '
-          .' VALUES '
-          .' (:groupChatNo,'
-          .' :groupChatTitle, '
-          .' :groupChatMemo, '
-          .' :groupChatCreateMemberNo, '
-          .' :groupChatUpdateMemberNo, '
-          .' :groupChatBelongsMemberNo, '
-          .' :groupChatInsTs, '
-          .' :groupChatUpdTs, '
-          .' :groupChatUpdatePermissionStatus, '
-          .' :groupChatStatus) '
-          ;
-          //グループチャットメモと添付ファイルの登録処理できるようにする
-          // TODO 添付ファイルの登録処理とグループチャット
-          $stmt = $con->dbh->prepare($sql);
-          $stmt->bindValue(':groupChatNo', $groupChatNo);
-          $stmt->bindValue(':groupChatTitle', $groupChatTitle);
-          $stmt->bindValue(':groupChatMemo', $groupChatMemo);
-          //このテーブルには、不要なカラム
-          // $stmt->bindValue(':groupChatAttachedFile', $groupChatAttachedFile);
-          $stmt->bindValue(':groupChatCreateMemberNo', $_SESSION['member_no']);
-          $stmt->bindValue(':groupChatUpdateMemberNo', $_SESSION['member_no']);
-          //グループチャットに参加しているメンバー
-          $stmt->bindValue(':groupChatBelongsMemberNo', $belong_member_no);
-          $stmt->bindValue(':groupChatInsTs', $now);
-          $stmt->bindValue(':groupChatUpdTs', $now);
-          //作成者以外でも更新できるにチェックを入れていた時に1にする(所属しているメンバーの方)
-          if($modifiable){
-            $stmt->bindValue(':groupChatUpdatePermissionStatus', 1);
-          }else{
-            $stmt->bindValue(':groupChatUpdatePermissionStatus', 0);
-          }
-          //デフォルトでは、表示させるようにする
-          $stmt->bindValue(':groupChatStatus', 1);
-          $stmt->execute();
+      $sql  = ' INSERT INTO GROUP_CHAT ( '
+        .' GROUP_CHAT_NO, '
+        .' GROUP_CHAT_TITLE, '
+        .' GROUP_CHAT_MEMO, '
+        .' GROUP_CHAT_CREATE_MEMBER_NO, '
+        .' GROUP_CHAT_UPDATE_MEMBER_NO, '
+        .' GROUP_CHAT_INS_TS, '
+        .' GROUP_CHAT_UPD_TS, '
+        .' GROUP_CHAT_STATUS) '
+        .' VALUES '
+        .' (:groupChatNo,'
+        .' :groupChatTitle, '
+        .' :groupChatMemo, '
+        .' :groupChatCreateMemberNo, '
+        .' :groupChatUpdateMemberNo, '
+        .' :groupChatInsTs, '
+        .' :groupChatUpdTs, '
+        .' :groupChatStatus) '
+        ;
+        //グループチャットメモと添付ファイルの登録処理できるようにする
+        // TODO 添付ファイルの登録処理とグループチャット
+        $stmt = $con->dbh->prepare($sql);
+        $stmt->bindValue(':groupChatNo', $groupChatNo);
+        $stmt->bindValue(':groupChatTitle', $groupChatTitle);
+        $stmt->bindValue(':groupChatMemo', $groupChatMemo);
+        $stmt->bindValue(':groupChatCreateMemberNo', $_SESSION['member_no']);
+        $stmt->bindValue(':groupChatUpdateMemberNo', $_SESSION['member_no']);
 
-          //上記で登録されたID(チャット全体のテーブルに紐付かせるグループチャット番号)を取得する
-          $tmpChatNo = $con->dbh->lastInsertId('GROUP_CHAT_NO');
+        $stmt->bindValue(':groupChatInsTs', $now);
+        $stmt->bindValue(':groupChatUpdTs', $now);
 
-          //グループチャット登録時パスを指定してあげる(登録する時のjavaScriptのファイル名をグループチャットの後ろにつける)
-          //グループチャット番号が、100005で4枚画像があれば、1000051 1000052 1000053 1000054などのように登録する
-          //グループチャット番号が、100005で100枚画像があれば、100005100 が最後の登録になるようにする
-          //画像のパスを指定する
-          $fileName = $tmpChatNo;
-          $filepath = THEME_IMAGE.$fileName;
-          //ディレクトリが作成されていない場合、新規で作成する
-          if(!file_exists(THEME_IMAGE)){
-            mkdir(THEME_IMAGE,0777);
-            chmod(THEME_IMAGE,0777);
-          }
-          //グループチャット番号のディレクトリを作成する
-          mkdir($filepath,0777);
-          chmod($filepath,0777);
-          //ファイルのアップロードがある時
-          if(count($_FILES)>0){
-            //配列として画像データを取得してあげて、エラーがある時は、飛ばして、問題ない時は、指定した所にファイルを移動してあげる
-            foreach($_FILES['name']['tmp_name'] as $key => $tmp_name){
-              if($_FILES['name']['error'][$key] > 0){continue;}
-              //名前の被りを防いで登録するために、拡張子とファイル名の所を分割する
-              $file_list = explode("/[.]/",$_FILES['name']['tmp_name'][$key]);
-              // //実際にあげられたファイル名で拡張子を除く(ダブリをなくす為に上書きしてあげる必要あり)
-              // $tmp_file_name = $file_list[0];
-              //グループチャット番号の後にアップロードした枚数だけを連番にして、名前を上書き(拡張子は、そのままつける)
-              $tmp_name = $tmpChatNo($key+1).$file_list[1];
-              //TODO 同じ名前にならないようにする必要がある
-              $groupChatAttachedFilePath = THEME_IMAGE.$tmp_name;
-              move_uploaded_file($tmp_name,THEME_IMAGE);
-              //画像がある時は、登録する
-              if(file_exists($groupChatAttachedFilePath)){
-                $this->setGroupChatAttachedFile($tmpChatNo,$groupChatAttachedFilePath);
-              }
+        //デフォルトでは、表示させるようにする
+        $stmt->bindValue(':groupChatStatus', 1);
+        $stmt->execute();
+
+        //上記で登録されたID(チャット全体のテーブルに紐付かせるグループチャット番号)を取得する
+        $tmpChatNo = $con->dbh->lastInsertId('GROUP_CHAT_NO');
+        //所属メンバーが複数の時もあるのでその時は、同じグループチャット番号で所属メンバーテーブルに複数レコード作る
+        foreach($belong_member as $belong_member_no){
+          $this->setGroupChatBelongs($tmpChatNo,$belong_member_no,$modifiable);
+        }
+        // ログに残す
+        logger('他のテーブルに渡すグループチャット番号'.$tmpChatNo);
+        //グループチャット登録時パスを指定してあげる(登録する時のjavaScriptのファイル名をグループチャットの後ろにつける)
+        //グループチャット番号が、100005で4枚画像があれば、1000051 1000052 1000053 1000054などのように登録する
+        //グループチャット番号が、100005で100枚画像があれば、100005100 が最後の登録になるようにする
+        //画像のパスを指定する
+        $fileName = $tmpChatNo;
+        $filepath = THEME_IMAGE.'/'.$fileName;
+
+        //imgのディレクトリを書き込みが出来るようにその他のユーザーにも書き込み権限を与える
+        system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
+        //ディレクトリが作成されていない場合、新規で作成する
+        if(!file_exists(THEME_IMAGE)){
+          mkdir(THEME_IMAGE,0777);
+          chmod(THEME_IMAGE,0777);
+        }
+        //グループチャット番号のディレクトリを作成する
+        mkdir($filepath,0777,true);
+        chmod($filepath,0777);
+
+        //書き込み後は、権限を元に戻す
+        system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
+
+
+        logger('ファイルの中身を確認する'.$_FILES['file']);
+        logger('ファイルの中身を確認する'.$_FILES['file']['tmp_name']);
+        logger('ファイルの中身を確認する'.$_FILES['file']['name']);
+        logger('リクエストで来た値を確認する'.$groupChatAttachedFile);
+        //ファイルのアップロードがある時
+        if(count($_FILES)>0){
+          //配列として画像データを取得してあげて、エラーがある時は、飛ばして、問題ない時は、指定した所にファイルを移動してあげる
+          foreach($_FILES['name']['tmp_name'] as $key => $tmp_name){
+            if($_FILES['name']['error'][$key] > 0){continue;}
+            //名前の被りを防いで登録するために、拡張子とファイル名の所を分割する
+            $file_list = explode("/[.]/",$_FILES['name']['tmp_name'][$key]);
+            // //実際にあげられたファイル名で拡張子を除く(ダブリをなくす為に上書きしてあげる必要あり)
+            // $tmp_file_name = $file_list[0];
+            //グループチャット番号の後にアップロードした枚数だけを連番にして、名前を上書き(拡張子は、そのままつける)
+            $tmp_name = $tmpChatNo($key+1).$file_list[1];
+            logger('ファイルの名前を確認'.$tmp_name);
+            //TODO 同じ名前にならないようにする必要がある
+            $groupChatAttachedFilePath = THEME_IMAGE.'/'.$tmp_name;
+            logger('格納されるファイルのフルパスを確認'.$groupChatAttachedFilePath);
+            move_uploaded_file($tmp_name,THEME_IMAGE);
+            //画像がある時は、登録する
+            if(file_exists($groupChatAttachedFilePath)){
+              $this->setGroupChatAttachedFile($tmpChatNo,$groupChatAttachedFilePath);
             }
           }
+        }
 
-          //新規判定用
-          $sql  = ' SELECT * FROM TO_CHAT '
-          .' WHERE GROUP_CHAT_NO = :groupChatNo '
-          ;
-          $stmt = $con->dbh->prepare($sql);
-          $stmt->bindValue(':groupChatNo', $tmpChatNo);
-          $stmt->execute();
-          $data = $stmt->fetch();
-          // グループチャット新規作成時は、チャットテーブルにないので紐づけの為登録する
-          if(empty($data['GROUP_CHAT_NO'])){
-            $this->setToChatNo($tmpChatNo);
-          }
-          //ある時で、変更がある時は、更新でない時は、時間だけ更新する
+        //新規判定用
+        $sql  = ' SELECT * FROM TO_CHAT '
+        .' WHERE GROUP_CHAT_NO = :groupChatNo '
+        ;
+        $stmt = $con->dbh->prepare($sql);
+        $stmt->bindValue(':groupChatNo', $tmpChatNo);
+        $stmt->execute();
+        $data = $stmt->fetch();
+        // グループチャット新規作成時は、チャットテーブルにないので紐づけの為登録する
+        if(empty($data['GROUP_CHAT_NO'])){
+          $this->setToChatNo($tmpChatNo);
+        }
+        //ある時で、変更がある時は、更新でない時は、時間だけ更新する
 
-          // グループチャットの更新(動きを確認して検証する)
-          // $sql  = ' UPDATE BOARD_CATEGORY SET '
-          //     .' BOARD_TOPIC_NUM = :groupChatNum, '
-          //     .' BOARD_CATEGORY_UPDATE_MEMBER_NO = :boardCategoryUpdateMemberNo, '
-          //     .' BOARD_CATEGORY_UPD_TS = :boardCategoryUpdTs '
-          //     .' WHERE BOARD_CATEGORY_NO = :boardCategoryNo'
-          // ;
-          // $stmt = $con->dbh->prepare($sql);
-          // $stmt->bindValue(':groupChatNum', count($this->getAllBoardTopic($boardCategoryNo)));
-          // $stmt->bindValue(':boardCategoryUpdateMemberNo', $_SESSION['member_no']);
-          // $stmt->bindValue(':boardCategoryUpdTs', $now);
-          // $stmt->bindValue(':boardCategoryNo', $boardCategoryNo);
+        // グループチャットの更新(動きを確認して検証する)
+        // $sql  = ' UPDATE BOARD_CATEGORY SET '
+        //     .' BOARD_TOPIC_NUM = :groupChatNum, '
+        //     .' BOARD_CATEGORY_UPDATE_MEMBER_NO = :boardCategoryUpdateMemberNo, '
+        //     .' BOARD_CATEGORY_UPD_TS = :boardCategoryUpdTs '
+        //     .' WHERE BOARD_CATEGORY_NO = :boardCategoryNo'
+        // ;
+        // $stmt = $con->dbh->prepare($sql);
+        // $stmt->bindValue(':groupChatNum', count($this->getAllBoardTopic($boardCategoryNo)));
+        // $stmt->bindValue(':boardCategoryUpdateMemberNo', $_SESSION['member_no']);
+        // $stmt->bindValue(':boardCategoryUpdTs', $now);
+        // $stmt->bindValue(':boardCategoryNo', $boardCategoryNo);
 
-          // return $stmt->execute();
-      }
+        // return $stmt->execute();
   }
 
   /**
@@ -303,6 +311,54 @@ class Chat extends Db
      $stmt->bindValue(':groupChatAttachedFileStatus', 1);
      $stmt->execute();
    }
+
+   /**
+    * テーマチャットの複数画像データ登録
+    * 編集時に更新できて、画像データ数を更新できるようにする(呼び元で配列で渡してあげる)
+    * @param $groupChatNo 登録するテーマチャットに紐づくグループチャット番号
+    * @param string $groupChatBelongsMemberNo グループに所属しているメンバー
+    * @param boolean $groupChatUpdatePermissionStatus 作成者以外の所属メンバーがグループチャットを更新できるかのフラグ
+    *
+    * @return array 登録用データ
+    */
+    public function setGroupChatBelongs($groupChatNo,$groupChatBelongsMemberNo=null,$groupChatUpdatePermissionStatus=null)
+    {
+      $con = new Db;
+      $con->connect();
+
+      // 複数テーブル登録・更新のため、現在時刻を変数化
+      $now = getNow();
+      // チャットの登録
+      $sql  = ' INSERT INTO GROUP_CHAT_BELONG ( '
+          .' GROUP_CHAT_BELONG_NO, '
+          .' GROUP_CHAT_NO, '
+          .' GROUP_CHAT_BELONGS_MEMBER_NO, '
+          .' GROUP_CHAT_BELONG_INS_TS, '
+          .' GROUP_CHAT_BELONG_UPD_TS, '
+          .' GROUP_CHAT_UPDATE_PERMISSION_STATUS) '
+          .' VALUES '
+          .' (:groupChatBelongsNo,'
+          .' :groupChatNo,'
+          .' :groupChatBelongsMemberNo, '
+          .' :groupChatBelongsInsTs, '
+          .' :groupChatBelongsUpdTs, '
+          .' :groupChatUpdatePermissionStatus) '
+      ;
+      $stmt = $con->dbh->prepare($sql);
+      // TODO グループチャット番号が入ってこない
+      $stmt->bindValue(':groupChatBelongsNo', '');
+      $stmt->bindValue(':groupChatNo', $groupChatNo);
+      $stmt->bindValue(':groupChatBelongsMemberNo', $groupChatBelongsMemberNo);
+      $stmt->bindValue(':groupChatBelongsInsTs', $now);
+      $stmt->bindValue(':groupChatBelongsUpdTs', $now);
+      //作成者以外でも更新できるにチェックを入れていた時に1にする(所属しているメンバーの方)
+      if($groupChatUpdatePermissionStatus){
+        $stmt->bindValue(':groupChatUpdatePermissionStatus', 1);
+      }else{
+        $stmt->bindValue(':groupChatUpdatePermissionStatus', 0);
+      }
+      $stmt->execute();
+    }
   /**
    * チャット(グループチャット・ダイレクトチャット)登録
    * @param $groupChatNo 登録するテーマチャットのグループチャットNo

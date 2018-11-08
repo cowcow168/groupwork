@@ -23,6 +23,39 @@ Account::sessionChangeChk($_SESSION['user_name'],
 
 $chat = new Chat;
 
+//複数画像のアップロード
+function normalize_files_array($files = []){
+  $normalize_array = [];
+  foreach($files as $index => $file) {
+    if(!is_array($file['name'])) {
+      $normalize_array[$index][] = $file;
+      continue;
+    }
+    //形式を並び替え
+    foreach($file['name'] as $idx => $name) {
+      $normalize_array[$index][$idx] = [
+        'name' => $name,
+        'type' => $file['type'][$idx],
+        'tmp_name' => $file['tmp_name'][$idx],
+        'error' => $file['error'][$idx],
+        'size' => $file['size'][$idx],
+      ];
+    }
+  }
+  return $normalize_files_array;
+}
+//テーマチャット作成ボタンが押される前にファイルがアップロードされることは、ないのでファイルがアップロードされたら、セッションに入れておく
+//上書きをした場合は、書き換わる
+  if(empty($_SESSION['upfile']) || $_FILES['file']['error'] === 0) {
+    for($i=0;$i<count($_FILES['file']['name']);$i++){
+      // if(isset($_FILES['file'])) {
+      unset($_SESSION['upfile'][$i]);
+      $_SESSION['upfile'][$i] = $_FILES['file'][$i];
+      logger('セッションの値を確認する1'.$_SESSION['upfile'][$i]);
+    }
+  }
+
+
 //テーマチャット作成時バリデーションチェック
 if(!empty($_POST['chat_theme_create'])){
   //グループタイトルのバリデーション
@@ -56,47 +89,14 @@ if(!empty($_POST['chat_theme_create'])){
     //バリデーションエラー前に初回追加した時
     $_SESSION['choice_member'] = $_REQUEST['choiceList'];
   }
-
   //TODO 　画像のファイルサイズを指定する(html側で指定してあげる)
   // TODO 画像の時は、画像をテーマチャット画面で表示して、.txtの時は、クリックするとテキストの内容が表示されて、csvファイルの時は、押すと出力される
-  //ファイルがアップロードされたかの判定が必要
-  if(isset($_FILES) && isset($_FILES['file']) && is_upload_file($_FILES['file']['tmp_name'])){
-    //ディレクトリ確認
-    if(!file_exists(THEME_IMAGE)){
-      system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].DOCUMENT_ROOT.'view/img');
-      //なければ作成する
-      mkdir('view/img/themeimg');
-      system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img/themeimg');
-    }
-    //permisiion変更
-    system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
-    system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img/themeimg');
-
-    // TODO ファイル名が被らないように考える必要がある　サーバーのアップロード先
-    $url = 'view/img/themeimg/'.basename($_FILES['file']['name']);
-
-    // tmpから保存先に移動
-    if(move_uploaded_file($_FILES['upload']['tmp_name'],$url)){
-      $msg = $url. 'のアップロードに成功しました';
-    }else{
-      $msg = 'アップロードに失敗しました';
-    }
-    // permission戻す
-    system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/upload');
-    system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/upload/img');
-
-    echo $msg;
-    // ログに残す
-    logger($msg);
-
-    // system('sudo chmod 644 '.$_SERVER['DOCUMENT_ROOT'].'view/upload');
-    // system('sudo chmod 644 '.$_SERVER['DOCUMENT_ROOT'].'view/upload/img');
-  }else{
-    echo 'error';
-  }
 
   //グループチャット作成登録画面に遷移してきた時
   if($_GET['edit_type'] == 'register'){
+    //ファイルのアップロード状況を確認
+    logger('登録ボタンを押した瞬間'.$_SESSION['upfile']);
+    logger('登録ボタンを押した瞬間'.var_dump($_SESSION['upfile']));
     //エラーがなければ登録処理を行う
     if(empty($_POST['err'])){
       $chat->setGroupChat($_POST['GROUP_GHAT_NO'],$_POST['GROUP_CHAT_TITLE'],$_POST['GROUP_CHAT_MEMO'],$_FILE['file']['tmp_name'],$_POST['modifiable'],$_SESSION['belong_member']);
