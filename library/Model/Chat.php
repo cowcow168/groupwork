@@ -140,6 +140,16 @@ class Chat extends Db
   */
   public function setGroupChat($groupChatNo, $groupChatTitle,$groupChatMemo=null,$groupChatAttachedFile=null,$modifiable=null,$belong_member=null)
   {
+    logger('ファイルの中身は'.print_r($groupChatAttachedFile));
+    logger(print var_export($groupChatAttachedFile,true));
+    logger(error_log(print_r($groupChatAttachedFile,true)));
+    error_log(print_r($belong_member,true));
+    $arr = array('test', '123');
+
+// 配列の中身を文字列にして返す
+$arrString = print_r($arr, true);
+
+error_log($arrString);
       $con = new Db;
       $con->connect();
       // 複数テーブル登録・更新のため、現在時刻を変数化
@@ -210,25 +220,35 @@ class Chat extends Db
         mkdir($filepath,0777,true);
         chmod($filepath,0777);
 
-        logger('ファイルの中身を確認する'.print_r($_SESSION['upfile']));
-        // logger('リクエストで来た値を確認する'.$groupChatAttachedFile);
+        // logger('ファイルの中身を確認する'.print_r($_FILES['upfile']));
+        logger('リクエストで来た値を確認する'.$groupChatAttachedFile);
+        // $file_list = array();
         //ファイルのアップロードがある時
-        if(count($_SESSION['upfile'])>0){
+        if(!empty($groupChatAttachedFile)){
           //配列として画像データを取得してあげて、エラーがある時は、飛ばして、問題ない時は、指定した所にファイルを移動してあげる
-          foreach($_SESSION['upfile'] as $key => $tmp_name){
-            if($_SESSION['upfile']['error'][$key] > 0){continue;}
+          // foreach($groupChatAttachedFile as $key => $tmp_name){
+          foreach($groupChatAttachedFile as $file_idx){
+            if($groupChatAttachedFile['upfile']['error'][$file_idx] !== UPLOAD_ERR_OK){continue;}
             //名前の被りを防いで登録するために、拡張子とファイル名の所を分割する
-            $file_list = explode("/[.]/",$_SESSION['upfile']['name'][$key]);
+            $file_list = preg_split("/[.]/",$groupChatAttachedFile['upfile']['name'][$file_idx]);
             logger('ファイルの分割状況を確認'.$file_list);
             // //実際にあげられたファイル名で拡張子を除く(ダブリをなくす為に上書きしてあげる必要あり)
             // $tmp_file_name = $file_list[0];
             //グループチャット番号の後にアップロードした枚数だけを連番にして、名前を上書き(拡張子は、そのままつける)
-            $tmp_name = $tmpChatNo($key+1).".".$file_list[1];
-            logger('ファイルの名前を確認'.$tmp_name);
+            $dir_name= $tmpChatNo($key+1);
+            //ファイル名を変更して拡張子をファイルアップロード時と同じにする
+            $file_name = $tmpChatNo($key+1).".".$file_list[1];
+            logger('ファイルの名前を確認'.$file_name);
             //TODO 同じ名前にならないようにする必要がある
-            $groupChatAttachedFilePath = THEME_IMAGE.'/'.$tmp_name;
+            $groupChatAttachedFilePath = THEME_IMAGE.'/'.$dir_name.'/'.$file_name;
+            //グループチャット部分のディレクトリが作成されていない場合、新規で作成する
+            if(!file_exists(THEME_IMAGE.'/'.$dir_name)){
+              mkdir(THEME_IMAGE.'/'.$dir_name,0777);
+              chmod(THEME_IMAGE.'/'.$dir_name,0777);
+            }
             logger('格納されるファイルのフルパスを確認'.$groupChatAttachedFilePath);
-            move_uploaded_file($tmp_name,THEME_IMAGE);
+            //指定したディレクトリにファイルを移動する
+            move_uploaded_file($file_name,dirname($groupChatAttachedFilePath));
             //画像がある時は、登録する
             if(file_exists($groupChatAttachedFilePath)){
               $this->setGroupChatAttachedFile($tmpChatNo,$groupChatAttachedFilePath);
