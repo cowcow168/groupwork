@@ -44,33 +44,19 @@ function normalize_files_array($files = []){
   }
   return $normalize_files_array;
 }
-//テーマチャット作成ボタンが押される前にファイルがアップロードされることは、ないのでファイルがアップロードされたら、セッションに入れておく
-//上書きをした場合は、書き換わる
-// for($i=0;$i<count($_FILES['file']);$i++){
-//   if(empty($_SESSION['upfile']) || $_FILES['file']['error'][$i] === 0) {
-//     unset($_SESSION['upfile']);
-//     $_SESSION['upfile'] = $_FILES['file'];
-//     logger('セッションの値を確認する'.$_SESSION['upfile']);
-//   }
-// }
 //ファイルがアップロードされていた時
 if(!empty($_FILES)){
   //アップロードするディレクトリを指定する
-  foreach ($_FILES["file"]["error"] as $key => $error) {
+  foreach ($_FILES['file']['error'] as $key => $error) {
       // unset($_SESSION['upfile'],$_SESSION['filelist']);
       if ($error == UPLOAD_ERR_OK) {
-          $tmp_name = $_FILES["file"]["tmp_name"][$key];
+          $tmp_name = $_FILES['file']['tmp_name'][$key];
           if(!$tmp_name){continue;}
-          // basename() で、ひとまずファイルシステムトラバーサル攻撃は防げるでしょう。
           // ファイル名についてのその他のバリデーションも、適切に行いましょう。
-          // $name = basename($_FILES["file"]["name"][$key]);
-          $name = $_FILES["file"]["name"][$key];
-          $_SESSION['upfile']['name'][$key] = $name;
-          $_SESSION['upfile']['error'][$key] = $_FILES["file"]["error"][$key];
-          // $file_list[] = preg_split("/[.]/",$_SESSION['upfile'][$key]);
-          // $_SESSION['filelist'] = $file_list;
-                  //imgのディレクトリを書き込みが出来るようにその他のユーザーにも書き込み権限を与える
-        system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
+          $_SESSION['upfile'] = $_FILES['file'];
+          //imgのディレクトリを書き込みが出来るようにその他のユーザーにも書き込み権限を与える
+          system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view');
+          system('sudo chmod 0777 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
         //ディレクトリが作成されていない場合、新規で作成する
         if(!file_exists(THEME_IMAGE)){
           mkdir(THEME_IMAGE,0777);
@@ -83,7 +69,13 @@ if(!empty($_FILES)){
           chmod(THEME_IMAGE_TMP,0777);
         }
         system('sudo chmod 0777 '.THEME_IMAGE_TMP);
-          move_uploaded_file($tmp_name, THEME_IMAGE_TMP);
+        //move_uploaded_file関数は、あげた直後のデータでないと移動されないので$_FILESのものを直接移動させる
+        move_uploaded_file($_FILES['file']['tmp_name'][$key], THEME_IMAGE_TMP.'/'.$_FILES['file']['name'][$key]);
+        //書き込み後は、権限を元に戻す
+        system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view');
+        system('sudo chmod 0775 '.$_SERVER['DOCUMENT_ROOT'].'view/img');
+        system('sudo chmod 0775 '.THEME_IMAGE);
+        system('sudo chmod 0775 '.THEME_IMAGE_TMP);
       }
   }
 }
@@ -128,7 +120,7 @@ if(!empty($_POST['chat_theme_create'])){
   if($_GET['edit_type'] == 'register'){
     //エラーがなければ登録処理を行う
     if(empty($_POST['err'])){
-      $chat->setGroupChat($_POST['GROUP_GHAT_NO'],$_POST['GROUP_CHAT_TITLE'],$_POST['GROUP_CHAT_MEMO'],$_SESSION['file'],$_POST['modifiable'],$_SESSION['belong_member']);
+      $chat->setGroupChat($_POST['GROUP_GHAT_NO'],$_POST['GROUP_CHAT_TITLE'],$_POST['GROUP_CHAT_MEMO'],$_SESSION['upfile'],$_POST['modifiable'],$_SESSION['belong_member']);
       //チャットの一覧ページ(ダイレクトページとテーマチャットが一覧で見れるページ)メッセージは、
       $_SESSION['edit_topic_msg'] = 'トピックが'.$chat->getGroupChatEditType($_GET['edit_type']).'されました';
       //登録がうまく行った場合は、ページ遷移させずに表示させていたセレクトボックスの値などのデータをセッションに入れていたものをクリアする
