@@ -733,6 +733,31 @@ class Chat extends Db
 
 // TODO TO_CHATテーブルとPERMISSIONテーブルを紐付ける方法と実装方法を決める(PERMISSIONテーブルに登録する際にTO_CHATテーブルに登録する方法が一番ラク)
 
+#############################################################################
+
+// ダイレクトチャット画面で使用するメソッド
+#############################################################################
+/**
+  *チャットトップ画面から遷移してきた際のgroup_chat_noによって個人名を抽出するために使用する
+  * @param int $group_chat_no  個人名を指定するために必要なgroup_chat_no
+  * @return int メンバーを指定するpermission_member_noを返す
+  */
+  public function selectPermissionGroupChatNo($groupChatNo)
+  {
+    $sql  = ' SELECT PERMISSION_MEMBER_NO FROM PERMISSION '
+        .' WHERE GROUP_CHAT_NO = :groupChatNo '
+        .' AND PERMISSION_STATUS = 1 '
+    ;
+
+    $con = new Db;
+    $con->connect();
+    $stmt = $con->dbh->prepare($sql);
+    $stmt->bindValue(':groupChatNo', $groupChatNo);
+    $stmt->execute();
+
+    return $stmt->fetchColumn();
+  }
+
 ##########トップ画面(グループチャット、ダイレクトチャットのどこにいる時でも共通)すべての項目
 
 /**

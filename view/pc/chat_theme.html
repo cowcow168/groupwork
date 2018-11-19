@@ -7,9 +7,6 @@
       <?php endforeach;?>
       <?php endif;?>
 </div>
-<!-- 下記は一時的に記述 -->
-<?php print_r($_SESSION['upfile']);?>
-<?php var_dump($_SESSION['filelist']);?>
 <h2>テーマチャットの<?=$chat->getGroupChatEditType($_GET['edit_type'])?></h2>
 <h2>タイトル<span>[必須]</span></h2>
 <form action="" method="post" name="chat_theme" enctype="multipart/form-data">
@@ -316,8 +313,8 @@ function attachFileClick(){
               //要素内の、最後の子要素の後ろ
               test.insertAdjacentHTML('beforeend',
                           '<div id="cba_commonAttachedFile'+ counter +'"'+'class="attachedFileParts" data-file-count="'+counter +'">'
-                          +'<input type="file" size="30" name="file[]" class="inputFile">'
-                          +'<input type="hidden" name="MAX_FILE_SIZE" value="26,214,400">'
+                          // +'<input type="hidden" name="MAX_FILE_SIZE" value="26,214,400">'
+                          +'<input type="file" size="30" name="file[]" class="inputFile"multiple>'
                           +'<span class="guide">(25MBまで)</span>'
                           +'<a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink" onclick="deleteFileClick();">'
                           +'<img src="" alt class="icon">'

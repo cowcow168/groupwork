@@ -21,16 +21,19 @@
                             </form>
                         </div>
                     <a href="" class="star"><img src="" class="icon" alt="お気に入りに登録する" data-star="off" /></a>
-                    <img src="" class="icon" /><span>深田 拓圭 さんとのチャット</span>
+                    <!-- メンバー名をセレクトできているかの確認 -->
+                    <?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
+                    <?php $permisiion_member_no = $chat->selectPermissionGroupChatNo($group_chat_no)?>
+                    <img src="" class="icon" /><span><?=$con->selectNo($permisiion_member_no)['member_name']?> さんとのチャット</span>
                     </div>
                 </div>
                 <div class="chatRoomBody">
                     <div class="chatRoomCommentListParts scrollable">
-                        <div class="chatRoomCommentBlock" data-createMemberDisplayName="深田 拓圭">
+                        <div class="chatRoomCommentBlock" data-createMemberDisplayName="<?=$con->selectNo($permisiion_member_no)['member_name']?>">
                             <div class="createMemberIcon">
                                 <img src="" class="icon" />
                                 <div class="name">
-                                    <a href="" title="深田 拓圭"><span class="name">深田 拓圭</span></a>
+                                    <a href="" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
                                 </div>
                             </div>
                             <div class="commentItemList">
@@ -111,7 +114,7 @@
                                         <a href="" title="牛島 淳史"><img src=""/><span class="name">牛島 淳史</span></a>
                                         </div>
                                         <div class="chatRoomMember">
-                                        <a href="" title="深田 拓圭"><img src=""/><span class="name">深田 拓圭</span></a>
+                                        <a href="" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><img src=""/><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
                                         </div>
                                     </div>
                                 </div>
