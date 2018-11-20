@@ -880,7 +880,8 @@ class Chat extends Db
       $con->connect();
       // 複数テーブル登録・更新のため、現在時刻を変数化
       $now = getNow();
-
+      //初めて取り込む時のグループチャット番号の初期値
+      $groupChatNo = 1;
       //PERMISSIOnテーブルの判定で使用する
       $permission_check = $this->newPermissionRegistCheck();
       //PERMISSIONテーブルにデータがまったくなく初めて取り込む時
@@ -908,8 +909,6 @@ class Chat extends Db
             .' :permissionStatus) '
             ;
 
-            //初めて取り込む時の初期値
-            $groupChatNo = 1;
             //格納用の画像名とパスを指定する
             $member_image = MEMBER_IMAGE.$member_data['member_no'].'.png';
             //グループチャットメモと添付ファイルの登録処理できるようにする
