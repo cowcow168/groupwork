@@ -21,6 +21,11 @@ Account::sessionChangeChk($_SESSION['user_name'],
 // ログアウトチェック
 (new Account)->logoutChk(@$_REQUEST['logout']);
 
+$chat = new Chat;
+//ダイレクトチャットで送信ボタンが押された時
+if(!empty($_POST['direct_chat_create'])){
+  //データベースの登録を行う
+}
 
 // 画面表示
 Html::header($access_device);

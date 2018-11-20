@@ -1,6 +1,5 @@
-<!-- javascriptを記載する所がいい場所でないので、bodyタグ前で読み込ませるかjsファイルを作成する -->
-<p><b>チャットダイレクト画面(サイボウズでメンバーをクリックした際は、ダイレクトチャット、グループチャットをクリックした時は、グループでやりとりする画面です。</b></p>
 <?php $chat = new Chat;?>
+<p><b>チャットダイレクト画面(サイボウズでメンバーをクリックした際は、ダイレクトチャット、グループチャットをクリックした時は、グループでやりとりする画面です。</b></p>
 <?php require_once(LIBRARY.'Api/chat.php')?>
 <?php require_once('chat_top_list.html')?>
 <div class="bodyAreaWrapper">
@@ -17,27 +16,33 @@
                     <div class="title">
                         <div class="func">
                             <form action="/mpChat/outputTextDirect" method="POST">
-                                <input type="hidden" name="chatRoomId" value="1:14259717" />
+                                <input type="hidden" name="chatRoomId" value="" />
                             </form>
                         </div>
-                    <a href="" class="star"><img src="" class="icon" alt="お気に入りに登録する" data-star="off" /></a>
-                    <!-- メンバー名をセレクトできているかの確認 -->
-                    <?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
-                    <?php $permisiion_member_no = $chat->selectPermissionGroupChatNo($group_chat_no)?>
-                    <img src="" class="icon" /><span><?=$con->selectNo($permisiion_member_no)['member_name']?> さんとのチャット</span>
+                        <!-- お気に入り登録をしている時は、下記のように表示される -->
+                        <!-- <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--2:15547680-" class="star">
+                          <img src="" class="icon" alt="お気に入りを削除する" data-star="on" />
+                        </a> -->
+                        <!-- お気に入りされていない時は、下のように表示される                     -->
+                        <a href="" class="star"><img src="" class="icon" alt="お気に入りに登録する" data-star="off" /></a>
+                        <!-- メンバー名をセレクトできているかの確認 -->
+                        <?php $group_chat_no = (!empty($_GET['group_chat_no']) ? $_GET['group_chat_no'] : null)?>
+                        <?php $permisiion_member_no = $chat->selectPermissionGroupChatNo($group_chat_no)?>
+                          <img src="" class="icon" /><span><?=$con->selectNo($permisiion_member_no)['member_name']?> さんとのチャット</span>
                     </div>
                 </div>
                 <div class="chatRoomBody">
                     <div class="chatRoomCommentListParts scrollable">
-                        <div class="chatRoomCommentBlock" data-createMemberDisplayName="<?=$con->selectNo($permisiion_member_no)['member_name']?>">
+                        <div class="chatRoomCommentBlock"  data-createMemberId="1:884608" data-createMemberDisplayName="<?=$con->selectNo($permisiion_member_no)['member_name']?>">
                             <div class="createMemberIcon">
                                 <img src="" class="icon" />
+                                <!-- 自分の名前が表示される -->
                                 <div class="name">
-                                    <a href="" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
+                                    <a href="/mpConfiguration/profile/view" class="profileLb iconLink" id="profile_1:884608" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
                                 </div>
                             </div>
                             <div class="commentItemList">
-                                <div class="commentItem  ">
+                                <div data-id="17601719" data-number="28" data-createDateInLong="1528346837000" class="commentItem  ">
                                     <div class="commentContents ">
                                         <div class="commentBody selfclear">
                                             <div class="commentBodyLeft">
@@ -45,23 +50,42 @@
                                                     コメントが入ります。pタグは、サイボウズでは入らないみたいです。
                                                 </div>
                                             </div>
+                                            <p>自分で投稿した投稿の時は、下記が表示される</p>
+                                            <div class="commentBodyRight">
+                                              <div class="commentDelete operation hiddenOperation" style="display:none">
+                                                <a href="#deleteComment_fid=17601719" class="iconLink delete" title="削除する">
+                                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/delete_white14.png" class="icon" alt="削除する" />
+                                                </a>
+                                              </div>
+                                            </div>
                                         </div>
                                         <div class="commentFooter operationParts selfclear">
                                             <div class="operation">
-                                                <a href=""><span>No.</span>
+                                                <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D2%253A15547680%26fid%3D17601719" class="commentUrlTip" title="固定リンク">
+                                                    <span>No.</span>
                                                     <span class="number">2</span>
                                                     <span class="createDate">2016/12/26(月) 9:08</span>
                                                 </a>
                                                 <span class="good">
-                                                    <span>
-                                                        <a href=""><img src=""/><span>いいね！</span></a>
-                                                    </span>
-                                                    <span class="goodMemberCountParts">
-                                                        <a href="">1</a><span>件</span>
-                                                    </span>
+                                                  <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                                    <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-2:15547680-17601719-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                                      <span>いいね！</span>
+                                                    </a>
+                                                  </span>
+                                                  <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" style="display:none">
+                                                    <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=2%3A15547680&amp;subTargetId=17601719">0</a>
+                                                    <span>件</span>
+                                                  </span>
                                                 </span>
-                                                <a href=""><img src=""/><span>返信</span></a>
-                                                <a href=""><span>お気に入り</span></a>
+                                                <a href="javascript:void(0);" id="chatRoomComment_28" class="replyChatRoomComment iconLink">
+                                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                                  <span>返信</span>
+                                                </a>
+                                                <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--2:15547680-17601719" class="star iconLink" data-displayLabel="true">
+                                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                                  <span class="starLabel">お気に入り</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -69,34 +93,193 @@
                             </div>
                         </div>
                     </div>
-                    <div class="newCommentAnnouncement">
-                        <div>新着コメントあり</div>
+                    <!-- 相手の投稿だとdata-createMemberIdが2になっている -->
+                    <div class="chatRoomCommentBlock" data-createMemberId="2:922494" data-createMemberDisplayName="深田 拓圭" data-chatRoomId="2:15547680">
+                      <div class="createMemberIcon">
+                        <img src="/49f5cdb4ca/icon/member/2:922494_2:931069_1479690565000.jpg" width="24" height="32" style="padding:0px 4px 0px 4px;" alt="" class="icon" />
+                        <div class="name">
+                          <a href="/mpAddress/list?mid=2%3A922494" class="profileLb iconLink" id="profile_2:922494" title="深田 拓圭">
+                            <span class="name">深田 拓圭</span>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="commentItemList">
+                        <div data-id="17697433" data-number="36" data-createDateInLong="1529040051000" class="commentItem  ">
+                          <div class="commentContents ">
+                            <div class="commentBody selfclear">
+                              <div class="commentBodyLeft">
+                                <div class="commentReply inReplyToBox">
+                                  <span class="inReplyTo">
+                                    <a href="javascript:void(0);" data-url="/tip/comment?fnum=35&amp;targetId=2%3A15547680&amp;application=MP_CHAT">
+                                      <span class="replyLink">&gt;35</span>
+                                    </a>
+                                  </span>
+                                </div>
+                                <div class="formatContents">相手の人のコメントが入ります。 </div>
+                              </div>
+                              <div class="commentBodyRight">
+                                <div class="commentDelete operation hiddenOperation" style="display:none"></div>
+                              </div>
+                            </div>
+                            <div class="commentFooter operationParts selfclear">
+                              <div class="operation">
+                                <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D2%253A15547680%26fid%3D17697433" class="commentUrlTip" title="固定リンク">
+                                  <span>No.</span>
+                                  <span class="number">36</span>
+                                  <span class="createDate">2018/6/15(金) 14:20</span>
+                                </a>
+                                <span class="good">
+                                  <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                    <a href="javascript:void(0);" class="iconLink goodLinkOff" id="cbaGood-MP_CHAT-2:15547680-17697433-off" data-url="/comet/common/good/goodTurnJsonDirect">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/good_check14.png" alt="" class="icon" />
+                                      <span>いいね！</span>
+                                    </a>
+                                  </span>
+                                  <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" >
+                                    <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=2%3A15547680&amp;subTargetId=17697433">1</a>
+                                    <span>件</span>
+                                  </span>
+                                </span>
+                                <a href="javascript:void(0);" id="chatRoomComment_36" class="replyChatRoomComment iconLink">
+                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                  <span>返信</span>
+                                </a>
+                                <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--2:15547680-17697433" class="star iconLink" data-displayLabel="true">
+                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                  <span class="starLabel">お気に入り</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 画像やtxtデータがある時の表示方法 -->
+                    <div class="chatRoomCommentBlock" data-createMemberId="1:884608" data-createMemberDisplayName=" 牛島 淳史" data-chatRoomId="2:15547680">
+                      <div class="createMemberIcon">
+                        <img src="/49f5cdb4ca/icon/member/1:884608_1:893008_1472443501000.jpg" width="24" height="32" style="padding:0px 4px 0px 4px;" alt="" class="icon" />
+                        <div class="name">
+                          <a href="/mpConfiguration/profile/view" class="profileLb iconLink" id="profile_1:884608" title="牛島 淳史">
+                            <span class="name">牛島 淳史</span>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="commentItemList">
+                        <div data-id="19362721" data-number="49" data-createDateInLong="1542678071000" class="commentItem  ">
+                          <div class="commentContents ">
+                            <div class="commentBody selfclear">
+                              <div class="commentBodyLeft">
+                                <div class="formatContents">&nbsp;
+                                  <div class="fileInfoList">
+                                    <div>
+                                      <div class="fileInfo">
+                                        <a href="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2755763&amp;application=MP_CHAT&amp;targetId=2%3A15547680" class="iconLink download" title="ダウンロード">
+                                          <span>テスト確認.txt</span>
+                                        </a>
+                                        <a class="textFilePreviewOpen" href="javascript:void(0);" data-url="/common/file/fileViewAjax?cid=1%3A2755763&amp;application=MP_CHAT&amp;targetId=2%3A15547680">
+                                          <img src="https://cybozulive.com/static/49f5cdb4ca/images/showdown20.gif" title="ファイル内容を表示する" alt="ファイル内容を表示する" class="icon" />
+                                        </a>
+                                        <span class="fileSize">( 1 KB )</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="fileInfoList">
+                                    <div>
+                                      <div class="imageContents">
+                                        <a href="/common/file/fileView?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680" target="_blank" rel="noopener noreferrer">
+                                          <img width="300" height="168" src="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680&amp;thumbnail=true" data-url="/common/file/imageLb?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680&amp;width=800" data-width="800" alt="" />
+                                        </a>
+                                      </div>
+                                      <div class="fileInfo">
+                                        <a href="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680" class="iconLink download" title="ダウンロード">
+                                          <span>学んだことのストック機能.png</span>
+                                        </a>
+                                        <span class="fileSize">( 263 KB )</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="commentBodyRight">
+                                <div class="commentDelete operation hiddenOperation" style="display:none">
+                                  <a href="#deleteComment_fid=19362721" class="iconLink delete" title="削除する">
+                                    <img src="https://cybozulive.com/static/49f5cdb4ca/images/delete_white14.png" class="icon" alt="削除する" />
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="commentFooter operationParts selfclear">
+                              <div class="operation">
+                                <a href="javascript:void(0);" data-url="/tip/commentUrl?url=https%3A%2F%2Fcybozulive.com%2FmpChat%2Fview%3FchatRoomId%3D2%253A15547680%26fid%3D19362721" class="commentUrlTip" title="固定リンク">
+                                  <span>No.</span>
+                                  <span class="number">49</span>
+                                  <span class="createDate">10:41</span>
+                                </a>
+                                <span class="good">
+                                  <span data-url="/common/good/goodAjax" data-mode="SIMPLE" data-use-comet="TRUE">
+                                    <a href="javascript:void(0);" class="iconLink goodLinkOn" id="cbaGood-MP_CHAT-2:15547680-19362721-on" data-url="/comet/common/good/goodTurnJsonDirect">
+                                      <img src="https://cybozulive.com/static/49f5cdb4ca/images/good14.png" alt="" class="icon" />
+                                      <span>いいね！</span>
+                                    </a>
+                                  </span>
+                                  <span class="goodMemberCountParts" data-url="/common/good/goodMemberListAjax" style="display:none">
+                                    <a href="javascript:void(0);" class="goodMemberCount goodMemberListTip" data-url="/common/good/goodMemberListTip?application=MP_CHAT&amp;targetId=2%3A15547680&amp;subTargetId=19362721">0</a>
+                                    <span>件</span>
+                                  </span>
+                                </span>
+                                <a href="javascript:void(0);" id="chatRoomComment_49" class="replyChatRoomComment iconLink">
+                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/reply14.png" alt="" class="icon" />
+                                  <span>返信</span>
+                                </a>
+                                <a href="javascript:void(0);" data-url="/common/star/starTurnJsonDirect" id="cbaStar-MP_CHAT--2:15547680-19362721" class="star iconLink" data-displayLabel="true">
+                                  <img src="https://cybozulive.com/static/49f5cdb4ca/images/star_off14.png" class="icon" alt="お気に入りに登録する" data-star="off" />
+                                  <span class="starLabel">お気に入り</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <!-- 下記のような表示を誰かに押してもらう -->
+                    <div class="newCommentAnnouncement" style="display:none">
+                      <div>新着コメントあり</div>
+                    </div>
+                    <div class="unconfirmedExistsAnnouncement" style="display:none">
+                      <div>新着コメントあり</div>
                     </div>
                 </div>
                 <div class="chatRoomFooter">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" name="chat_direct" enctype="multipart/form-data">
                         <div class="input textareaParts expand">
                                 <div class="minTextareaParts selfclear">
                                     <div class="textareaWrapper">
                                      <textarea class="commonContent" placeholder="コメントを入力"></textarea>
                                     </div>
                                     <div class="functionButton">
-                                        <button class="submit">送信</button>
+                                        <button id="cba_mpChatSend"  name="direct_chat_create"  class="submit">送信</button>
                                     </div>
                                 </div>
                             <div class="expandedTextareaParts">
                                 <div class="attachedFile" id="cba_mpChatAddFile">
+                                <!-- 画像添付がある時は、下記のエリアにファイル画像エリアを追加する -->
+                                <div class="attachedFileAddParts" id="ui-id-1"></div>
+                                <div class="attachedFile">
                                     <div class="attachedFileAddWrapper">
-                                        <div class="attachedFileAdd">
-                                            <a href="" class="fileadd iconLink"><img src="" alt=""/><span>添付ファイルを追加する</span></a>
+                                        <div id="attachedFileAdd" class="attachedFileAdd">
+                                            <a href="javascript:void(0);" class="fileadd iconLink" onclick="attachFileClick();"><img src="" alt=""/><span>添付ファイルを追加する</span></a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="sendOption">
+                                <!-- TODO 時間があれば実装する -->
+                                <!-- <div class="sendOption">
                                 <input type="checkbox"/><label for="cba_mpChatEnterSendOption">Enterで送信</label>
-                                </div>
+                                </div> -->
                             </div>
-                            <input type="hidden" name="chatRoomId" value="1:14259717" />
+                            <!-- value値は、基本残した状態でaに埋め込む -->
+                            <!-- <input type="hidden" name="chatRoomId" value="1:14259717" /> -->
+                            <input type="hidden" name="chatRoomId" value="" />
                             <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-06-29T23:43:26" />
                         </div>
                     </form>
@@ -111,7 +294,8 @@
                                     </div>
                                     <div>
                                         <div class="chatRoomMember">
-                                        <a href="" title="牛島 淳史"><img src=""/><span class="name">牛島 淳史</span></a>
+                                        <!-- <a href="" title="牛島 淳史"><img src=""/><span class="name">牛島 淳史</span></a> -->
+                                        <a href="" title="<?=$con->selectNo($_SESSION['member_no'])['member_name']?>"><img src=""/><span class="name"><?=$con->selectNo($_SESSION['member_no'])['member_name']?></span></a>
                                         </div>
                                         <div class="chatRoomMember">
                                         <a href="" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><img src=""/><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
@@ -124,9 +308,25 @@
                                     <div class="subTitle">
                                         <p>添付ファイル</p>
                                     </div>
-                                    <div class="accessoryLink">
-                                        <a href="">一覧を表示する </a>
+                                    <!-- ファイルをアップロードした時に最新の投稿のものが表示される -->
+                                    <!-- <div class="chatRoomAttachFile">
+                                      <a class="image" href="javascript:void(0);" data-url="/common/file/imageLb?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680&amp;thumbnail=false&amp;width=800" data-width="800" data-downloadUrl="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2755764&amp;application=MP_CHAT&amp;targetId=2%3A15547680" target="_blank" rel="noopener noreferrer">学んだことのストック機能.png</a>
+                                      <a href="/mpChat/view?chatRoomId=2%3A15547680&amp;fid=19362721" class="iconLink chevron">
+                                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/chevron.gif" class="icon" alt="" />
+                                      </a>
                                     </div>
+                                    <div class="chatRoomAttachFile">
+                                      <a class="download" href="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2755763&amp;application=MP_CHAT&amp;targetId=2%3A15547680">テスト確認.txt</a>
+                                      <a href="/mpChat/view?chatRoomId=2%3A15547680&amp;fid=19362721" class="iconLink chevron">
+                                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/chevron.gif" class="icon" alt="" />
+                                      </a>
+                                    </div>
+                                    <div class="chatRoomAttachFile">
+                                      <a class="image" href="javascript:void(0);" data-url="/common/file/imageLb?cid=1%3A2439402&amp;application=MP_CHAT&amp;targetId=2%3A15547680&amp;thumbnail=false&amp;width=500" data-width="500" data-downloadUrl="/mpCabinet/downloadFileByMpTargetDirect?cid=1%3A2439402&amp;application=MP_CHAT&amp;targetId=2%3A15547680" target="_blank" rel="noopener noreferrer">0812123257.jpg</a>
+                                      <a href="/mpChat/view?chatRoomId=2%3A15547680&amp;fid=17378234" class="iconLink chevron">
+                                        <img src="https://cybozulive.com/static/49f5cdb4ca/images/chevron.gif" class="icon" alt="" />
+                                      </a>
+                                    </div>                                     -->
                                 </div>
                             </div>
                         </div>
@@ -136,7 +336,98 @@
         </div>
     </div>
 </div>
+<?php var_dump(__FILE__);?>
 <script>
+
+// ##################################################
+// ダイレクトチャット部分やり取り関係機能
+// ##################################################
+
+$(function() {
+  //登録した際の投稿部分のカウント数
+  var registerNum = 0;
+
+  //登録処理をする際のajaxの記載
+  $(document).on('click','input[type=button]',function(){
+
+    //送信する時の登録用のオブジェクトを作成する
+    var senddata = new Object();
+
+    //登録するコメント本文を作成
+    $('textarea.commonContent').each(function(){
+      senddata[$(this).attr('id')] = $(this).val();
+    })
+    //登録するボタンの情報を作成
+    $('button[name="direct_chat_create"]'.each(function(){
+      senddata[$(this).attr('id')] = $(this).val();
+    }))
+
+    if (window.XMLHttpRequest) {
+        ajax = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+      //IEで使用する時などに使用する
+        ajax = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    // Ajaxでのカテゴリの登録・削除
+
+    $.ajax({
+        type: "POST",
+        url: "library/Api/chatDirect.php",
+        data: senddata,
+
+
+        success: function (senddata) {
+            $('#board_comment_msg').after("<div id=\"new_board_comment_"+registerNum+"\"></div>");
+            $('#new_board_comment_'+registerNum).html(senddata);
+            registerNum++;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    })
+  })
+})
+
+  // ##############################################
+  // 添付画像の処理を記載
+
+  // ##############################################
+  // TODO 番号のリセットなどを実装して、DB上で複数登録させる
+  //カウンターを設定する
+  var attachcount = 0;
+  var deletecount = 0;
+  //添付ファイルのボタンが押された際と削除した際の画像にファイル名を動的に与える為に必要
+  var attachbox = document.getElementById('attachedFileAdd');
+
+  //添付ファイルを追加するボタン
+  function attachFileClick(){
+    //添付ファイルを追加するを押した回数をカウントアップする
+    attachcount++;
+    var counter = attachcount;
+    var test = document.getElementById('ui-id-1');
+
+                //要素内の、最後の子要素の後ろ
+                test.insertAdjacentHTML('beforeend',
+                            '<div id="cba_commonAttachedFile'+ counter +'"'+'class="attachedFileParts" data-file-count="'+counter +'">'
+                            // +'<input type="hidden" name="MAX_FILE_SIZE" value="26,214,400">'
+                            +'<input type="file" size="30" name="file[]" class="inputFile"multiple>'
+                            +'<span class="guide">(25MBまで)</span>'
+                            +'<a href="javascript:void(0);" class="attachedFileList__delete attachedFileDeleteiconLink" onclick="deleteFileClick();">'
+                            +'<img src="" alt class="icon">'
+                            +'<span>削除</span>'
+                            +'</a>'
+                            +'</div>');
+  }
+  //添付ファイルを削除するボタン
+  function deleteFileClick(){
+    //削除ボタンをクリックした回数をカウントアップする
+    deletecount++;
+    // data_file_count--;
+    //削除を押した時は、div毎消す
+    var counter = deletecount;
+    var test = document.getElementById('cba_commonAttachedFile'+counter);
+    test.parentNode.removeChild(test);
+  }
 // ボタンをクリックしたら、styleにつける
 //ボタンを開閉する時の処理(テーマチャット側)
 function btnthemeClick(){
@@ -199,7 +490,6 @@ function btnCloseClick(){
   }
 }
 </script>
-<?php require_once('footer.html')?>
 <footer class="main-footer text-center">
     <strong>&copy;EBA Inc. 2013-<?=(new DateTime)->format('Y')?></strong>
 </footer>
