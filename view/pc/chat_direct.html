@@ -258,7 +258,7 @@
                                      <textarea class="commonContent" placeholder="コメントを入力"></textarea>
                                     </div>
                                     <div class="functionButton">
-                                        <button id="cba_mpChatSend"  name="direct_chat_create"  class="submit">送信</button>
+                                        <button id="cba_mpChatSend"  name="direct_chat_create" class="submit">送信</button>
                                     </div>
                                 </div>
                             <div class="expandedTextareaParts">
@@ -377,15 +377,35 @@ $(function() {
 
 
         success: function (senddata) {
-            $('#board_comment_msg').after("<div id=\"new_board_comment_"+registerNum+"\"></div>");
-            $('#new_board_comment_'+registerNum).html(senddata);
+            $('#board_comment_msg').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
+            $('#new_direct_chat_comment_'+registerNum).html(senddata);
             registerNum++;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             alert(errorThrown);
         }
     })
-  })
+  });
+
+  //登録した投稿に関して返信をする際に必要
+  $(document).on('click','a[id="reply_comment"]',function(){
+    //返信した際のhtml要素を取得する
+    var className = $(this).attr('class');
+    var directExchangeList = className.split('_');
+
+    //ダイレクトチャットの時の返信コメント番号
+    var direct_chat_exchange_reply_comment_no = directExchangeList[2];
+    //ダイレクトチャット時の表示番号
+    var direct_chat_exchange_display_no = directExchangeList[3];
+
+    //作成するhtmlタグを作成(返信したコメントとお気にいりやいいねや返信ボタンを表示させる)
+    $('#reply_to').html(
+        board_comment_display_no+'へ返信する'
+        +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
+        +'<input type="hidden" class="register_board_comment" id="reply_to_board_comment_no" value="'+reply_to_board_comment_no+'">'
+    );
+
+  });
 })
 
   // ##############################################

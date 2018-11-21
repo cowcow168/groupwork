@@ -11,12 +11,23 @@ $chat = new Chat;
 // 投稿内容に関していいね、お気に入り登録、返信などをすることができる。(自分の投稿や相手の投稿に関わらず、つけれる)
 ##########################################
 
+//コメントが入力されいる時は、送信ボタンを押すと登録処理が走る
+if(!empty($_POST['direct_chat_create'])){
+  //コメントが入力されていれば登録処理を行う
+  if(!empty($_POST['GROUP_CHAT_EXCHANGE_COMMENT_TEXT'])){
+    $chat->setDirectChatExchange($_POST['group_chat_no'],$_POST['BOARD_COMMENT_TEXT'],$reply_to_board_comment_no);
+  }else{
+    // コメントが入力されていない時は、何も行わない
+  }
+}
 
 
+//ダイレクトチャット画面でグループチャット番号で検索をかけるためにグループチャット番号を取得する
+$group_chat_no = (!empty($_POST['group_chat_no']) ? $_POST['group_chat_no']:null);
+//やり取りしている内容を全件取得する
+$direct_chat_comments = $chat->getAllDirectChatExchange($group_chat_no);
 
-
-// グループチャット削除時　　　　　　　　　　　　　　　　　　　　　　　　　　　　TODO:トランザクション処理の追加
-if(!empty($_POST['leave_group_chat'])){
-    $chat->deleteGroupChat($_POST['GROUP_CHAT_NO']);
-    // $msg = '削除に成功しました。';
+//登録した内容でダイレクトチャット一覧を出力
+foreach($direct_chat_comments as $direct_comment) {
+  //この内部にhtmlデータや画像がある時やcsvデータがある時などの設定や吐き出すhtmlなどを指定してあげる。
 }

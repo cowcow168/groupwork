@@ -1,7 +1,6 @@
 <?php
-if(!empty($_POST)){
-  require_once('../../library/library.php');
-}
+//library直下のlibrary.phpを読み込むように設定する
+require_once(preg_replace('/Api[\\/\\\]chat.php/','',__FILE__).'library.php');
 $chat = new Chat;
 #
 #下記は、後で(サイボウズと比較して)実装する
@@ -58,6 +57,7 @@ $chat = new Chat;
 //         }
 //     }
 // }
+
 // グループチャット削除時　　　　　　　　　　　　　　　　　　　　　　　　　　　　TODO:トランザクション処理の追加
 if(!empty($_POST['leave_group_chat'])){
     $chat->deleteGroupChat($_POST['GROUP_CHAT_NO']);

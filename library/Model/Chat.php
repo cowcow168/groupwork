@@ -758,6 +758,208 @@ class Chat extends Db
     return $stmt->fetchColumn();
   }
 
+  /**
+   * ダイレクトチャット時のコメントの投稿などを登録する
+   * @param $groupChatNo やり取りをするダイレクトチャットのグループチャットNo
+   *
+   * @return array 登録用データ
+   */
+   public function setDirectChatExchange(&$groupChatNo){
+     $con = new Db;
+     $con->connect();
+
+     // 複数テーブル登録・更新のため、現在時刻を変数化
+     $now = getNow();
+     // チャットの登録
+     $sql  = ' INSERT INTO DIRECT_CHAT_EXCHANGE ( '
+         .' DIRECT_CHAT_EXCHANGE_NO, '
+         .' GROUP_CHAT_NO, '
+         .' DIRECT_CHAT_EXCHANGE_DISPLAY_NO, '
+         .' DIRECT_CHAT_EXCHANGE_COMMENT_TEXT, '
+         .' DIRECT_CHAT_EXCHANGE_ATTACHED_FILE, '
+         .' DIRECT_CHAT_EXCHANGE_CREATE_MEMBER_NO, '
+         .' DIRECT_CHAT_EXCHANGE_UPDATE_MEMBER_NO, '
+         .' DIRECT_CHAT_EXCHANGE_COMMENT_GOOD_NUM, '
+         .' DIRECT_CHAT_EXCHANGE_COMMENT_FAVORITE_NUM, '
+         .' DIRECT_CHAT_EXCHANGE_PARENT_REPLY_COMMENT_NO, '
+         .' DIRECT_CHAT_EXCHANGE_REPLY_COMMENT_NO, '
+         .' DIRECT_CHAT_EXCHANGE_INS_TS, '
+         .' DIRECT_CHAT_EXCHANGE_UPD_TS, '
+         .' DIRECT_CHAT_EXCHANGE_STATUS, '
+         .' DIRECT_CHAT_EXCHANGE_ADD_FAVORITE_STATUS) '
+         .' VALUES '
+         .' (:DirectChatExchangeNo,'
+         .' :groupChatNo,'
+         .' :DirectChatExchangeDisplayNo,'
+         .' :DirectChatExchangeCommentText, '
+         .' :DirectChatExchangeAttachedFile, '
+         .' :DirectChatExchangeCreateMemberNo, '
+         .' :DirectChatExchangeUpdateMemberNo, '
+         .' :DirectChatExchangeCommentGoodNum, '
+         .' :DirectChatExchangeCommentFavoriteNum, '
+         .' :DirectChatExchangeParentReplyCommentNo, '
+         .' :DirectChatExchangeReplyCommentNo, '
+         .' :DirectChatExchangeInsTs, '
+         .' :DirectpChatExchangeUpdTs, '
+         .' :DirectChatExchangeStatus, '
+         .' :DirectChatExchangeAddFavoriteStatus) '
+     ;
+     $stmt = $con->dbh->prepare($sql);
+     //自動で入力される項目
+     $stmt->bindValue(':GroupChatExchangeNo', '');
+     $stmt->bindValue(':groupChatNo', $groupChatNo);
+     if(!$DirectChatDisplayNo){
+       //初回投稿の時は、投稿がない状態なのでダイレクトチャットやり取り番号1を登録
+       $DirectChatDisplayNo = 1;
+       $stmt->bindValue(':DirectChatExchangeDisplayNo', $DirectChatDisplayNo);
+     }else{
+       //最新のダイレクトチャットやり取り番号を取得する
+       $DirectChatDisplayNo = $con->dbh->lastInsertId('DIRECT_CHAT_EXCHANGE_DISPLAY_NO');
+       // 初回投稿以外の時は、最新のDIRECT_CHAT_EXCHANGE_DISPLAY_NOを取得してそれに1を加算した番号を登録する
+       $DirectChatDisplayNo++;
+       $stmt->bindValue(':DirectChatExchangeDisplayNo', $DirectChatDisplayNo);
+     }
+     //やり取りする前は、存在しないのでデフォルトは、NULLで作成する
+     $stmt->bindValue(':DirectChatExchangeCommentText', null);
+     //ログインしているメンバーとダイレクトチャットで登録されたメンバーが投稿できるようにする
+     // TODO 最初の投稿時は、ログインしているメンバーで作成時間と更新時間を更新
+     $stmt->bindValue(':DirectChatExchangeCreateMemberNo', $_SESSION['member_no']);
+     $stmt->bindValue(':DirectChatExchangeUpdateMemberNo', $_SESSION['member_no']);
+     //ファイルがある時は、登録する
+     // TODO 同じ投稿で複数ファイルが登録されることも考えられるのでテーブルを拡張した方が良いかもしれない(その時は、Display_NOで紐付ける)
+     $stmt->bindValue(':DirectChatExchangeAttachedFile', null);
+     //ダイレクトチャット登録時は、NULLで良い項目
+     $stmt->bindValue(':DirectChatExchangeCommentGoodNum', null);
+     $stmt->bindValue(':DirectChatExchangeCommentFavoriteNum', null);
+     $stmt->bindValue(':DirectChatExchangeParentReplyCommentNo', null);
+     $stmt->bindValue(':DirectChatExchangeReplyCommentNo', null);
+     $stmt->bindValue(':DirectChatExchangeInsTs', $now);
+     $stmt->bindValue(':DirectpChatExchangeUpdTs', $now);
+     //デフォルトでは、表示させるようにする
+     $stmt->bindValue(':DirectChatExchangeStatus', 1);
+     //デフォルトでは、お気に入りでない0を設定する
+     $stmt->bindValue(':DirectChatExchangeAddFavoriteStatus', 0);
+     $stmt->execute();
+
+     //相手の投稿に返信やいいねやお気に入り登録する時に登録(更新が走る)
+
+   }
+
+   /**
+   * ダイレクトチャットでやり取りした内容をすべて取得する
+   * @param int $groupChatNo 個人同士を指定する為に必要なグループチャット番号
+   *
+   * @return array ダイレクトチャットでやり取りした内容をすべて返す
+   */
+   public function getAllDirectChatExchange($groupChatNo)
+   {
+     //所属していないメンバーを検索する
+     $sql  = ' SELECT * FROM DIRECT_CHAT_EXCHANGE '
+         .' WHERE GROUP_CHAT_NO = :groupChatNo '
+         //基本辞めてない社員は、このテーブル前に表示されないのでデフォルトで1を設定する
+         .' AND DIRECT_CHAT_EXCHANGE_ADD_FAVORITE_STATUS = 1 '
+     ;
+
+     $con = new Db;
+     $con->connect();
+     $stmt = $con->dbh->prepare($sql);
+     $stmt->bindParam(':groupChatNo', $memberNo);
+     $stmt->execute();
+
+     return $stmt->fetchAll();
+   }
+
+  #############################################################################
+
+  // グループチャット画面で使用するメソッド
+  #############################################################################
+  /**
+   * グループチャット時のコメントの投稿などを登録する
+   * @param $groupChatNo やり取りをするテーマチャットのグループチャットNo
+   *
+   * @return array 登録用データ
+   */
+   public function setGroupChatExchange(&$groupChatNo){
+     $con = new Db;
+     $con->connect();
+
+     // 複数テーブル登録・更新のため、現在時刻を変数化
+     $now = getNow();
+     // チャットの登録
+     $sql  = ' INSERT INTO GROUP_CHAT_EXCHANGE ( '
+         .' GROUP_CHAT_EXCHANGE_NO, '
+         .' GROUP_CHAT_NO, '
+         .' GROUP_CHAT_EXCHANGE_DISPLAY_NO, '
+         .' GROUP_CHAT_EXCHANGE_COMMENT_TEXT, '
+         .' GROUP_CHAT_EXCHANGE_ATTACHED_FILE, '
+         .' GROUP_CHAT_EXCHANGE_CREATE_MEMBER_NO, '
+         .' GROUP_CHAT_EXCHANGE_UPDATE_MEMBER_NO, '
+         .' GROUP_CHAT_EXCHANGE_COMMENT_GOOD_NUM, '
+         .' GROUP_CHAT_EXCHANGE_COMMENT_FAVORITE_NUM, '
+         .' GROUP_CHAT_EXCHANGE_PARENT_REPLY_COMMENT_NO, '
+         .' GROUP_CHAT_EXCHANGE_REPLY_COMMENT_NO, '
+         .' GROUP_CHAT_EXCHANGE_INS_TS, '
+         .' GROUP_CHAT_EXCHANGE_UPD_TS, '
+         .' GROUP_CHAT_EXCHANGE_STATUS, '
+         .' GROUP_CHAT_EXCHANGE_ADD_FAVORITE_STATUS) '
+         .' VALUES '
+         .' (:GroupChatExchangeNo,'
+         .' :groupChatNo,'
+         .' :groupChatExchangeDisplayNo,'
+         .' :groupChatExchangeCommentText, '
+         .' :groupChatExchangeAttachedFile, '
+         .' :groupChatExchangeCreateMemberNo, '
+         .' :groupChatExchangeUpdateMemberNo, '
+         .' :groupChatExchangeCommentGoodNum, '
+         .' :groupChatExchangeCommentFavoriteNum, '
+         .' :groupChatExchangeParentReplyCommentNo, '
+         .' :groupChatExchangeReplyCommentNo, '
+         .' :groupChatExchangeInsTs, '
+         .' :grouppChatExchangeUpdTs, '
+         .' :groupChatExchangeStatus, '
+         .' :groupChatExchangeAddFavoriteStatus) '
+     ;
+     $stmt = $con->dbh->prepare($sql);
+     //自動で入力される項目
+     $stmt->bindValue(':GroupChatExchangeNo', '');
+     $stmt->bindValue(':groupChatNo', $groupChatNo);
+     if(!$groupChatDisplayNo){
+       //初回投稿の時は、投稿がない状態なのでグループチャットやり取り番号1を登録
+       $groupChatDisplayNo = 1;
+       $stmt->bindValue(':groupChatExchangeDisplayNo', $groupChatDisplayNo);
+     }else{
+       //最新のグループチャットやり取り番号を取得する
+       $groupChatDisplayNo = $con->dbh->lastInsertId('GROUP_CHAT_EXCHANGE_DISPLAY_NO');
+       // 初回投稿以外の時は、最新のGROUP_CHAT_EXCHANGE_DISPLAY_NOを取得してそれに1を加算した番号を登録する
+       $groupChatDisplayNo++;
+       $stmt->bindValue(':groupChatExchangeDisplayNo', $groupChatDisplayNo);
+     }
+     //やり取りする前は、存在しないのでデフォルトは、NULLで作成する
+     $stmt->bindValue(':groupChatExchangeCommentText', null);
+     //ログインしているメンバーとグループチャットで登録されたメンバーが投稿できるようにする
+     // TODO 最初の投稿時は、ログインしているメンバーで作成時間と更新時間を更新
+     $stmt->bindValue(':groupChatExchangeCreateMemberNo', $_SESSION['member_no']);
+     $stmt->bindValue(':groupChatExchangeUpdateMemberNo', $_SESSION['member_no']);
+     //ファイルがある時は、登録する
+     // TODO 同じ投稿で複数ファイルが登録されることも考えられるのでテーブルを拡張した方が良いかもしれない(その時は、Display_NOで紐付ける)
+     $stmt->bindValue(':groupChatExchangeAttachedFile', null);
+     //グループチャット登録時は、NULLで良い項目
+     $stmt->bindValue(':groupChatExchangeCommentGoodNum', null);
+     $stmt->bindValue(':groupChatExchangeCommentFavoriteNum', null);
+     $stmt->bindValue(':groupChatExchangeParentReplyCommentNo', null);
+     $stmt->bindValue(':groupChatExchangeReplyCommentNo', null);
+     $stmt->bindValue(':groupChatExchangeInsTs', $now);
+     $stmt->bindValue(':grouppChatExchangeUpdTs', $now);
+     //デフォルトでは、表示させるようにする
+     $stmt->bindValue(':groupChatExchangeStatus', 1);
+     //デフォルトでは、お気に入りでない0を設定する
+     $stmt->bindValue(':groupChatExchangeAddFavoriteStatus', 0);
+     $stmt->execute();
+
+     //相手の投稿に返信やいいねやお気に入り登録する時に登録(更新が走る)
+
+   }
+
 ##########トップ画面(グループチャット、ダイレクトチャットのどこにいる時でも共通)すべての項目
 
 /**
