@@ -764,7 +764,7 @@ class Chat extends Db
    *
    * @return array 登録用データ
    */
-   public function setDirectChatExchange(&$groupChatNo){
+   public function setDirectChatExchange(&$groupChatNo,$coment_text,$reply_to_dairect_chat_comment_no){
      $con = new Db;
      $con->connect();
 

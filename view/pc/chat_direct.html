@@ -255,10 +255,11 @@
                         <div class="input textareaParts expand">
                                 <div class="minTextareaParts selfclear">
                                     <div class="textareaWrapper">
-                                     <textarea class="commonContent" placeholder="コメントを入力"></textarea>
+                                     <textarea class="commonContent" name="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" id="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" placeholder="コメントを入力"></textarea>
                                     </div>
                                     <div class="functionButton">
-                                        <button id="cba_mpChatSend"  name="direct_chat_create" class="submit">送信</button>
+                                        <!-- <button id="cba_mpChatSend"  name="direct_chat_create" class="submit">送信</button> -->
+                                        <button id="direct_chat_create"  name="direct_chat_create" class="submit direct_chat_create">送信</button>
                                     </div>
                                 </div>
                             <div class="expandedTextareaParts">
@@ -284,6 +285,8 @@
                         </div>
                     </form>
                 </div>
+                <!-- 投稿された際に入力エリアが新たに作成されるエリア -->
+                <div class="chatRoomCommentBlock"></div>
                 <div class="sideAreaWrapper">
                     <div class="sideArea scrollable">
                         <div class="contentsFrame">
@@ -336,77 +339,58 @@
         </div>
     </div>
 </div>
-<?php var_dump(__FILE__);?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 
 // ##################################################
 // ダイレクトチャット部分やり取り関係機能
 // ##################################################
-
 $(function() {
   //登録した際の投稿部分のカウント数
   var registerNum = 0;
-
   //登録処理をする際のajaxの記載
-  $(document).on('click','input[type=button]',function(){
-
+  $(document).on('click','button[name="direct_chat_create"]',function(e){
+    e.preventDefault();
     //送信する時の登録用のオブジェクトを作成する
     var senddata = new Object();
-
     //登録するコメント本文を作成
     $('textarea.commonContent').each(function(){
       senddata[$(this).attr('id')] = $(this).val();
-    })
+    });
     //登録するボタンの情報を作成
-    $('button[name="direct_chat_create"]'.each(function(){
+    $('button[name="direct_chat_create"]').each(function(){
       senddata[$(this).attr('id')] = $(this).val();
-    }))
-
-    if (window.XMLHttpRequest) {
-        ajax = new XMLHttpRequest();
-    } else if (window.ActiveXObject) {
-      //IEで使用する時などに使用する
-        ajax = new ActiveXObject("MSXML2.XMLHTTP.3.0");
-    }
+    });
     // Ajaxでのカテゴリの登録・削除
-
     $.ajax({
-        type: "POST",
-        url: "library/Api/chatDirect.php",
-        data: senddata,
-
-
-        success: function (senddata) {
-            $('#board_comment_msg').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
-            $('#new_direct_chat_comment_'+registerNum).html(senddata);
-            registerNum++;
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(errorThrown);
-        }
-    })
+    type: "POST",
+    url: "send.php",
+    data: senddata,
+    }).done(function (senddata) {
+      $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
+      $('#new_direct_chat_comment_'+registerNum).html(senddata);
+      registerNum++;
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+      alert(errorThrown);
+    });
   });
-
   //登録した投稿に関して返信をする際に必要
   $(document).on('click','a[id="reply_comment"]',function(){
     //返信した際のhtml要素を取得する
     var className = $(this).attr('class');
     var directExchangeList = className.split('_');
-
     //ダイレクトチャットの時の返信コメント番号
     var direct_chat_exchange_reply_comment_no = directExchangeList[2];
     //ダイレクトチャット時の表示番号
     var direct_chat_exchange_display_no = directExchangeList[3];
-
     //作成するhtmlタグを作成(返信したコメントとお気にいりやいいねや返信ボタンを表示させる)
     $('#reply_to').html(
-        board_comment_display_no+'へ返信する'
-        +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
-        +'<input type="hidden" class="register_board_comment" id="reply_to_board_comment_no" value="'+reply_to_board_comment_no+'">'
-    );
-
+      direct_chat_exchange_display_no+'へ返信する'
+      +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
+      +'<input type="hidden" class="direct_chat_create" id="direct_chat_exchange_reply_comment_no" value="'+direct_chat_exchange_reply_comment_no+'">'
+      );
   });
-})
+});
 
   // ##############################################
   // 添付画像の処理を記載
