@@ -364,7 +364,7 @@ $(function() {
     // Ajaxでのカテゴリの登録・削除
     $.ajax({
     type: "POST",
-    url: "send.php",
+    url: "library/Api/chatDirect.php",
     data: senddata,
     }).done(function (senddata) {
       $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");

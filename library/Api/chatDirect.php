@@ -3,7 +3,9 @@
 require_once(preg_replace('/Api[\\/\\\]chatDirect.php/','',__FILE__).'library.php');
 $chat = new Chat;
 
-
+// //ダイレクトチャット画面でグループチャット番号で検索をかけるためにグループチャット番号を取得する
+// $group_chat_no = (!empty($_POST['group_chat_no']) ? $_POST['group_chat_no']:null);
+$group_chat_no=filter_input(INPUT_POST,"group_chat_no");
 $direct_chat_create=filter_input(INPUT_POST,"direct_chat_create");
 $GROUP_CHAT_EXCHANGE_COMMENT_TEXT=filter_input(INPUT_POST,"GROUP_CHAT_EXCHANGE_COMMENT_TEXT");
 logger('処理は、来ているよ');
@@ -14,18 +16,27 @@ logger('処理は、来ているよ');
 // 自分で作成した投稿に関しては、削除することが可能
 // 投稿内容に関していいね、お気に入り登録、返信などをすることができる。(自分の投稿や相手の投稿に関わらず、つけれる)
 ##########################################
+//画面上でデバッグする時に必要
+// if(!is_null($direct_chat_create)){
+//   print 'button pushed<br>';
+//   if(!is_null($GROUP_CHAT_EXCHANGE_COMMENT_TEXT) and $GROUP_CHAT_EXCHANGE_COMMENT_TEXT!==""){
+//     print 'get data<br>';
+//   }else{
+//     print 'no data<br>';
+//   }
+// }else{
+//   print 'button not pushed<br>';
+// }
+
 if(!is_null($direct_chat_create)){
   print 'button pushed<br>';
-    logger('ボタン押されたよ');
   if(!is_null($GROUP_CHAT_EXCHANGE_COMMENT_TEXT) and $GROUP_CHAT_EXCHANGE_COMMENT_TEXT!==""){
-        logger('データがちゃんと来てるよ');
     print 'get data<br>';
+    $chat->setDirectChatExchange($group_chat_no,$GROUP_CHAT_EXCHANGE_COMMENT_TEXT,$reply_to_dairect_chat_comment_no);
   }else{
-            logger('データがないよ');
     print 'no data<br>';
   }
 }else{
-              logger('押されていないよ');
   print 'button not pushed<br>';
 }
 
