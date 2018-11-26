@@ -254,6 +254,10 @@
                     <form method="post" name="chat_direct" enctype="multipart/form-data">
                         <div class="input textareaParts expand">
                                 <div class="minTextareaParts selfclear">
+                                  <!-- とりあえずあるデータの表示確認の為テストで設置する -->
+                                  <div id="board_comment_list">
+                                      <?php require_once(LIBRARY.'Api/chatDirect.php')?>
+                                  </div>
                                     <div class="textareaWrapper">
                                      <textarea class="commonContent" name="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" id="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" placeholder="コメントを入力"></textarea>
                                     </div>
@@ -375,7 +379,6 @@ $(function() {
       $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
       $('#new_direct_chat_comment_'+registerNum).html(senddata);
       registerNum++;
-      console.log(senddata);
     }).fail(function (XMLHttpRequest, textStatus, errorThrown){
       alert(errorThrown);
     });
@@ -395,6 +398,69 @@ $(function() {
       +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
       +'<input type="hidden" class="direct_chat_create" id="direct_chat_exchange_reply_comment_no" value="'+direct_chat_exchange_reply_comment_no+'">'
       );
+  });
+  //返信する時の処理
+  $(document).on("click", 'a[id="reply_comment"]', function(){
+
+      var className = $(this).attr("class");
+      var arrayClass = className.split("_");
+
+      var reply_to_board_comment_no = arrayClass[2];
+      var board_comment_display_no = arrayClass[3];
+
+      $('#reply_to').html(
+          board_comment_display_no+'へ返信する'
+          +'<a href="javascript:void(0);" id="reply_cancel">×</a>'
+          +'<input type="hidden" class="register_board_comment" id="reply_to_board_comment_no" value="'+reply_to_board_comment_no+'">'
+      );
+  });
+  //キャンセルを押した時の処理
+  $(document).on("click", 'a[id="reply_cancel"]', function(){
+      $('#reply_to').html(""
+      );
+  });
+
+  //削除を押した時の処理
+  $(document).on("click", 'a[id="delete_board_comment"]', function(){
+
+      var className = $(this).attr("class");
+      var arrayClass = className.split("_");
+
+      var board_comment_no = arrayClass[2];
+      var board_topic_no = arrayClass[3];
+
+      var senddata = new Object();
+
+      // 削除するカテゴリ情報を作成
+      if(arrayClass[0]+'_'+arrayClass[1] == "delete_comment"){
+          senddata["board_topic_no"] = board_topic_no;
+
+          var delFlg = false;
+
+          //削除する時にポップアップを表示する
+          if(window.confirm('本当に削除してもよろしいですか？')){
+              $("a."+className).each(function(){
+                  senddata[$(this).attr("id")] = true;
+                  senddata["BOARD_COMMENT_NO"] = board_comment_no;
+
+              })
+              var delFlg = true;
+          }
+
+          //いいえが押されずにはいが選ばれた時は、削除して、もう一度リロードする
+          if(delFlg){
+              // Ajaxでのコメント削除
+              $.ajax({
+                  type: "POST",
+                  url: "library/Api/chatDirect.php",
+                  data: senddata,
+                }).done(function(senddata) {
+                  //TODO コメント削除の時の挙動
+                }).fail(function(XMLHttpRequest,textStatus,errorThrown) {
+                  alert(errorThrown);
+                });
+          }
+      }
   });
 });
 

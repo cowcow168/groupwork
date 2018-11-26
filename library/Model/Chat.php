@@ -862,7 +862,7 @@ class Chat extends Db
      $con = new Db;
      $con->connect();
      $stmt = $con->dbh->prepare($sql);
-     $stmt->bindParam(':groupChatNo', $memberNo);
+     $stmt->bindParam(':groupChatNo', $groupChatNo);
      $stmt->execute();
 
      return $stmt->fetchAll();
