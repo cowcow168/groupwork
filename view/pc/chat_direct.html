@@ -280,8 +280,8 @@
                             </div>
                             <!-- value値は、基本残した状態でaに埋め込む -->
                             <!-- <input type="hidden" name="chatRoomId" value="1:14259717" /> -->
-                            <input type="hidden" name="chatRoomId" value="" />
-                            <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-06-29T23:43:26" />
+                            <input type="hidden" name="group_chat_no" value="<?=$group_chat_no?>" />
+                            <!-- <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-06-29T23:43:26" /> -->
                         </div>
                     </form>
                 </div>
@@ -361,6 +361,11 @@ $(function() {
     $('button[name="direct_chat_create"]').each(function(){
       senddata[$(this).attr('id')] = $(this).val();
     });
+    //登録するグループチャット番号を登録する
+    $('input:hidden[name="group_chat_no"]').each(function(){
+      senddata[$(this).attr('name')] = $(this).val();
+    });
+
     // Ajaxでのカテゴリの登録・削除
     $.ajax({
     type: "POST",
@@ -370,6 +375,7 @@ $(function() {
       $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
       $('#new_direct_chat_comment_'+registerNum).html(senddata);
       registerNum++;
+      console.log(senddata);
     }).fail(function (XMLHttpRequest, textStatus, errorThrown){
       alert(errorThrown);
     });

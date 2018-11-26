@@ -224,7 +224,6 @@ class Chat extends Db
               $file_list = preg_split("/[.]/",$groupChatAttachedFile['name'][$key]);
               //一時保存ディレクトリtmpファイルから移動させるためのパスを指定する
               $tmp_file_name = THEME_IMAGE_TMP.'/'.$groupChatAttachedFile['name'][$key];
-
               //グループチャット番号の後にアップロードした枚数だけを連番にして、名前を上書き(拡張子は、そのままつける)
               $dir_name= $tmpChatNo.($key+1);
 
@@ -764,7 +763,7 @@ class Chat extends Db
    *
    * @return array 登録用データ
    */
-   public function setDirectChatExchange(&$groupChatNo,$coment_text,$reply_to_dairect_chat_comment_no = null){
+   public function setDirectChatExchange($groupChatNo,$coment_text,$reply_to_dairect_chat_comment_no = null){
      $con = new Db;
      $con->connect();
 
@@ -806,21 +805,21 @@ class Chat extends Db
      ;
      $stmt = $con->dbh->prepare($sql);
      //自動で入力される項目
-     $stmt->bindValue(':GroupChatExchangeNo', '');
+     $stmt->bindValue(':DirectChatExchangeNo', '');
      $stmt->bindValue(':groupChatNo', $groupChatNo);
-     if(!$DirectChatDisplayNo){
+     //lastInsertIDでは、execute後の値しか取得できないので、最新のダイレクトチャットのやり取り番号を取得する
+     $DirectChatDisplayNo = $this->getDisplayNoDirectChatExchange($groupChatNo);
+     if(empty($DirectChatDisplayNo)){
        //初回投稿の時は、投稿がない状態なのでダイレクトチャットやり取り番号1を登録
        $DirectChatDisplayNo = 1;
        $stmt->bindValue(':DirectChatExchangeDisplayNo', $DirectChatDisplayNo);
      }else{
-       //最新のダイレクトチャットやり取り番号を取得する
-       $DirectChatDisplayNo = $con->dbh->lastInsertId('DIRECT_CHAT_EXCHANGE_DISPLAY_NO');
        // 初回投稿以外の時は、最新のDIRECT_CHAT_EXCHANGE_DISPLAY_NOを取得してそれに1を加算した番号を登録する
        $DirectChatDisplayNo++;
        $stmt->bindValue(':DirectChatExchangeDisplayNo', $DirectChatDisplayNo);
      }
      //やり取りする前は、存在しないのでデフォルトは、NULLで作成する
-     $stmt->bindValue(':DirectChatExchangeCommentText', null);
+     $stmt->bindValue(':DirectChatExchangeCommentText', $coment_text);
      //ログインしているメンバーとダイレクトチャットで登録されたメンバーが投稿できるようにする
      // TODO 最初の投稿時は、ログインしているメンバーで作成時間と更新時間を更新
      $stmt->bindValue(':DirectChatExchangeCreateMemberNo', $_SESSION['member_no']);
@@ -857,7 +856,7 @@ class Chat extends Db
      $sql  = ' SELECT * FROM DIRECT_CHAT_EXCHANGE '
          .' WHERE GROUP_CHAT_NO = :groupChatNo '
          //基本辞めてない社員は、このテーブル前に表示されないのでデフォルトで1を設定する
-         .' AND DIRECT_CHAT_EXCHANGE_ADD_FAVORITE_STATUS = 1 '
+         .' AND DIRECT_CHAT_EXCHANGE_STATUS = 1 '
      ;
 
      $con = new Db;
@@ -869,6 +868,29 @@ class Chat extends Db
      return $stmt->fetchAll();
    }
 
+   /**
+   * ダイレクトチャットのチャット表示番号の最新のものを取得する
+   * @param int $groupChatNo 個人同士を指定する為に必要なグループチャット番号
+   *
+   * @return int ダイレクトチャットのチャット表示番号の最新のものを返す
+   */
+   public function getDisplayNoDirectChatExchange($groupChatNo)
+   {
+     //所属していないメンバーを検索する
+     $sql  = ' SELECT MAX(DIRECT_CHAT_EXCHANGE_DISPLAY_NO) FROM DIRECT_CHAT_EXCHANGE '
+         .' WHERE GROUP_CHAT_NO = :groupChatNo '
+         //基本辞めてない社員は、このテーブル前に表示されないのでデフォルトで1を設定する
+         .' AND DIRECT_CHAT_EXCHANGE_STATUS = 1 '
+     ;
+
+     $con = new Db;
+     $con->connect();
+     $stmt = $con->dbh->prepare($sql);
+     $stmt->bindParam(':groupChatNo', $groupChatNo);
+     $stmt->execute();
+
+     return $stmt->fetchColumn();
+   }
   #############################################################################
 
   // グループチャット画面で使用するメソッド
