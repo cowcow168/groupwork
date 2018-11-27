@@ -1,50 +1,8 @@
 <?php
 // library直下のlibrary.phpを読み込むように設定する
+// C:\Users\ushijima\Documents\eba-groupwork_ushijima\library\Api\chatDirect.php
 require_once(preg_replace('/Api[\\/\\\]chatDirect.php/','',__FILE__).'library.php');
-$chat = new Chat;
-//データベースとの接続
-$con = new Db;
-//ログインユーザーの表示
-$account = new Account;
-//ダイレクトチャット用のオブジェクトを作成する
-$direct_chat = new DirectChat;
-// //やり取りしている内容を全件取得する
-$direct_chat_comments = $chat->getAllDirectChatExchange($group_chat_no);
-
-//ダイレクトチャット画面でグループチャット番号で検索をかけるためにグループチャット番号を取得する
-$group_chat_no=filter_input(INPUT_POST,"group_chat_no");
-$direct_chat_create=filter_input(INPUT_POST,"direct_chat_create");
-$GROUP_CHAT_EXCHANGE_COMMENT_TEXT=filter_input(INPUT_POST,"GROUP_CHAT_EXCHANGE_COMMENT_TEXT");
-##########################################
-// ダイレクトチャットで必要になる機能
-// 送信ボタンを押した時に投稿内容が登録される
-// 空で送信ボタンを押すと登録の処理が行われない
-// 自分で作成した投稿に関しては、削除することが可能
-// 投稿内容に関していいね、お気に入り登録、返信などをすることができる。(自分の投稿や相手の投稿に関わらず、つけれる)
-##########################################
-
-if(!is_null($direct_chat_create)){
-  //ボタンが押された時の処理
-  if(!is_null($GROUP_CHAT_EXCHANGE_COMMENT_TEXT) and $GROUP_CHAT_EXCHANGE_COMMENT_TEXT!==""){
-    //データを登録した時に新たにダイレクトチャットのリストを表示する
-    $chat->setDirectChatExchange($group_chat_no,$GROUP_CHAT_EXCHANGE_COMMENT_TEXT,$reply_to_dairect_chat_comment_no);
-    $direct_chat->commnet_list($direct_chat_comments);
-  }else{
-    //コメントが入力されていなければ何も処理されない
-  }
-}else{
-  //初期表示でやり取りしていなかったら表示しない。
-  $direct_chat->commnet_list($direct_chat_comments);
-}
-
-//コメント削除の時
-if(!empty($_POST['delete_board_comment'])){
-    $chat->deleteBoardComment($_POST['BOARD_COMMENT_NO']);
-}
-
-
-
-
+// require_once(dirname(__FILE__).'../../library.php');
 
 //2018/08/15
 /**
@@ -53,16 +11,16 @@ if(!empty($_POST['delete_board_comment'])){
 *ダイレクトチャットの表示などのクラス
 *
 */
-class DirectChat extends Db
+class ChatDirect extends Db
 {
 
-  public function commnet_list($direct_chat_comments){
+  public function commnet_list($chat_direct_comments){
     //データベースとの接続
     $con = new Db;
     //ログインユーザーの表示
     $account = new Account;
     //登録した内容でダイレクトチャット一覧を出力
-    foreach($direct_chat_comments as $direct_comment) {
+    foreach($chat_direct_comments as $direct_comment) {
       echo '<div class="chatRoomCommentBlock">'
           .'<div class="createMemberIcon">'
           .'<img src="" class="icon" />'
@@ -162,4 +120,47 @@ class DirectChat extends Db
       }
     }
   }
+}
+// require_once(LIBRARY.'Api/chatDirect.php');
+$chat = new Chat;
+//データベースとの接続
+$con = new Db;
+//ログインユーザーの表示
+$account = new Account;
+//ダイレクトチャット用のオブジェクトを作成する
+$chat_direct = new ChatDirect;
+
+//ダイレクトチャット画面でグループチャット番号で検索をかけるためにグループチャット番号を取得する
+$group_chat_no=filter_input(INPUT_POST,"group_chat_no");
+// //やり取りしている内容を全件取得する
+$chat_direct_comments = $chat->getAllDirectChatExchange($group_chat_no);
+$chat_direct_create=filter_input(INPUT_POST,"direct_chat_create");
+$GROUP_CHAT_EXCHANGE_COMMENT_TEXT=filter_input(INPUT_POST,"GROUP_CHAT_EXCHANGE_COMMENT_TEXT");
+##########################################
+// ダイレクトチャットで必要になる機能
+// 送信ボタンを押した時に投稿内容が登録される
+// 空で送信ボタンを押すと登録の処理が行われない
+// 自分で作成した投稿に関しては、削除することが可能
+// 投稿内容に関していいね、お気に入り登録、返信などをすることができる。(自分の投稿や相手の投稿に関わらず、つけれる)
+##########################################
+
+if(!is_null($chat_direct_create)){
+  //ボタンが押された時の処理
+  if(!is_null($GROUP_CHAT_EXCHANGE_COMMENT_TEXT) and $GROUP_CHAT_EXCHANGE_COMMENT_TEXT!==""){
+    //データを登録した時に新たにダイレクトチャットのリストを表示する
+    $chat->setDirectChatExchange($group_chat_no,$GROUP_CHAT_EXCHANGE_COMMENT_TEXT,$reply_to_dairect_chat_comment_no);
+    //更新した値を取得する
+    $chat_direct_comments = $chat->getAllDirectChatExchange($group_chat_no);
+    $chat_direct->commnet_list($chat_direct_comments);
+  }else{
+    //コメントが入力されていなければ何も処理されない
+  }
+}else{
+  //初期表示でやり取りしていなかったら表示しない。
+  $chat_direct->commnet_list($chat_direct_comments);
+}
+
+//コメント削除の時
+if(!empty($_POST['delete_board_comment'])){
+    $chat->deleteBoardComment($_POST['BOARD_COMMENT_NO']);
 }

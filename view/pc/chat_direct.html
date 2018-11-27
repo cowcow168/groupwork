@@ -242,6 +242,10 @@
                       </div>
                     </div>
                   </div>
+                  <!-- とりあえずあるデータの表示確認の為テストで設置する -->
+                  <!-- <div id="board_comment_list">
+                      <?php require_once(LIBRARY.'Api/chatDirect.php')?>
+                  </div> -->
                     <!-- 下記のような表示を誰かに押してもらう -->
                     <div class="newCommentAnnouncement" style="display:none">
                       <div>新着コメントあり</div>
@@ -253,11 +257,11 @@
                 <div class="chatRoomFooter">
                     <form method="post" name="chat_direct" enctype="multipart/form-data">
                         <div class="input textareaParts expand">
+                          <!-- とりあえずあるデータの表示確認の為テストで設置する -->
+                          <div id="board_comment_list">
+                              <?php require_once(LIBRARY.'Api/chatDirect.php')?>
+                          </div>
                                 <div class="minTextareaParts selfclear">
-                                  <!-- とりあえずあるデータの表示確認の為テストで設置する -->
-                                  <div id="board_comment_list">
-                                      <?php require_once(LIBRARY.'Api/chatDirect.php')?>
-                                  </div>
                                     <div class="textareaWrapper">
                                      <textarea class="commonContent" name="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" id="GROUP_CHAT_EXCHANGE_COMMENT_TEXT" placeholder="コメントを入力"></textarea>
                                     </div>
@@ -284,7 +288,8 @@
                             </div>
                             <!-- value値は、基本残した状態でaに埋め込む -->
                             <!-- <input type="hidden" name="chatRoomId" value="1:14259717" /> -->
-                            <input type="hidden" name="group_chat_no" value="<?=$group_chat_no?>" />
+                            <!-- <input type="hidden" name="group_chat_no" value="<?=$group_chat_no?>" /> -->
+                            <input type="hidden" name="group_chat_no" value="1" />
                             <!-- <input type="hidden" id="cba_mpChatLastAccessDate" value="2018-06-29T23:43:26" /> -->
                         </div>
                     </form>
@@ -350,6 +355,29 @@
 // ダイレクトチャット部分やり取り関係機能
 // ##################################################
 $(function() {
+  //初期表示を表示する
+  window.onload = function(){
+    // ページ読み込み時に実行したい処理
+    //送信する時の登録用のオブジェクトを作成する
+    var senddata = new Object();
+    //グループチャット番号で検索する
+    $('input:hidden[name="group_chat_no"]').each(function(){
+      senddata[$(this).attr('name')] = $(this).val();
+    });
+    // Ajaxでのカテゴリの登録・削除
+    $.ajax({
+    type: "POST",
+    url: "library/Api/chatDirect.php",
+    data: senddata,
+    }).done(function (senddata) {
+      $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
+      $('#new_direct_chat_comment_'+registerNum).html(senddata);
+      registerNum++;
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown){
+      alert(errorThrown);
+    });
+  }
+
   //登録した際の投稿部分のカウント数
   var registerNum = 0;
   //登録処理をする際のajaxの記載
@@ -376,9 +404,10 @@ $(function() {
     url: "library/Api/chatDirect.php",
     data: senddata,
     }).done(function (senddata) {
-      $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
-      $('#new_direct_chat_comment_'+registerNum).html(senddata);
-      registerNum++;
+      // $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
+      // $('#new_direct_chat_comment_'+registerNum).html(senddata);
+      html(senddata);
+      // registerNum++;
     }).fail(function (XMLHttpRequest, textStatus, errorThrown){
       alert(errorThrown);
     });
