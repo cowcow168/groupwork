@@ -38,7 +38,7 @@
         <ul id="cba_chatRoomList_THEME" class="include_theme" style="display:none;">
           <li class="selfclearconfirmed">
             <div>
-              <a href="chat_direct?theme_chat=<?=$group_chat['GROUP_CHAT_TITLE']?>&group_chat_no=<?=$group_chat['GROUP_CHAT_NO']?>" title="" class="iconLink">
+              <a href="chat_exchange?theme_chat=<?=$group_chat['GROUP_CHAT_TITLE']?>&group_chat_no=<?=$group_chat['GROUP_CHAT_NO']?>" title="" class="iconLink">
                 <img src="" alt=""><span><?=$group_chat['GROUP_CHAT_TITLE']?></span>
               </a>
             </div>
@@ -73,7 +73,7 @@
           <?php foreach($chat->getPermissionMember($member_no) as $permisiion_member):?>
           <!-- TODO 遷移した後にidをハッシュ化してあげる必要あり -->
           <li class="selfclearconfirmed">
-            <div><a href="chat_direct?group_chat_no=<?=$permisiion_member['GROUP_CHAT_NO']?>"><img src="" alt=""><span><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span></a></div>
+            <div><a href="chat_exchange?group_chat_no=<?=$permisiion_member['GROUP_CHAT_NO']?>"><img src="" alt=""><span><?=$con->selectNo($permisiion_member['PERMISSION_MEMBER_NO'])['member_name']?></span></a></div>
           </li>
           <?php endforeach;?>
           <!-- ここまでループさせる -->
