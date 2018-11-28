@@ -869,6 +869,34 @@ class Chat extends Db
    }
 
    /**
+   * ダイレクトチャットでやり取りした最新の投稿を取得する
+   * @param int $groupChatNo 個人同士を指定する為に必要なグループチャット番号
+   *
+   * @return array ダイレクトチャットでやり取りした最新の投稿を取得する
+   */
+   public function getlatestDirectChatExchange($groupChatNo)
+   {
+     //最新の投稿を取得する
+     $DirectChatDisplayNo = $this->getDisplayNoDirectChatExchange($groupChatNo);
+     //所属していないメンバーを検索する
+     $sql  = ' SELECT * FROM DIRECT_CHAT_EXCHANGE '
+         .' WHERE GROUP_CHAT_NO = :groupChatNo '
+         //基本辞めてない社員は、このテーブル前に表示されないのでデフォルトで1を設定する
+         .' AND DIRECT_CHAT_EXCHANGE_DISPLAY_NO = :DirectChatDisplayNo '
+         .' AND DIRECT_CHAT_EXCHANGE_STATUS = 1 '
+     ;
+
+     $con = new Db;
+     $con->connect();
+     $stmt = $con->dbh->prepare($sql);
+     $stmt->bindParam(':groupChatNo', $groupChatNo);
+     $stmt->bindParam(':DirectChatDisplayNo', $DirectChatDisplayNo);
+     $stmt->execute();
+
+     return $stmt->fetch();
+   }
+
+   /**
    * ダイレクトチャットのチャット表示番号の最新のものを取得する
    * @param int $groupChatNo 個人同士を指定する為に必要なグループチャット番号
    *
@@ -890,6 +918,38 @@ class Chat extends Db
      $stmt->execute();
 
      return $stmt->fetchColumn();
+   }
+
+   /**
+    * ダイレクトチャットやり取り削除
+    *
+    * @param $groupChatNo 削除するダイレクトチャットやり取りNo
+    *
+    * @return bool
+    */
+   public function deleteDirectChatExchangeNo($directChatExchangeNo)
+   {
+       $con = new Db;
+       $con->connect();
+
+       // 複数テーブル登録・更新のため、現在時刻を変数化
+       $now = getNow();
+
+       // ダイレクトチャットのやり取り番号の論理削除(基本は、投稿を作成した人しか消す権限がないので消せない)
+       $sql  = ' UPDATE DIRECT_CHAT_EXCHANGE SET '
+       //自分が入る
+           .' DIRECT_CHAT_EXCHANGE_UPDATE_MEMBER_NO = :directChatExchangeUpdateMemberNo, '
+           .' DIRECT_CHAT_EXCHANGE_UPD_TS = :directChatExchangeUpdTs, '
+           .' DIRECT_CHAT_EXCHANGE_STATUS = 0 '
+           .' WHERE DIRECT_CHAT_EXCHANGE_NO = :directChatExchangeNo'
+       ;
+
+       $stmt = $con->dbh->prepare($sql);
+       $stmt->bindValue(':directChatExchangeUpdateMemberNo', $_SESSION['member_no']);
+       $stmt->bindValue(':directChatExchangeUpdTs', $now);
+       $stmt->bindValue(':groupChatNo', $directChatExchangeNo);
+       $stmt->execute();
+
    }
   #############################################################################
 
