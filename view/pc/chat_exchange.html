@@ -33,11 +33,11 @@
                 </div>
                 <div class="chatRoomBody">
                     <div class="chatRoomCommentListParts scrollable">
-                        <div class="chatRoomCommentBlock"  data-createMemberId="1:884608" data-createMemberDisplayName="<?=$con->selectNo($permisiion_member_no)['member_name']?>">
+                        <!-- <div class="chatRoomCommentBlock"  data-createMemberId="1:884608" data-createMemberDisplayName="<?=$con->selectNo($permisiion_member_no)['member_name']?>">
                             <div class="createMemberIcon">
-                                <img src="" class="icon" />
+                                <img src="" class="icon" /> -->
                                 <!-- 自分の名前が表示される -->
-                                <div class="name">
+                                <!-- <div class="name">
                                     <a href="/mpConfiguration/profile/view" class="profileLb iconLink" id="profile_1:884608" title="<?=$con->selectNo($permisiion_member_no)['member_name']?>"><span class="name"><?=$con->selectNo($permisiion_member_no)['member_name']?></span></a>
                                 </div>
                             </div>
@@ -91,10 +91,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- chatRoomCommentBlockの閉じタグ -->
                         <!-- 相手の投稿だとdata-createMemberIdが2になっている -->
-                        <div class="chatRoomCommentBlock" data-createMemberId="2:922494" data-createMemberDisplayName="深田 拓圭" data-chatRoomId="2:15547680">
+                        <!-- <div class="chatRoomCommentBlock" data-createMemberId="2:922494" data-createMemberDisplayName="深田 拓圭" data-chatRoomId="2:15547680">
                           <div class="createMemberIcon">
                             <img src="" width="24" height="32" style="padding:0px 4px 0px 4px;" alt="" class="icon" />
                             <div class="name">
@@ -153,10 +153,10 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                         <!-- chatRoomCommentBlockの閉じタグ -->
                         <!-- 画像やtxtデータがある時の表示方法 -->
-                        <div class="chatRoomCommentBlock" data-createMemberId="1:884608" data-createMemberDisplayName=" 牛島 淳史" data-chatRoomId="2:15547680">
+                        <!-- <div class="chatRoomCommentBlock" data-createMemberId="1:884608" data-createMemberDisplayName=" 牛島 淳史" data-chatRoomId="2:15547680">
                           <div class="createMemberIcon">
                             <img src="" width="24" height="32" style="padding:0px 4px 0px 4px;" alt="" class="icon" />
                             <div class="name">
@@ -241,18 +241,22 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                         <!-- chatRoomCommentBlockの閉じタグ -->
-                  </div>
+                  <!-- </div> -->
                   <!-- chatRoomCommentListPartsの閉じタグ -->
                   <?php
                     $con = new Db;
                     $chat = new Chat;
                     $account = new Account;
+                    $chat_direct = new ChatDirect;
+                    $json_direct_comment = json_encode($chat->getlatestDirectChatExchange($group_chat_no));
+                    var_dump($json_direct_comment);
                   ?>
+                  <?php if(empty($ajax_flag)):?>
                   <!-- ここからループさせる -->
                   <?php foreach($chat->getAllDirectChatExchange($group_chat_no) as $direct_comment):?>
-                    <div class="chatRoomCommentBlock">
+                    <div class="chatRoomCommentBlock_<?=$direct_comment['DIRECT_CHAT_EXCHANGE_DISPLAY_NO']?>">
                       <div class="createMemberIcon">
                         <img src="" class="icon" />
                         <!-- // 自分の名前が表示される -->
@@ -325,10 +329,17 @@
                       <a href="#delete" name="delete_chat_direct_comment" class="delete_comment_<?=$direct_comment['DIRECT_CHAT_EXCHANGE_NO']?>" >削除する</a>
                     <?php endif;?>
                   <?php endforeach;?>
+                <?php endif;?>
                   <!-- ここまでループさせる -->
-
+                  <!-- ajax送信前の時の表示 -->
+                  <?php if($ajax_flag):?>
+                  <div class="chatRoomCommentBlock">
+                    <p>フラグあるよ</p>
+                    <?php $chat_direct->commnet_list($chat_direct_comments)?>
+                  </div>
+                  <?php endif;?>
                   <!-- 投稿された際に入力エリアが新たに作成されるエリア -->
-                  <div class="chatRoomCommentBlock"></div>
+                  <!-- <div class="chatRoomCommentBlock"></div> -->
                     <!-- 下記のような表示を誰かに押してもらう -->
                     <div class="newCommentAnnouncement" style="display:none">
                       <div>新着コメントあり</div>
@@ -470,6 +481,9 @@ $(function() {
     e.preventDefault();
     //送信する時の登録用のオブジェクトを作成する
     var senddata = new Object();
+    var json_direct_comment = '<?php echo $json_direct_comment; ?>';
+    //JSONをパース
+    var data = JSON.parse(json_direct_comment);
     //登録するコメント本文を作成
     $('textarea.commonContent').each(function(){
       senddata[$(this).attr('id')] = $(this).val();
@@ -489,10 +503,7 @@ $(function() {
     url: "library/Api/chatDirect.php",
     data: senddata,
     }).done(function (senddata) {
-      // $('.chatRoomCommentBlock').after("<div id=\"new_direct_chat_comment_"+registerNum+"\"></div>");
-      // $('#new_direct_chat_comment_'+registerNum).html(senddata);
-      $('div.chatRoomCommentBlock').html(senddata);
-      registerNum++;
+      $('.chatRoomFooter').before($('div.chatRoomCommentBlock_'+data['DIRECT_CHAT_EXCHANGE_DISPLAY_NO']).html(senddata));
     }).fail(function (XMLHttpRequest, textStatus, errorThrown){
       alert(errorThrown);
     });

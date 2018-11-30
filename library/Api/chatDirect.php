@@ -251,15 +251,15 @@ if(!is_null($chat_direct_create)){
     //更新した値を取得する
     // //やり取りしている内容を全件取得する
     // $chat_direct_comments = $chat->getAllDirectChatExchange($group_chat_no);
-    // $chat_direct_comments = $chat->getAllDirectChatExchange($group_chat_no);
     $chat_direct_comment = $chat->getlatestDirectChatExchange($group_chat_no);
     // $chat_direct->commnet_list($chat_direct_comments);
+    //初期表示と送信後に送られてきた時の表示の為にフラグを付与してあげる
+    $ajax_flag = true;
     $chat_direct->latest_commnet_list($chat_direct_comment);
+    return $ajax_flag;
   }else{
     //コメントが入力されていなければ何も処理されない
   }
-}else{
-  //初期表示でやり取りしていなかったら表示しない。
 }
 
 //コメント削除の時

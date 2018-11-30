@@ -1,5 +1,6 @@
 <?php
 require_once('library/library.php');
+require_once('library/Api/chatDirect.php');
 
 // セッションチェック
 (new Account)->authChk(@$_SESSION['user_name']);
@@ -22,6 +23,8 @@ Account::sessionChangeChk($_SESSION['user_name'],
 (new Account)->logoutChk(@$_REQUEST['logout']);
 
 $chat = new Chat;
+//API側で定義したもの
+$chat_direct = new ChatDirect;
 //ダイレクトチャットで送信ボタンが押された時
 if(!empty($_POST['direct_chat_create'])){
   //データベースの登録を行う
